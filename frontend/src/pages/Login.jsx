@@ -31,7 +31,7 @@ function Login() {
     };
 
     return (
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-12 min-w-[400px]">
             <p className=" flex flex-col gap-3">
                 <h1 className="text-4xl font-semibold flex flex-row">
                     Welcome Back<div className="text-[#4169E2]">!</div>
@@ -49,7 +49,7 @@ function Login() {
             <Form
                 onFinish={handleLogin}
                 autoComplete="off"
-                className="w-[25vw] min-w-[200px]"
+                className="w-[100%]"
                 style={{ justifyItems: "center" }}
                 requiredMark={false}
                 layout="vertical"

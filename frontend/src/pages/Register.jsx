@@ -4,7 +4,8 @@ import conf from "../conf/main";
 import ax, { axData } from "../conf/ax";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { Button, Form, Input, Alert, Checkbox } from "antd";
+import { Button, Form, Input, Alert } from "antd";
+import RegisterBar from "../components/RegisterBar";
 
 function Register() {
     const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +32,7 @@ function Register() {
     };
 
     return (
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-12 min-w-[400px]">
             <p className=" flex flex-col gap-3">
                 <h1 className="text-4xl font-semibold flex flex-row">
                     Create new account<div className="text-[#4169E2]">.</div>
@@ -46,10 +47,11 @@ function Register() {
                     </a>
                 </p>
             </p>
+            <RegisterBar />
             <Form
                 onFinish={handleRegister}
                 autoComplete="off"
-                className="w-[25vw] min-w-[200px]"
+                className="w-[100%]"
                 style={{ justifyItems: "center" }}
                 requiredMark={false}
                 layout="vertical"
@@ -87,12 +89,12 @@ function Register() {
 
                 <Form.Item style={{ width: "100%" }}>
                     <Button
-                        style={{ width: "100%", height: "42px" }}
+                        style={{ width: "100%", height: "42px", marginTop: "16px" }}
                         type="primary"
                         htmlType="submit"
                         loading={isLoading}
                     >
-                        Register
+                        Continue
                     </Button>
                 </Form.Item>
             </Form>
