@@ -6,12 +6,12 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { Button, Form, Input, Alert, Checkbox } from "antd";
 
-function Login() {
+function Register() {
     const [isLoading, setIsLoading] = useState(false);
     const [errMsg, setErrMsg] = useState(null);
     const navigate = useNavigate();
 
-    const handleLogin = async (formData) => {
+    const handleRegister = async (formData) => {
         try {
             setIsLoading(true);
             setErrMsg(null);
@@ -34,20 +34,20 @@ function Login() {
         <div className="flex flex-col gap-12">
             <p className=" flex flex-col gap-3">
                 <h1 className="text-4xl font-semibold flex flex-row">
-                    Welcome Back<div className="text-[#4169E2]">!</div>
+                    Create new account<div className="text-[#4169E2]">.</div>
                 </h1>
                 <p className="text-xs text-gray-500">
-                    Don't have an account?{" "}
+                    Already have an account?{" "}
                     <a
-                        onClick={() => navigate("/register")}
+                        onClick={() => navigate("/login")}
                         className="text-[#4169E2] hover:text-blue-400 cursor-pointer transition-colors duration-200"
                     >
-                        Register
+                        Log In
                     </a>
                 </p>
             </p>
             <Form
-                onFinish={handleLogin}
+                onFinish={handleRegister}
                 autoComplete="off"
                 className="w-[25vw] min-w-[200px]"
                 style={{ justifyItems: "center" }}
@@ -59,16 +59,30 @@ function Login() {
                         <Alert message={errMsg} type="error" />
                     </Form.Item>
                 )}
-                <Form.Item name="identifier" label="Email" rules={[{ required: true }]} style={{ width: "100%" }}>
+                <div className="flex flex-row gap-4">
+                    <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}>
+                        <Input />
+                    </Form.Item>
+                </div>
+                <Form.Item
+                    name="identifier"
+                    label="Email"
+                    rules={[{ required: true, type: "email" }]}
+                    style={{ width: "100%" }}
+                >
                     <Input />
                 </Form.Item>
 
-                <Form.Item name="password" label="Password" rules={[{ required: true }]} style={{ width: "100%" }}>
+                <Form.Item
+                    name="password"
+                    label="Password"
+                    rules={[{ required: true, min: 8 }]}
+                    style={{ width: "100%" }}
+                >
                     <Input.Password />
-                </Form.Item>
-
-                <Form.Item name="remember" valuePropName="checked" label={null} style={{ width: "100%" }}>
-                    <Checkbox style={{ userSelect: "none" }}>Remember me</Checkbox>
                 </Form.Item>
 
                 <Form.Item style={{ width: "100%" }}>
@@ -78,7 +92,7 @@ function Login() {
                         htmlType="submit"
                         loading={isLoading}
                     >
-                        Login
+                        Register
                     </Button>
                 </Form.Item>
             </Form>
@@ -86,4 +100,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Register;
