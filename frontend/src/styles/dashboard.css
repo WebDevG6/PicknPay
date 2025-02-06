@@ -1,0 +1,25 @@
+.dashboard-icon {
+    font-size: 22px;
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.icon-green {
+    color: green;
+    background-color: lightgreen;
+}
+
+.icon-blue {
+    color: blue;
+    background-color: lightblue;
+}
+
+.icon-purple {
+    color: purple;
+    background-color: lightcyan;
+}
+
+.icon-orange {
+    color: orange;
+    background-color: lightyellow;
+}

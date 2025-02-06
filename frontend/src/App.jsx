@@ -8,8 +8,8 @@ import Home from "./pages/Home";
 import AdminLayout from "./layout/AdminLayout";
 import Orders from "./components/ui/admin/Orders";
 import Products from "./components/ui/admin/Products";
-import Users from "./components/ui/admin/Users";
 import Dashboard from "./components/ui/admin/Dashboard";
+import Customers from "./components/ui/admin/Customers";
 
 function App() {
     return (
@@ -24,7 +24,7 @@ function App() {
                         <Route path="/admin/*" element={<Navigate to={"/admin/dashboard"} />} />
                         <Route path="/admin/orders" element={<Orders />} />
                         <Route path="/admin/products" element={<Products />} />
-                        <Route path="/admin/users" element={<Users />} />
+                        <Route path="/admin/customers" element={<Customers />} />
                         <Route path="/admin/dashboard" element={<Dashboard />} />
                     </Route>
                     <Route element={<RequiredAuth />}></Route>
