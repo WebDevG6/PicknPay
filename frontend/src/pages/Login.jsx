@@ -23,6 +23,11 @@ function Login() {
             });
             const responseUser = await ax.get(conf.jwtUserEndpoint, { withCredentials: false });
             const role = responseUser.data.role.name;
+            if (role === "user") {
+                navigate("/");
+            } else if (role === "admin") {
+                navigate("/admin");
+            }
         } catch (err) {
             setErrMsg(err.response.data.error.message);
         } finally {
@@ -32,10 +37,10 @@ function Login() {
 
     return (
         <div className="flex flex-col gap-12 min-w-[400px]">
-            <p className=" flex flex-col gap-3">
-                <h1 className="text-4xl font-semibold flex flex-row">
-                    Welcome Back<div className="text-[#4169E2]">!</div>
-                </h1>
+            <div className=" flex flex-col gap-3">
+                <p className="text-4xl font-semibold flex flex-row">
+                    Welcome Back<a className="text-[#4169E2]">!</a>
+                </p>
                 <p className="text-xs text-gray-500">
                     Don't have an account?{" "}
                     <a
@@ -45,7 +50,7 @@ function Login() {
                         Register
                     </a>
                 </p>
-            </p>
+            </div>
             <Form
                 onFinish={handleLogin}
                 autoComplete="off"
@@ -55,11 +60,16 @@ function Login() {
                 layout="vertical"
             >
                 {errMsg && (
-                    <Form.Item>
+                    <Form.Item style={{ width: "100%" }}>
                         <Alert message={errMsg} type="error" />
                     </Form.Item>
                 )}
-                <Form.Item name="identifier" label="Email" rules={[{ required: true }]} style={{ width: "100%" }}>
+                <Form.Item
+                    name="identifier"
+                    label="Email"
+                    rules={[{ required: true, type: "email" }]}
+                    style={{ width: "100%" }}
+                >
                     <Input />
                 </Form.Item>
 
