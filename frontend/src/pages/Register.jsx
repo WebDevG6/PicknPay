@@ -47,7 +47,7 @@ function Register() {
                     </a>
                 </p>
             </p>
-            <RegisterBar />
+            <RegisterBar stage={0} />
             <Form
                 onFinish={handleRegister}
                 autoComplete="off"
