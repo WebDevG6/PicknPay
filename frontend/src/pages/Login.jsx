@@ -23,9 +23,9 @@ function Login() {
             });
             const responseUser = await ax.get(conf.jwtUserEndpoint, { withCredentials: false });
             const role = responseUser.data.role.name;
-            if (role === "user") {
+            if (role === "Authenticated") {
                 navigate("/");
-            } else if (role === "admin") {
+            } else if (role === "Admin") {
                 navigate("/admin");
             }
         } catch (err) {
@@ -36,7 +36,7 @@ function Login() {
     };
 
     return (
-        <div className="flex flex-col gap-12 min-w-[400px]">
+        <div className="flex flex-col gap-6 min-w-[400px]">
             <div className=" flex flex-col gap-3">
                 <p className="text-4xl font-semibold flex flex-row">
                     Welcome Back<a className="text-[#4169E2]">!</a>

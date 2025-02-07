@@ -13,29 +13,44 @@ function Register() {
     const [checkStep, setCheckStep] = useState(0);
     const [errMsg, setErrMsg] = useState(null);
     const [registerForm] = Form.useForm();
+    const [registerData, setRegisterData] = useState();
     const navigate = useNavigate();
 
-    const handleRegister = async (formData) => {
+    const handleRegister = async () => {
+        const addressData = await registerForm.validateFields();
         try {
             setIsLoading(true);
             setErrMsg(null);
-            const response = await ax.post(conf.loginEndpoint, formData);
+            const response = await ax.post(
+                conf.registerEndpoint,
+                {
+                    email: registerData.email,
+                    username: registerData.email,
+                    password: registerData.password,
+                },
+                { withCredentials: false }
+            );
             axData.jwt = response.data.jwt;
             Cookies.set("token", axData.jwt, {
-                expires: formData.remember ? 30 : null,
+                expires: null,
                 path: "/",
             });
-            const responseUser = await ax.get(conf.jwtUserEndpoint, { withCredentials: false });
-            const role = responseUser.data.role.name;
+            await ax.put(conf.userEndpoint + response.data.user.id, {
+                firstname: registerData.firstName,
+                lastname: registerData.lastName,
+                address: addressData.address,
+            });
+            navigate("/");
         } catch (err) {
-            setErrMsg(err.response.data.error.message);
+            setErrMsg(err?.response?.data?.error?.message);
+            setCheckStep(0);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="flex flex-col gap-12 min-w-[400px]">
+        <div className="flex flex-col gap-6 min-w-[400px]">
             <div className=" flex flex-col gap-3">
                 <p className="text-4xl font-semibold flex flex-row">
                     Create new account<a className="text-[#4169E2]">.</a>
@@ -52,7 +67,6 @@ function Register() {
             </div>
             <RegisterBar stage={checkStep} />
             <Form
-                onFinish={handleRegister}
                 autoComplete="off"
                 className="w-[100%]"
                 style={{ justifyItems: "center" }}
@@ -77,7 +91,7 @@ function Register() {
                             </Form.Item>
                         </div>
                         <Form.Item
-                            name="identifier"
+                            name="email"
                             label="Email"
                             rules={[{ required: true, type: "email" }]}
                             style={{ width: "100%" }}
@@ -95,19 +109,9 @@ function Register() {
                         </Form.Item>
                     </>
                 ) : (
-                    <>
-                        <Form.Item
-                            name="phone"
-                            label="Phone Number"
-                            rules={[{ required: true, min: 10 }]}
-                            style={{ width: "100%" }}
-                        >
-                            <Input placeholder="099 9999 9999" />
-                        </Form.Item>
-                        <Form.Item style={{ width: "100%" }} name="address" label="Address">
-                            <TextArea autoSize={{ minRows: 3, maxRows: 9 }} />
-                        </Form.Item>
-                    </>
+                    <Form.Item style={{ width: "100%" }} name="address" label="Address">
+                        <TextArea autoSize={{ minRows: 3, maxRows: 9 }} />
+                    </Form.Item>
                 )}
 
                 <Form.Item className="w-full">
@@ -128,10 +132,11 @@ function Register() {
                             style={{ height: "42px", marginTop: "16px" }}
                             type="primary"
                             onClick={async () => {
-                                await registerForm.validateFields();
                                 if (checkStep === 1) {
-                                    console.log("register!");
+                                    handleRegister();
                                 } else {
+                                    const firstForm = await registerForm.validateFields();
+                                    setRegisterData(firstForm);
                                     setCheckStep(1);
                                 }
                             }}
