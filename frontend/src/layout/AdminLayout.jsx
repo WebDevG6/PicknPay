@@ -120,6 +120,7 @@ function AdminLayout() {
                         padding: 24,
                         minHeight: 280,
                         background: colorBgContainer,
+                        backgroundColor: "#f5f5f5",
                         borderRadius: borderRadiusLG,
                     }}>
                     <Outlet />
