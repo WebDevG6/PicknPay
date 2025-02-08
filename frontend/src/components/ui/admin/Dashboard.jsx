@@ -105,13 +105,29 @@ const Dashboard = () => {
 const DashboardCard = ({ title, value, icon }) => {
     return (
         <Col xs={24} sm={12}>
-            <Card style={{ width: "100%" ,boxShadow:"0 0 10px rgba(0,0,0,0.05)"}}>
-                <Space direction="horizontal">
-                    {icon}
-                    <Statistic title={title} value={value} />
-                </Space>
-            </Card>
-        </Col>
+        <Card
+            style={{
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0,0,0,0.05)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center", 
+                textAlign: "center",
+            }}>
+            <Space
+                direction="horizontal"
+                style={{
+                    display: "flex",
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    flexWrap: "wrap", 
+                }}>
+                {icon}
+                <Statistic title={title} value={value} />
+            </Space>
+        </Card>
+    </Col>
+    
     );
 };
 const LineChart = () => {
@@ -175,7 +191,7 @@ const BarChart = () => {
                 label: "Sales",
                 data: [65, 59, 80, 81, 56, 55, 40],
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
-                borderColor: "rgb(75, 192, 192)",
+                borderColor: "rgb(275, 592, 392)",
                 borderWidth: 1,
             },
         ],

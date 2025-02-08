@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Space, Table } from "antd";
+import { Avatar, Space, Table, Input } from "antd";
 import { useEffect, useState } from "react";
 
 const getCustomers = () => {
@@ -9,6 +9,7 @@ const getCustomers = () => {
 const Customers = () => {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
+    const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -23,8 +24,9 @@ const Customers = () => {
             style={{
                 padding: "22px", display: "flex", flexDirection: "column", borderRadius: "22px", backgroundColor: "white", overflowX: "auto", maxWidth: "100%"
             }}>
+            <Input.Search placeholder="Search here..." style={{ width: "100%", marginBottom: 20 }} onSearch={(value) => { setSearchedText(value) }} onChange={(e) => { setSearchedText(e.target.value) }} />
             <Space size={20} direction="vertical">
-                <Table 
+                <Table
                     loading={loading}
                     columns={[
                         {
@@ -37,6 +39,8 @@ const Customers = () => {
                         {
                             title: "First Name",
                             dataIndex: "firstName",
+                            filteredValue: searchedText ? [searchedText] : null,
+                            onFilter: (value, record) => { return String(record.firstName).toLowerCase().includes(value.toLowerCase()), String(record.lastName).toLowerCase().includes(value.toLowerCase()) },
                         },
                         {
                             title: "Last Name",

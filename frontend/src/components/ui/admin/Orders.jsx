@@ -1,5 +1,5 @@
-import { Space, Table } from "antd";
 import { useEffect, useState } from "react";
+import { Space, Table,Input } from "antd";
 
 const getOrders = () => {
     return fetch("https://dummyjson.com/carts/1").then((res) => res.json());
@@ -8,6 +8,7 @@ const getOrders = () => {
 function Orders() {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
+    const [searchedText,setSearchedText] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -19,6 +20,7 @@ function Orders() {
 
     return (
         <div style={{ padding: "22px", display: "flex", flexDirection: "column", borderRadius: "22px", backgroundColor: "white", overflowX: "auto", maxWidth: "100%" }}>
+            <Input.Search placeholder="Search here..." style={{ width: "100%", marginBottom: 20 }} onSearch={(value) => {setSearchedText(value)}} onChange={(e) => {setSearchedText(e.target.value)}} />
             <Space size={20} direction="vertical">
                 <Table
                     loading={loading}
@@ -26,6 +28,8 @@ function Orders() {
                         {
                             title: "Title",
                             dataIndex: "title",
+                            filteredValue: searchedText ? [searchedText] : null,
+                            onFilter: (value, record) =>  String(record.title).toLowerCase().includes(value.toLowerCase()),
                         },
                         {
                             title: "Price",
