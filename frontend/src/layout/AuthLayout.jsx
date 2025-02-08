@@ -12,12 +12,14 @@ export default function AuthLayout() {
                 },
             }}
         >
-            <div className="h-screen w-screen inline-flex bg-white">
-                <div className="w-[60%] flex flex-col items-center justify-center">
-                    <p className="text-4xl font-bold font-[Koulen] mb-6 tracking-wider text-[#4169E2]">PICK&PAY</p>
+            <div className="h-screen w-screen grid grid-cols-5 bg-white">
+                <div className="md:col-span-3 col-span-5 flex flex-col sm:items-center   items-left justify-center">
+                    <p className="text-4xl font-bold font-[Koulen] sm:mb-6 sm:pl-0 mb-0 ml-5 tracking-wider text-[#4169E2]">
+                        PICK&PAY
+                    </p>
                     <Outlet />
                 </div>
-                <div className="w-[40%] h-full">
+                <div className="md:col-span-2 hidden md:block h-full">
                     <Carousel autoplay className="h-screen">
                         <div className="h-screen">
                             <img

@@ -50,9 +50,9 @@ function Register() {
     };
 
     return (
-        <div className="flex flex-col gap-6 min-w-[400px]">
+        <div className="flex flex-col gap-6 min-w-[0] p-5 sm:p-0 sm:min-w-[350px]">
             <div className=" flex flex-col gap-3">
-                <p className="text-4xl font-semibold flex flex-row">
+                <p className="text-4xl font-semibold">
                     Create new account<a className="text-[#4169E2]">.</a>
                 </p>
                 <p className="text-xs text-gray-500">
@@ -82,7 +82,7 @@ function Register() {
 
                 {checkStep === 0 ? (
                     <>
-                        <div className="flex flex-row gap-4">
+                        <div className="flex sm:flex-row flex-col sm:gap-4 gap-0 w-[100%]">
                             <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
                                 <Input />
                             </Form.Item>

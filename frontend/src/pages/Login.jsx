@@ -36,9 +36,9 @@ function Login() {
     };
 
     return (
-        <div className="flex flex-col gap-6 min-w-[400px]">
+        <div className="flex flex-col gap-6 min-w-[0] p-5 sm:p-0 sm:min-w-[350px]">
             <div className=" flex flex-col gap-3">
-                <p className="text-4xl font-semibold flex flex-row">
+                <p className="text-4xl font-semibold">
                     Welcome Back<a className="text-[#4169E2]">!</a>
                 </p>
                 <p className="text-xs text-gray-500">
