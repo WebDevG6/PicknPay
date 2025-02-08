@@ -9,6 +9,7 @@ function Orders() {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
     const [searchedText,setSearchedText] = useState("");
+    const [sortOrder, setSortOrder] = useState("ascend");
 
     useEffect(() => {
         setLoading(true);
@@ -30,6 +31,11 @@ function Orders() {
                             dataIndex: "title",
                             filteredValue: searchedText ? [searchedText] : null,
                             onFilter: (value, record) =>  String(record.title).toLowerCase().includes(value.toLowerCase()),
+                            sorter: (a, b) => a.title.localeCompare(b.title),
+                            sortOrder,
+                            onHeaderCell: () => ({
+                                onClick: () => setSortOrder(sortOrder === "ascend" ? "descend" : "ascend"),
+                            }),
                         },
                         {
                             title: "Price",

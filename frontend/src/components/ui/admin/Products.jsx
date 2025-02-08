@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Rate, Space, Table,Input } from "antd";
+import { Avatar, Rate, Space, Table, Input } from "antd";
 import { useEffect, useState } from "react";
 
 const getInventory = () => {
@@ -9,7 +9,8 @@ const getInventory = () => {
 const Products = () => {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
-    const [searchedText,setSearchedText] = useState("");
+    const [searchedText, setSearchedText] = useState("");
+    const [sortOrder, setSortOrder] = useState("ascend");
 
     useEffect(() => {
         setLoading(true);
@@ -21,7 +22,7 @@ const Products = () => {
 
     return (
         <div style={{ padding: "22px", display: "flex", flexDirection: "column", borderRadius: "22px", backgroundColor: "white", overflowX: "auto", maxWidth: "100%" }}>
-            <Input.Search placeholder="Search here..." style={{ width: "100%", marginBottom: 20 }} onSearch={(value) => {setSearchedText(value)}} onChange={(e) => {setSearchedText(e.target.value)}} />
+            <Input.Search placeholder="Search here..." style={{ width: "100%", marginBottom: 20 }} onSearch={(value) => { setSearchedText(value) }} onChange={(e) => { setSearchedText(e.target.value) }} />
             <Space size={20} direction="vertical">
                 <Table
                     loading={loading}
@@ -37,7 +38,12 @@ const Products = () => {
                             title: "Title",
                             dataIndex: "title",
                             filteredValue: searchedText ? [searchedText] : null,
-                            onFilter: (value, record) =>  String(record.title).toLowerCase().includes(value.toLowerCase()),
+                            onFilter: (value, record) => String(record.title).toLowerCase().includes(value.toLowerCase()),
+                            sorter: (a, b) => a.title.localeCompare(b.title),
+                            sortOrder,
+                            onHeaderCell: () => ({
+                                onClick: () => setSortOrder(sortOrder === "ascend" ? "descend" : "ascend"),
+                            }),
                         },
                         {
                             title: "Price",
