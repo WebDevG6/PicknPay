@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import { Layout, Menu, theme, Badge } from "antd";
+import { Layout, Menu, theme, Badge,Drawer  } from "antd";
 import { DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined, LogoutOutlined, ShoppingOutlined, BellOutlined } from "@ant-design/icons";
 import { authContext } from "../context/AuthContext";
 
@@ -16,6 +16,7 @@ function AdminLayout() {
     } = theme.useToken();
     const navigate = useNavigate();
     const location = useLocation();
+    const [open, setOpen] = useState(false);
     const { userInfo } = useContext(authContext);
     const [collapsed, setCollapsed] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState();
@@ -33,6 +34,13 @@ function AdminLayout() {
         3: { label: "Products", path: "/admin/products" },
         4: { label: "Customers", path: "/admin/customers" },
         5: { label: "Logout", path: "/logout" },
+    };
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
     };
 
     useEffect(() => {
@@ -106,18 +114,28 @@ function AdminLayout() {
                     <div
                         style={{
                             position: "absolute",
+                            top: "14px",
                             right: "18px",
+                            display: "flex",
+                            alignItems: "center", 
                         }}>
                         <Badge size="small" count={5} style={{ fontSize: 12 }}>
-                            <BellOutlined style={{ fontSize: 20, color: "white", cursor: "pointer" }} />
+                            <BellOutlined
+                                style={{ fontSize: 20, color: "white", cursor: "pointer" }}
+                                onClick={showDrawer}
+                            />
                         </Badge>
+                        <Drawer title="Notifications" onClose={onClose} open={open} width={250}>
+                            <p>🔔 Notification 1</p>
+                            <p>🔔 Notification 2</p>
+                            <p>🔔 Notification 3</p>
+                        </Drawer>
                     </div>
                 </header>
 
                 <Content
                     style={{
-                        margin: "14px",
-                        padding: 24,
+                        padding: 6,
                         minHeight: 280,
                         background: colorBgContainer,
                         backgroundColor: "#f5f5f5",

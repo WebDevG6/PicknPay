@@ -1,11 +1,10 @@
 import { Card, Row, Space, Statistic, Col, Table, Divider } from "antd";
 import React from "react";
 import { ShoppingOutlined, UserOutlined, DollarOutlined, ProductOutlined } from "@ant-design/icons";
-import "../../../styles/dashboard.css";
-import { Pie, Line } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from "chart.js";
+import { Line, Doughnut, Bar } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
+ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 const columns = [
     {
         title: "Name",
@@ -61,30 +60,39 @@ const data = [
 
 const Dashboard = () => {
     return (
-        <div style={{ margin: "-30px" }}>
+        <div className="w-full overflow-hidden">
             <Row gutter={[18, 18]} style={{ padding: "18px", borderRadius: "18px" }}>
                 <Col xs={24} md={12} style={{ textAlign: "center", alignItems: "center", display: "flex" }}>
                     <Row gutter={[16, 16]} style={{ display: "flex", flexWrap: "wrap" }}>
-                        <DashboardCard icon={<ShoppingOutlined className="text-[22px] rounded-[12px] p-[8px] text-[green] bg-green-600/20" />} title={"Orders"} value={12322} />
-                        <DashboardCard icon={<ProductOutlined className="text-[22px] rounded-[12px] p-[8px] text-[blue] bg-blue-600/20" />} title={"Products"} value={12322} />
-                        <DashboardCard icon={<UserOutlined className="text-[22px] rounded-[12px] p-[8px] text-[purple] bg-cyan-600/20" />} title={"Customers"} value={12322} />
-                        <DashboardCard icon={<DollarOutlined className="text-[22px] rounded-[12px] p-[8px] text-[orange] bg-yellow-600/20" />} title={"Revenue"} value={12322} />
+                        <DashboardCard icon={<ShoppingOutlined className="text-[22px] !text-[green] rounded-[12px] p-[8px] bg-green-600/20" />} title={"Orders"} value={12322} />
+                        <DashboardCard icon={<ProductOutlined className="text-[22px] !text-[blue] rounded-[12px] p-[8px]  bg-blue-600/20" />} title={"Products"} value={12322} />
+                        <DashboardCard icon={<UserOutlined className="text-[22px] !text-[purple] rounded-[12px] p-[8px]  bg-cyan-600/20" />} title={"Customers"} value={12322} />
+                        <DashboardCard icon={<DollarOutlined className="text-[22px] !text-[orange] rounded-[12px] p-[8px]  bg-yellow-400/20" />} title={"Revenue"} value={12322} />
                     </Row>
                 </Col>
-                <Col xs={24} md={12} style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px" }}>
-                    <div style={{ textAlign: "center" }}>
-                        <PieChart />
-                    </div>
+                <Col xs={24} md={12} style={{ textAlign: "center", borderRadius: "20px" }}>
+                    <Row>
+                        <Col xs={24} sm={24} md={12}>
+                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", gap: "20px", marginRight: "10px", padding: "12px" ,boxShadow:"0 0 10px rgba(0,0,0,0.05)"}}>
+                                <PieChart />
+                            </div>
+                        </Col>
+                        <Col xs={24} sm={24} md={12}>
+                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", gap: "20px", marginLeft: "10px", padding: "12px", boxShadow:"0 0 10px rgba(0,0,0,0.05)" }}>
+                                <BarChart />
+                            </div>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
-            <Row gutter={[12, 12]} style={{ padding: "12px", margin: "-12px" }}>
+            <Row gutter={[16, 16]} style={{ padding: "12px", margin: "-12px" }}>
                 <Col xs={24} sm={24} md={16}>
-                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "12px" }}>
+                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "12px", marginLeft: "7px",marginBottom:"20px",boxShadow:"0 0 10px rgba(0,0,0,0.05)"  }}>
                         <LineChart />
                     </div>
                 </Col>
                 <Col xs={24} sm={24} md={8}>
-                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "8px" }}>
+                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "8px",boxShadow:"0 0 10px rgba(0,0,0,0.05)" }}>
                         <Divider>Middle size table</Divider>
                         <Table pagination={{ pageSize: 3 }} columns={columns} dataSource={data} size="small" />
                     </div>
@@ -97,7 +105,7 @@ const Dashboard = () => {
 const DashboardCard = ({ title, value, icon }) => {
     return (
         <Col xs={24} sm={12}>
-            <Card style={{ width: "100%" }}>
+            <Card style={{ width: "100%" ,boxShadow:"0 0 10px rgba(0,0,0,0.05)"}}>
                 <Space direction="horizontal">
                     {icon}
                     <Statistic title={title} value={value} />
@@ -113,7 +121,7 @@ const LineChart = () => {
         labels: labels,
         datasets: [
             {
-                label: "My First Dataset",
+                label: "Sales for 2020 (M)",
                 data: [65, 59, 80, 81, 56, 55, 40],
                 fill: true,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -123,12 +131,12 @@ const LineChart = () => {
         ],
     };
     const options = {
-        responsive: true, // ทำให้กราฟ responsive
-        maintainAspectRatio: false, // ปิดอัตราส่วนคงที่ เพื่อให้ปรับขนาดได้
+        responsive: true,
+        maintainAspectRatio: false,
     };
 
     return (
-        <div style={{ width: "100%", height: "auto", maxWidth: "100%", minHeight: "300px" }}>
+        <div style={{ width: "100%", height: "auto", maxWidth: "100%", minHeight: "300px"}}>
             <Line data={data} options={options} />
         </div>
     );
@@ -153,10 +161,40 @@ const PieChart = () => {
     };
 
     return (
-        <div style={{ width: "39vh", height: "39vh", margin: "auto" }}>
-            <Pie data={data} options={options} />
+        <div style={{ width: "100%", maxWidth: "400px", height: "auto", display: "flex", justifyContent: "center", margin: "0 auto", minHeight: "220px" }}>
+            <Doughnut data={data} options={options} />
         </div>
     );
 };
 
+const BarChart = () => {
+    const data = {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+        datasets: [
+            {
+                label: "Sales",
+                data: [65, 59, 80, 81, 56, 55, 40],
+                backgroundColor: "rgba(75, 192, 192, 0.6)",
+                borderColor: "rgb(75, 192, 192)",
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
+
+    return (
+        <div style={{ width: "100%", maxWidth: "400px", height: "auto", display: "flex", justifyContent: "center", margin: "0 auto", minHeight: "220px" }}>
+            <Bar data={data} options={options} />
+        </div>
+    );
+};
 export default Dashboard;
