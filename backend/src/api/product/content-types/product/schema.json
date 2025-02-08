@@ -24,29 +24,29 @@
     "stock": {
       "type": "integer"
     },
-    "category": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::categorie.categorie",
-      "inversedBy": "product"
-    },
     "order_item": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::order-item.order-item",
-      "mappedBy": "product"
-    },
-    "cart": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::cart.cart",
-      "mappedBy": "product"
-    },
-    "review": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::review.review",
       "inversedBy": "product"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::categorie.categorie",
+      "inversedBy": "products"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "product"
+    },
+    "cart_item": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::cart-item.cart-item",
+      "mappedBy": "product"
     }
   }
 }

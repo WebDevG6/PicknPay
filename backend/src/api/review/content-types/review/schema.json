@@ -12,23 +12,30 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "rating": {
-      "type": "integer"
-    },
     "comment": {
       "type": "string"
     },
     "product": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::product.product",
-      "mappedBy": "review"
+      "inversedBy": "reviews"
     },
-    "customer": {
+    "user": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::customer.customer",
-      "inversedBy": "review"
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "reviews"
+    },
+    "rating": {
+      "type": "enumeration",
+      "enum": [
+        "Amazing",
+        "Good",
+        "Fair",
+        "Poor",
+        "Terrible"
+      ]
     }
   }
 }

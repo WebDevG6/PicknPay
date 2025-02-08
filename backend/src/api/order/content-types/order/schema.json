@@ -12,22 +12,25 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "total": {
-      "type": "integer"
-    },
-    "status_order": {
-      "type": "string"
-    },
     "order_item": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::order-item.order-item",
       "inversedBy": "order"
     },
-    "customer": {
+    "status_order": {
+      "type": "enumeration",
+      "enum": [
+        "To pay",
+        "To ship",
+        "To receive",
+        "complete"
+      ]
+    },
+    "user": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::customer.customer",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
     }
   }

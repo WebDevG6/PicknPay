@@ -18,17 +18,17 @@
     "quantity": {
       "type": "integer"
     },
-    "product": {
+    "user": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::product.product",
-      "inversedBy": "cart"
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "cart"
     },
-    "customer": {
+    "cart_items": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::customer.customer",
-      "inversedBy": "cart"
+      "relation": "oneToMany",
+      "target": "api::cart-item.cart-item",
+      "mappedBy": "cart"
     }
   }
 }
