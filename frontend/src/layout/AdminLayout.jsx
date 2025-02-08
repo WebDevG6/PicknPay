@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import { Layout, Menu, theme, Badge,Drawer  } from "antd";
+import { Layout, Menu, theme, Badge, Drawer } from "antd";
 import { DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined, LogoutOutlined, ShoppingOutlined, BellOutlined } from "@ant-design/icons";
 import { authContext } from "../context/AuthContext";
 
@@ -56,7 +56,7 @@ function AdminLayout() {
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <Sider style={{ siderStyle, backgroundColor: "#122c76" }} collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+            <Sider style={{ siderStyle }} collapsible collapsed={collapsed} onCollapse={setCollapsed}>
                 <div
                     className="admin-panel"
                     style={{
@@ -84,14 +84,14 @@ function AdminLayout() {
                     </h1>
                 </div>
 
-                <Menu style={{ backgroundColor: "#122c76", padding: 6 }} theme="dark" selectedKeys={[selectedMenu]} mode="inline" items={items} onClick={handleMenuClick} />
+                <Menu style={{ padding: 6 }} theme="dark" selectedKeys={[selectedMenu]} mode="inline" items={items} onClick={handleMenuClick} />
             </Sider>
             <Layout>
                 <header
                     style={{
                         padding: 23,
                         paddingBlockEnd: 22,
-                        backgroundColor: "#122c76",
+                        background: colorBgContainer,
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -101,7 +101,7 @@ function AdminLayout() {
                     <h1
                         style={{
                             fontSize: 22,
-                            color: "white",
+                            color: "black",
                             fontWeight: "bold",
                             margin: 0,
                             position: "absolute",
@@ -117,11 +117,11 @@ function AdminLayout() {
                             top: "14px",
                             right: "18px",
                             display: "flex",
-                            alignItems: "center", 
+                            alignItems: "center",
                         }}>
                         <Badge size="small" count={5} style={{ fontSize: 12 }}>
                             <BellOutlined
-                                style={{ fontSize: 20, color: "white", cursor: "pointer" }}
+                                style={{ fontSize: 20, color: "black", cursor: "pointer" }}
                                 onClick={showDrawer}
                             />
                         </Badge>

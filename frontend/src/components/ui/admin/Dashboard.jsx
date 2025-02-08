@@ -58,6 +58,7 @@ const data = [
     },
 ];
 
+
 const Dashboard = () => {
     return (
         <div className="w-full overflow-hidden">
@@ -85,16 +86,16 @@ const Dashboard = () => {
                     </Row>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} style={{ padding: "12px", margin: "-12px" }}>
+            <Row gutter={[16, 16]} style={{ padding: "6px", borderRadius: "18px" }}>
                 <Col xs={24} sm={24} md={16}>
                     <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "12px", marginLeft: "7px",marginBottom:"20px",boxShadow:"0 0 10px rgba(0,0,0,0.05)"  }}>
                         <LineChart />
                     </div>
                 </Col>
                 <Col xs={24} sm={24} md={8}>
-                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "8px",boxShadow:"0 0 10px rgba(0,0,0,0.05)" }}>
+                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "8px",boxShadow:"0 0 10px rgba(0,0,0,0.05)",marginBottom:"20px" }}>
                         <Divider>Middle size table</Divider>
-                        <Table pagination={{ pageSize: 3 }} columns={columns} dataSource={data} size="small" />
+                        <Table  pagination={{ pageSize: 3 }} columns={columns} dataSource={data} size="small" />
                     </div>
                 </Col>
             </Row>
@@ -142,7 +143,7 @@ const LineChart = () => {
                 fill: true,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                 borderColor: "rgb(75, 192, 192)",
-                tension: 0.1,
+                tension: 0.05,
             },
         ],
     };
