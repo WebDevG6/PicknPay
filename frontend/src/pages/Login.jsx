@@ -12,7 +12,7 @@ function Login() {
         await login.mutateAsync(formData, {
             onSuccess: () => {
                 getRole().then((role) => {
-                    if (role.data === "Authenticated") {
+                    if (role.data === "Customer") {
                         navigate("/", { replace: true });
                     } else if (role.data === "Admin") {
                         navigate("/admin", { replace: true });
