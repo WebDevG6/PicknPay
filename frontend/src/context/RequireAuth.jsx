@@ -33,5 +33,5 @@ export default function RequiredAuth() {
         return;
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 }
