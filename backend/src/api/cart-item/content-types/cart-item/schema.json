@@ -12,20 +12,23 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "quantity": {
-      "type": "biginteger"
-    },
-    "cart": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::cart.cart",
-      "inversedBy": "cart_items"
+    "cart_item_id": {
+      "type": "string"
     },
     "product": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::product.product",
-      "inversedBy": "cart_item"
+      "inversedBy": "cart_items"
+    },
+    "quantity": {
+      "type": "biginteger"
+    },
+    "cart_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cart.cart",
+      "inversedBy": "cart_items_id"
     }
   }
 }

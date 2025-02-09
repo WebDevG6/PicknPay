@@ -65,18 +65,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "orders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::order.order",
-      "mappedBy": "user"
-    },
-    "cart": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::cart.cart",
-      "inversedBy": "user"
-    },
     "reviews": {
       "type": "relation",
       "relation": "oneToMany",
@@ -94,6 +82,12 @@
     "lastname": {
       "type": "string",
       "required": true
+    },
+    "cart_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::cart.cart",
+      "mappedBy": "users_permissions_user"
     }
   }
 }
