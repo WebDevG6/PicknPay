@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "order_items",
+  "collectionName": "cart_items",
   "info": {
-    "singularName": "order-item",
-    "pluralName": "order-items",
-    "displayName": "Order_item",
+    "singularName": "cart-item",
+    "pluralName": "cart-items",
+    "displayName": "Cart_item",
     "description": ""
   },
   "options": {
@@ -13,19 +13,19 @@
   "pluginOptions": {},
   "attributes": {
     "quantity": {
-      "type": "integer"
+      "type": "biginteger"
     },
-    "order": {
+    "cart": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::order.order",
-      "mappedBy": "order_item"
+      "relation": "manyToOne",
+      "target": "api::cart.cart",
+      "inversedBy": "cart_items"
     },
     "product": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::product.product",
-      "mappedBy": "order_item"
+      "inversedBy": "cart_item"
     }
   }
 }
