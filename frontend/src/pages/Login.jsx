@@ -1,69 +1,89 @@
-import { useState } from "react";
-import { Button, Form, Input, Alert, Checkbox } from "antd";
+import React from "react";
 import { useNavigate } from "react-router";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import Cookies from "js-cookie";
-import conf from "../conf/main";
-import ax, { axData } from "../conf/ax";
+import { Button, Form, Input, Alert, Checkbox } from "antd";
+import { useLogin, useRole } from "../hooks/auth";
 
-export default function Login() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [errMsg, setErrMsg] = useState(null);
+function Login() {
     const navigate = useNavigate();
+    const login = useLogin();
+    const { refetch: getRole } = useRole();
 
-    async function handleLogin(formData) {
-        try {
-            setIsLoading(true);
-            setErrMsg(null);
-            const response = await ax.post(conf.loginEndpoint, formData);
-            axData.jwt = response.data.jwt;
-            Cookies.set("token", axData.jwt, {
-                expires: formData.remember ? 30 : null,
-                path: "/",
-            });
-            const responseUser = await ax.get(conf.jwtUserEndpoint, { withCredentials: false });
-            const role = responseUser.data.role.name;
-        } catch (err) {
-            setErrMsg(err.response.data.error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    const handleLogin = async (formData) => {
+        await login.mutateAsync(formData, {
+            onSuccess: () => {
+                getRole().then((role) => {
+                    if (role.data === "Customer") {
+                        navigate("/", { replace: true });
+                    } else if (role.data === "Admin") {
+                        navigate("/admin", { replace: true });
+                    }
+                });
+            },
+        });
+    };
 
     return (
-        <div className="h-screen w-screen justify-center items-center text-white flex bg-linear-90 from-[#001628] to-[#1c64a3]">
-            <div className="pt-12 pb-6   pl-6 pr-6 text-2xl justify-items-center bg-white text-black rounded-xl">
-                <p className="text-5xl mb-12 font-bold">Login</p>
-                <Form onFinish={handleLogin} autoComplete="off" className="w-[25vw] min-w-[200px]">
-                    {errMsg && (
-                        <Form.Item>
-                            <Alert message={errMsg} type="error" />
-                        </Form.Item>
-                    )}
-                    <Form.Item name="identifier" rules={[{ required: true }]}>
-                        <Input placeholder="Username" prefix={<UserOutlined />} />
-                    </Form.Item>
-
-                    <Form.Item name="password" rules={[{ required: true }]}>
-                        <Input.Password placeholder="Password" prefix={<LockOutlined />} />
-                    </Form.Item>
-
-                    <Form.Item name="remember" valuePropName="checked" label={null}>
-                        <Checkbox style={{ userSelect: "none" }}>Remember me</Checkbox>
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Button
-                            style={{ width: "100%", height: "52px" }}
-                            type="primary"
-                            htmlType="submit"
-                            loading={isLoading}
-                        >
-                            LOGIN
-                        </Button>
-                    </Form.Item>
-                </Form>
+        <div className="flex flex-col gap-6 min-w-[0] p-5 sm:p-0 sm:min-w-[350px]">
+            <div className=" flex flex-col gap-3">
+                <p className="text-4xl font-semibold">
+                    Welcome Back<a className="text-[#4169E2]">!</a>
+                </p>
+                <p className="text-xs text-gray-500">
+                    Don't have an account?{" "}
+                    <a
+                        onClick={() => navigate("/register")}
+                        className="text-[#4169E2] hover:text-blue-400 cursor-pointer transition-colors duration-200"
+                    >
+                        Register
+                    </a>
+                </p>
             </div>
+            <Form
+                onFinish={handleLogin}
+                autoComplete="off"
+                className="w-[100%]"
+                style={{ justifyItems: "center" }}
+                requiredMark={false}
+                layout="vertical"
+            >
+                {login.isError && (
+                    <Form.Item style={{ width: "100%" }}>
+                        <Alert
+                            message={login.error.response?.data?.error?.message || "Login failed. Please try again."}
+                            type="error"
+                        />
+                    </Form.Item>
+                )}
+                <Form.Item
+                    name="identifier"
+                    label="Email"
+                    rules={[{ required: true, type: "email" }]}
+                    style={{ width: "100%" }}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item name="password" label="Password" rules={[{ required: true }]} style={{ width: "100%" }}>
+                    <Input.Password />
+                </Form.Item>
+
+                <Form.Item name="remember" valuePropName="checked" label={null} style={{ width: "100%" }}>
+                    <Checkbox style={{ userSelect: "none" }}>Remember me</Checkbox>
+                </Form.Item>
+
+                <Form.Item style={{ width: "100%" }}>
+                    <Button
+                        style={{ width: "100%", height: "42px" }}
+                        type="primary"
+                        htmlType="submit"
+                        loading={login.isPending}
+                    >
+                        Login
+                    </Button>
+                </Form.Item>
+            </Form>
         </div>
     );
 }
+
+export default Login;
