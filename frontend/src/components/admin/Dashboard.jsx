@@ -1,4 +1,4 @@
-import { Card, Row, Space, Statistic, Col, Table, Divider } from "antd";
+import { Card, Row, Space, Statistic, Col, Table, Divider, theme } from "antd";
 import React from "react";
 import { ShoppingOutlined, UserOutlined, DollarOutlined, ProductOutlined } from "@ant-design/icons";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
@@ -60,42 +60,45 @@ const data = [
 
 
 const Dashboard = () => {
+    const {
+        token: { borderRadiusLG },
+    } = theme.useToken();
     return (
         <div className="w-full overflow-hidden">
-            <Row gutter={[18, 18]} style={{ padding: "18px", borderRadius: "18px" }}>
-                <Col xs={24} md={12} style={{ textAlign: "center", alignItems: "center", display: "flex" }}>
-                    <Row gutter={[16, 16]} style={{ display: "flex", flexWrap: "wrap" }}>
+            <Row gutter={[18, 18]} className="p-[8px]">
+                <Col xs={24} md={12} className="flex items-center justify-center text-center">
+                    <Row gutter={[16, 16]} className="flex flex-wrap">
                         <DashboardCard icon={<ShoppingOutlined className="text-[22px] !text-[green] rounded-[12px] p-[8px] bg-green-600/20" />} title={"Orders"} value={12322} />
                         <DashboardCard icon={<ProductOutlined className="text-[22px] !text-[blue] rounded-[12px] p-[8px]  bg-blue-600/20" />} title={"Products"} value={12322} />
                         <DashboardCard icon={<UserOutlined className="text-[22px] !text-[purple] rounded-[12px] p-[8px]  bg-cyan-600/20" />} title={"Customers"} value={12322} />
                         <DashboardCard icon={<DollarOutlined className="text-[22px] !text-[orange] rounded-[12px] p-[8px]  bg-yellow-400/20" />} title={"Revenue"} value={12322} />
                     </Row>
                 </Col>
-                <Col xs={24} md={12} style={{ textAlign: "center", borderRadius: "20px" }}>
+                <Col xs={24} md={12} style={{ textAlign: "center", borderRadius: borderRadiusLG }}>
                     <Row>
                         <Col xs={24} sm={24} md={12}>
-                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", gap: "20px", marginRight: "10px", padding: "12px" ,boxShadow:"0 0 10px rgba(0,0,0,0.05)"}}>
+                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: borderRadiusLG, marginRight: "10px", padding: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.05)" }}>
                                 <PieChart />
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={12}>
-                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", gap: "20px", marginLeft: "10px", padding: "12px", boxShadow:"0 0 10px rgba(0,0,0,0.05)" }}>
+                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: borderRadiusLG, marginLeft: "20px", padding: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.05)" }}>
                                 <BarChart />
                             </div>
                         </Col>
                     </Row>
                 </Col>
             </Row>
-            <Row gutter={[16, 16]} style={{ padding: "6px", borderRadius: "18px" }}>
+            <Row gutter={[12, 12]} className="p-[8px]">
                 <Col xs={24} sm={24} md={16}>
-                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "12px", marginLeft: "7px",marginBottom:"20px",boxShadow:"0 0 10px rgba(0,0,0,0.05)"  }}>
+                    <div className="text-center bg-white rounded-lg p-2 shadow-md">
                         <LineChart />
                     </div>
                 </Col>
                 <Col xs={24} sm={24} md={8}>
-                    <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: "20px", padding: "8px",boxShadow:"0 0 10px rgba(0,0,0,0.05)",marginBottom:"20px" }}>
+                    <div className="text-center bg-white rounded-lg p-2 shadow-md min-h-[315px]">
                         <Divider>Middle size table</Divider>
-                        <Table  pagination={{ pageSize: 3 }} columns={columns} dataSource={data} size="small" />
+                        <Table pagination={{ pageSize: 3 }} columns={columns} dataSource={data} size="small" />
                     </div>
                 </Col>
             </Row>
@@ -104,31 +107,30 @@ const Dashboard = () => {
 };
 
 const DashboardCard = ({ title, value, icon }) => {
+    const {
+        token: { borderRadiusLG },
+    } = theme.useToken();
     return (
         <Col xs={24} sm={12}>
-        <Card
-            style={{
-                width: "100%",
-                boxShadow: "0 0 10px rgba(0,0,0,0.05)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center", 
-                textAlign: "center",
-            }}>
-            <Space
-                direction="horizontal"
+            <Card
                 style={{
+                    width: "100%",
+                    boxShadow: "0 0 10px rgba(0,0,0,0.05)",
                     display: "flex",
-                    alignItems: "center", 
-                    justifyContent: "center", 
-                    flexWrap: "wrap", 
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                    borderRadius: borderRadiusLG,
                 }}>
-                {icon}
-                <Statistic title={title} value={value} />
-            </Space>
-        </Card>
-    </Col>
-    
+                <Space
+                    direction="horizontal"
+                    className="flex items-center justify-center flex-wrap">
+                    {icon}
+                    <Statistic title={title} value={value} />
+                </Space>
+            </Card>
+        </Col>
+
     );
 };
 const LineChart = () => {
@@ -153,7 +155,7 @@ const LineChart = () => {
     };
 
     return (
-        <div style={{ width: "100%", height: "auto", maxWidth: "100%", minHeight: "300px"}}>
+        <div className="w-full h-auto max-w-full min-h-[300px]">
             <Line data={data} options={options} />
         </div>
     );
@@ -178,7 +180,7 @@ const PieChart = () => {
     };
 
     return (
-        <div style={{ width: "100%", maxWidth: "400px", height: "auto", display: "flex", justifyContent: "center", margin: "0 auto", minHeight: "220px" }}>
+        <div className="w-full max-w-[400px] h-auto flex justify-center mx-auto min-h-[220px]">
             <Doughnut data={data} options={options} />
         </div>
     );
@@ -209,7 +211,7 @@ const BarChart = () => {
     };
 
     return (
-        <div style={{ width: "100%", maxWidth: "400px", height: "auto", display: "flex", justifyContent: "center", margin: "0 auto", minHeight: "220px" }}>
+        <div className="w-full max-w-[400px] h-auto flex justify-center mx-auto min-h-[220px]">
             <Bar data={data} options={options} />
         </div>
     );

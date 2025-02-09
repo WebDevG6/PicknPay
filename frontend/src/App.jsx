@@ -6,10 +6,10 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Home from "./pages/Home";
 import AdminLayout from "./layout/AdminLayout";
-import Orders from "./components/ui/admin/Orders";
-import Products from "./components/ui/admin/Products";
-import Dashboard from "./components/ui/admin/Dashboard";
-import Customers from "./components/ui/admin/Customers";
+import Orders from "./components/admin/Orders";
+import Products from "./components/admin/Products";
+import Dashboard from "./components/admin/Dashboard";
+import Customers from "./components/admin/Customers";
 
 function App() {
     return (
