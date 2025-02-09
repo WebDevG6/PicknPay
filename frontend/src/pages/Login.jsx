@@ -1,38 +1,25 @@
 import React from "react";
-import Cookies from "js-cookie";
-import conf from "../conf/main";
-import ax, { axData } from "../conf/ax";
 import { useNavigate } from "react-router";
-import { useState } from "react";
 import { Button, Form, Input, Alert, Checkbox } from "antd";
+import { useLogin, useRole } from "../hooks/auth";
 
 function Login() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [errMsg, setErrMsg] = useState(null);
     const navigate = useNavigate();
+    const login = useLogin();
+    const { refetch: getRole } = useRole();
 
     const handleLogin = async (formData) => {
-        try {
-            setIsLoading(true);
-            setErrMsg(null);
-            const response = await ax.post(conf.loginEndpoint, formData);
-            axData.jwt = response.data.jwt;
-            Cookies.set("token", axData.jwt, {
-                expires: formData.remember ? 30 : null,
-                path: "/",
-            });
-            const responseUser = await ax.get(conf.jwtUserEndpoint, { withCredentials: false });
-            const role = responseUser.data.role.name;
-            if (role === "Authenticated") {
-                navigate("/");
-            } else if (role === "Admin") {
-                navigate("/admin");
-            }
-        } catch (err) {
-            setErrMsg(err.response.data.error.message);
-        } finally {
-            setIsLoading(false);
-        }
+        await login.mutateAsync(formData, {
+            onSuccess: () => {
+                getRole().then((role) => {
+                    if (role.data === "Authenticated") {
+                        navigate("/", { replace: true });
+                    } else if (role.data === "Admin") {
+                        navigate("/admin", { replace: true });
+                    }
+                });
+            },
+        });
     };
 
     return (
@@ -59,9 +46,12 @@ function Login() {
                 requiredMark={false}
                 layout="vertical"
             >
-                {errMsg && (
+                {login.isError && (
                     <Form.Item style={{ width: "100%" }}>
-                        <Alert message={errMsg} type="error" />
+                        <Alert
+                            message={login.error.response?.data?.error?.message || "Login failed. Please try again."}
+                            type="error"
+                        />
                     </Form.Item>
                 )}
                 <Form.Item
@@ -86,7 +76,7 @@ function Login() {
                         style={{ width: "100%", height: "42px" }}
                         type="primary"
                         htmlType="submit"
-                        loading={isLoading}
+                        loading={login.isPending}
                     >
                         Login
                     </Button>

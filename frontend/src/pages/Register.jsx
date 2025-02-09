@@ -1,52 +1,41 @@
 import React from "react";
-import Cookies from "js-cookie";
-import conf from "../conf/main";
-import ax, { axData } from "../conf/ax";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { Button, Form, Input, Alert } from "antd";
 import RegisterBar from "../components/RegisterBar";
+import { useRegister, useProfile } from "../hooks/auth";
 const { TextArea } = Input;
 
 function Register() {
-    const [isLoading, setIsLoading] = useState(false);
     const [checkStep, setCheckStep] = useState(0);
-    const [errMsg, setErrMsg] = useState(null);
     const [registerForm] = Form.useForm();
     const [registerData, setRegisterData] = useState();
+    const register = useRegister();
+    const changeProfile = useProfile();
     const navigate = useNavigate();
 
     const handleRegister = async () => {
         const addressData = await registerForm.validateFields();
-        try {
-            setIsLoading(true);
-            setErrMsg(null);
-            const response = await ax.post(
-                conf.registerEndpoint,
-                {
-                    email: registerData.email,
-                    username: registerData.email,
-                    password: registerData.password,
-                },
-                { withCredentials: false }
-            );
-            axData.jwt = response.data.jwt;
-            Cookies.set("token", axData.jwt, {
-                expires: null,
-                path: "/",
-            });
-            await ax.put(conf.userEndpoint + response.data.user.id, {
-                firstname: registerData.firstName,
-                lastname: registerData.lastName,
-                address: addressData.address,
-            });
-            navigate("/");
-        } catch (err) {
-            setErrMsg(err?.response?.data?.error?.message);
-            setCheckStep(0);
-        } finally {
-            setIsLoading(false);
-        }
+        await register.mutateAsync(registerData, {
+            onSuccess: (data) => {
+                changeProfile.mutate(
+                    {
+                        userId: data.user.id,
+                        firstName: registerData.firstName,
+                        lastName: registerData.lastName,
+                        address: addressData.address,
+                    },
+                    {
+                        onSuccess: () => {
+                            navigate("/", { replace: true });
+                        },
+                    }
+                );
+            },
+            onError: () => {
+                setCheckStep(0);
+            },
+        });
     };
 
     return (
@@ -74,9 +63,14 @@ function Register() {
                 form={registerForm}
                 layout="vertical"
             >
-                {errMsg && (
+                {register.isError && (
                     <Form.Item style={{ width: "100%" }}>
-                        <Alert message={errMsg} type="error" />
+                        <Alert
+                            message={
+                                register.error.response?.data?.error?.message || "Register failed. Please try again."
+                            }
+                            type="error"
+                        />
                     </Form.Item>
                 )}
 
@@ -140,7 +134,7 @@ function Register() {
                                     setCheckStep(1);
                                 }
                             }}
-                            loading={isLoading}
+                            loading={register.isPending}
                         >
                             {checkStep === 0 ? "Continue" : "Register"}
                         </Button>
