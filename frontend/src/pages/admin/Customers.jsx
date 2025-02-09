@@ -39,7 +39,7 @@ const Customers = () => {
                             title: "First Name",
                             dataIndex: "firstName",
                             filteredValue: searchedText ? [searchedText] : null,
-                            onFilter: (value, record) => { return String(record.firstName).toLowerCase().includes(value.toLowerCase()), String(record.lastName).toLowerCase().includes(value.toLowerCase()) },
+                            onFilter: (value, record) => { return String(record.email).toLowerCase().includes(value.toLowerCase()), String(record.firstName).toLowerCase().includes(value.toLowerCase()) },
                             sorter: (a, b) => a.firstName.localeCompare(b.firstName),
                             sortOrder,
                             onHeaderCell: () => ({
@@ -53,10 +53,6 @@ const Customers = () => {
                         {
                             title: "Email",
                             dataIndex: "email",
-                        },
-                        {
-                            title: "Phone",
-                            dataIndex: "phone",
                         },
                         {
                             title: "Address",

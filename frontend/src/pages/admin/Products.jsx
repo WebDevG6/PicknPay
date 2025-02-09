@@ -1,11 +1,12 @@
+import React from "react";
+import { Avatar, Rate, Space, Table, Input } from "antd";
 import { useEffect, useState } from "react";
-import { Space, Table, Input } from "antd";
 
-const getOrders = () => {
-    return fetch("https://dummyjson.com/carts/1").then((res) => res.json());
+const getInventory = () => {
+    return fetch("https://dummyjson.com/products").then((res) => res.json());
 };
 
-function Orders() {
+const Products = () => {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
     const [searchedText, setSearchedText] = useState("");
@@ -13,7 +14,7 @@ function Orders() {
 
     useEffect(() => {
         setLoading(true);
-        getOrders().then((res) => {
+        getInventory().then((res) => {
             setDataSource(res.products);
             setLoading(false);
         });
@@ -26,6 +27,13 @@ function Orders() {
                 <Table
                     loading={loading}
                     columns={[
+                        {
+                            title: "Thumbnail",
+                            dataIndex: "thumbnail",
+                            render: (link) => {
+                                return <Avatar src={link} />;
+                            },
+                        },
                         {
                             title: "Title",
                             dataIndex: "title",
@@ -40,31 +48,40 @@ function Orders() {
                         {
                             title: "Price",
                             dataIndex: "price",
-                            render: (value) => <span>${value}</span>,
+                            render: (value) => <span>฿{value}</span>,
                         },
                         {
-                            title: "DiscountedTotal",
-                            dataIndex: "discountedTotal",
-                            render: (value) => <span>${value}</span>,
+                            title: "Rating",
+                            dataIndex: "rating",
+                            render: (rating) => {
+                                return <Rate value={rating} allowHalf disabled />;
+                            },
                         },
                         {
-                            title: "Quantity",
-                            dataIndex: "quantity",
+                            title: "Stock",
+                            dataIndex: "stock",
+                        },
+
+                        {
+                            title: "Brand",
+                            dataIndex: "brand",
                         },
                         {
-                            title: "Total",
-                            dataIndex: "total",
+                            title: "Category",
+                            dataIndex: "category",
                         },
                     ]}
                     dataSource={dataSource}
                     pagination={{
-                        pageSize: 5,
+                        pageSize: 8,
                     }}
-                    scroll={{ x: "max-content" }} >
+                    scroll={{ x: "max-content" }}
+                >
 
                 </Table>
             </Space>
-        </div >
+        </div>
     );
-}
-export default Orders;
+};
+
+export default Products;

@@ -60,36 +60,33 @@ const data = [
 
 
 const Dashboard = () => {
-    const {
-        token: { borderRadiusLG },
-    } = theme.useToken();
     return (
-        <div className="w-full overflow-hidden">
-            <Row gutter={[18, 18]} className="p-[8px]">
+        <div className="w-full overflow-hidden ">
+            <Row gutter={[16, 16]} className="p-[8px] ">
                 <Col xs={24} md={12} className="flex items-center justify-center text-center">
-                    <Row gutter={[16, 16]} className="flex flex-wrap">
-                        <DashboardCard icon={<ShoppingOutlined className="text-[22px] !text-[green] rounded-[12px] p-[8px] bg-green-600/20" />} title={"Orders"} value={12322} />
-                        <DashboardCard icon={<ProductOutlined className="text-[22px] !text-[blue] rounded-[12px] p-[8px]  bg-blue-600/20" />} title={"Products"} value={12322} />
-                        <DashboardCard icon={<UserOutlined className="text-[22px] !text-[purple] rounded-[12px] p-[8px]  bg-cyan-600/20" />} title={"Customers"} value={12322} />
-                        <DashboardCard icon={<DollarOutlined className="text-[22px] !text-[orange] rounded-[12px] p-[8px]  bg-yellow-400/20" />} title={"Revenue"} value={12322} />
+                    <Row gutter={[16, 16]} className="flex flex-wrap h-full">
+                        <DashboardCard icon={<ShoppingOutlined className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />} title={"Orders"} value={12322} />
+                        <DashboardCard icon={<ProductOutlined className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />} title={"Products"} value={12322} />
+                        <DashboardCard icon={<UserOutlined className="text-2xl !text-[purple] rounded-xl p-2  bg-cyan-600/20 h-full" />} title={"Customers"} value={12322} />
+                        <DashboardCard icon={<DollarOutlined className="text-2xl !text-[orange] rounded-xl p-2  bg-yellow-400/20 h-full" />} title={"Revenue"} value={12322} />
                     </Row>
                 </Col>
-                <Col xs={24} md={12} style={{ textAlign: "center", borderRadius: borderRadiusLG }}>
-                    <Row>
+                <Col xs={24} md={12} className="text-center rounded-lg ">
+                    <Row gutter={[16, 16]} className="h-full">
                         <Col xs={24} sm={24} md={12}>
-                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: borderRadiusLG, marginRight: "10px", padding: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.05)" }}>
+                            <div className="flex text-center bg-white rounded-lg p-[10px] shadow-md h-full">
                                 <PieChart />
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={12}>
-                            <div style={{ textAlign: "center", backgroundColor: "white", borderRadius: borderRadiusLG, marginLeft: "20px", padding: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.05)" }}>
+                            <div className="flex text-center bg-white rounded-lg p-[10px] shadow-md h-full" >
                                 <BarChart />
                             </div>
                         </Col>
                     </Row>
                 </Col>
             </Row>
-            <Row gutter={[12, 12]} className="p-[8px]">
+            <Row gutter={[16, 16]} className="p-[8px]">
                 <Col xs={24} sm={24} md={16}>
                     <div className="text-center bg-white rounded-lg p-2 shadow-md">
                         <LineChart />
@@ -107,21 +104,10 @@ const Dashboard = () => {
 };
 
 const DashboardCard = ({ title, value, icon }) => {
-    const {
-        token: { borderRadiusLG },
-    } = theme.useToken();
     return (
         <Col xs={24} sm={12}>
             <Card
-                style={{
-                    width: "100%",
-                    boxShadow: "0 0 10px rgba(0,0,0,0.05)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    textAlign: "center",
-                    borderRadius: borderRadiusLG,
-                }}>
+                className="flex flex-col text-center items-center w-full shadow-md rounded-lg p-2">
                 <Space
                     direction="horizontal"
                     className="flex items-center justify-center flex-wrap">
@@ -180,7 +166,7 @@ const PieChart = () => {
     };
 
     return (
-        <div className="w-full max-w-[400px] h-auto flex justify-center mx-auto min-h-[220px]">
+        <div className="w-full max-w-[400px] h-full justify-center mx-auto min-h-[220px]">
             <Doughnut data={data} options={options} />
         </div>
     );

@@ -1,12 +1,11 @@
-import React from "react";
-import { Avatar, Rate, Space, Table, Input } from "antd";
 import { useEffect, useState } from "react";
+import { Space, Table, Input } from "antd";
 
-const getInventory = () => {
-    return fetch("https://dummyjson.com/products").then((res) => res.json());
+const getOrders = () => {
+    return fetch("https://dummyjson.com/carts/1").then((res) => res.json());
 };
 
-const Products = () => {
+function Orders() {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
     const [searchedText, setSearchedText] = useState("");
@@ -14,7 +13,7 @@ const Products = () => {
 
     useEffect(() => {
         setLoading(true);
-        getInventory().then((res) => {
+        getOrders().then((res) => {
             setDataSource(res.products);
             setLoading(false);
         });
@@ -28,13 +27,6 @@ const Products = () => {
                     loading={loading}
                     columns={[
                         {
-                            title: "Thumbnail",
-                            dataIndex: "thumbnail",
-                            render: (link) => {
-                                return <Avatar src={link} />;
-                            },
-                        },
-                        {
                             title: "Title",
                             dataIndex: "title",
                             filteredValue: searchedText ? [searchedText] : null,
@@ -46,42 +38,29 @@ const Products = () => {
                             }),
                         },
                         {
+                            title: "Quantity",
+                            dataIndex: "quantity",
+                        },
+                        {
                             title: "Price",
                             dataIndex: "price",
-                            render: (value) => <span>${value}</span>,
+                            render: (value) => <span>฿{value}</span>,
                         },
                         {
-                            title: "Rating",
-                            dataIndex: "rating",
-                            render: (rating) => {
-                                return <Rate value={rating} allowHalf disabled />;
-                            },
-                        },
-                        {
-                            title: "Stock",
-                            dataIndex: "stock",
-                        },
-
-                        {
-                            title: "Brand",
-                            dataIndex: "brand",
-                        },
-                        {
-                            title: "Category",
-                            dataIndex: "category",
+                            title: "Total",
+                            dataIndex: "total",
+                            render: (value) => <span>฿{value}</span>,
                         },
                     ]}
                     dataSource={dataSource}
                     pagination={{
-                        pageSize: 8,
+                        pageSize: 5,
                     }}
-                    scroll={{ x: "max-content" }}
-                >
+                    scroll={{ x: "max-content" }} >
 
                 </Table>
             </Space>
-        </div>
+        </div >
     );
-};
-
-export default Products;
+}
+export default Orders;
