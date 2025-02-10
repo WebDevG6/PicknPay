@@ -14,6 +14,7 @@ import Orders from "./pages/admin/Orders";
 import Products from "./pages/admin/Products";
 import Dashboard from "./pages/admin/Dashboard";
 import Customers from "./pages/admin/Customers";
+import CheckAuth from "./context/CheckAuth";
 
 function App() {
     return (
@@ -22,11 +23,13 @@ function App() {
                 <Routes>
                     <Route element={<AuthLayout />}>
                         <Route path="/login" element={<Login />} />
-                        <Route path="/logout" element={<Logout />} />
                         <Route path="/register" element={<Register />} />
                     </Route>
-                    <Route element={<UserLayout />}>
-                        <Route index path="/" element={<Home />} />
+                    <Route path="/logout" element={<Logout />} />
+                    <Route element={<CheckAuth />}>
+                        <Route element={<UserLayout />}>
+                            <Route index path="/" element={<Home />} />
+                        </Route>
                     </Route>
                     <Route element={<RequiredAuth />}>
                         <Route element={<RequireAdminRole />}>
