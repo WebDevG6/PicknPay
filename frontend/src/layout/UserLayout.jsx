@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Button, ConfigProvider, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Button, ConfigProvider, Input, Drawer } from "antd";
+import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { authContext } from "../context/AuthContext";
 
@@ -16,6 +16,13 @@ const userNavigation = [
 export default function userLayout() {
     const { userInfo } = useContext(authContext);
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+    const showDrawer = () => {
+        setOpen(true);
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
 
     return (
         <ConfigProvider
@@ -30,6 +37,14 @@ export default function userLayout() {
                 <Disclosure as="nav" className="bg-white  drop-shadow-lg">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-14 items-center justify-between">
+                            <div className="block md:hidden">
+                                <button
+                                    className="inline-flex justify-center items-center text-center cursor-pointer p-1 h-7 w-7 text-gray-400 hover:bg-[#F0F0F0] hover:text-black transition rounded-sm"
+                                    onClick={showDrawer}
+                                >
+                                    <MenuOutlined className="text-xl" />
+                                </button>
+                            </div>
                             <div className="flex items-center gap-6">
                                 <div className="shrink-0">
                                     <p className="text-3xl font-bold font-[Koulen] tracking-wider text-[#4169E2]">
@@ -99,6 +114,29 @@ export default function userLayout() {
                         </div>
                     </div>
                 </Disclosure>
+                <Drawer
+                    title={
+                        userInfo && (
+                            <div className="flex flex-row justify-start items-center gap-3 ml-1">
+                                <img alt="profile" src={imageProfileMockUrl} className="size-10 rounded-full" />
+                                <div className="">
+                                    <p>
+                                        {console.log(userInfo)}
+                                        {userInfo.firstname} {userInfo.lastname}
+                                    </p>
+                                    <p className="text-sm text-gray-500">{userInfo.email}</p>
+                                </div>
+                            </div>
+                        )
+                    }
+                    placement="left"
+                    onClose={onClose}
+                    open={open}
+                >
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                </Drawer>
 
                 <main className="bg-[#F5F5F5]">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
