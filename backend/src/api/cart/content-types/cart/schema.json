@@ -13,21 +13,24 @@
   "pluginOptions": {},
   "attributes": {
     "cart_id": {
-      "type": "biginteger"
+      "type": "string"
     },
-    "quantity": {
-      "type": "integer"
-    },
-    "user": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "cart"
-    },
-    "cart_items": {
+    "cart_items_id": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::cart-item.cart-item",
+      "mappedBy": "cart_id"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "cart_id"
+    },
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
       "mappedBy": "cart"
     }
   }

@@ -12,10 +12,13 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "order_item": {
+    "order_id": {
+      "type": "string"
+    },
+    "cart": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::order-item.order-item",
+      "target": "api::cart.cart",
       "inversedBy": "order"
     },
     "status_order": {
@@ -24,14 +27,8 @@
         "To pay",
         "To ship",
         "To receive",
-        "complete"
+        "Complete"
       ]
-    },
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "orders"
     }
   }
 }
