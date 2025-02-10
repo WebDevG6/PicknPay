@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Button, ConfigProvider, Input, Drawer } from "antd";
+import { Button, ConfigProvider, Input, Drawer, Divider } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { authContext } from "../context/AuthContext";
@@ -10,6 +10,7 @@ const imageProfileMockUrl =
 
 const userNavigation = [
     { name: "Profile", to: "/profile" },
+    { name: "Cart", to: "/" },
     { name: "Logout", to: "/logout" },
 ];
 
@@ -58,12 +59,17 @@ export default function userLayout() {
                                     </Button>
                                 </div>
                             </div>
-                            <div className="lg:w-[30em] w-[20em]">
+                            <div className="lg:w-[30em] w-[20em] hidden md:block">
                                 <Input
                                     allowClear
                                     style={{ borderRadius: 100, background: "#F5F5F5" }}
                                     prefix={<SearchOutlined style={{ fontSize: 16, color: "#9AA1AE" }} />}
                                 />
+                            </div>
+                            <div className="md:hidden block">
+                                <button className="inline-flex justify-center items-center text-center cursor-pointer p-1 h-7 w-7 text-gray-400 hover:bg-[#F0F0F0] hover:text-black transition rounded-sm">
+                                    <SearchOutlined style={{ fontSize: 20 }} />
+                                </button>
                             </div>
                             {userInfo ? (
                                 <div className="hidden md:block">
@@ -103,13 +109,15 @@ export default function userLayout() {
                                     </div>
                                 </div>
                             ) : (
-                                <Button
-                                    type="primary"
-                                    onClick={() => navigate("/login")}
-                                    style={{ borderRadius: 5, letterSpacing: 1 }}
-                                >
-                                    Login
-                                </Button>
+                                <div className="hidden md:block">
+                                    <Button
+                                        type="primary"
+                                        onClick={() => navigate("/login")}
+                                        style={{ borderRadius: 5, letterSpacing: 1 }}
+                                    >
+                                        Login
+                                    </Button>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -121,7 +129,6 @@ export default function userLayout() {
                                 <img alt="profile" src={imageProfileMockUrl} className="size-10 rounded-full" />
                                 <div className="">
                                     <p>
-                                        {console.log(userInfo)}
                                         {userInfo.firstname} {userInfo.lastname}
                                     </p>
                                     <p className="text-sm text-gray-500">{userInfo.email}</p>
@@ -133,9 +140,26 @@ export default function userLayout() {
                     onClose={onClose}
                     open={open}
                 >
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    {userInfo ? (
+                        <div className="flex flex-col gap-2">
+                            {userNavigation.map((item) => (
+                                <button
+                                    className=" p-2 rounded-sm transition py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black cursor-pointer"
+                                    onClick={() => navigate(item.to)}
+                                >
+                                    {item.name}
+                                </button>
+                            ))}
+                        </div>
+                    ) : (
+                        <Button
+                            type="primary"
+                            onClick={() => navigate("/login")}
+                            style={{ borderRadius: 5, letterSpacing: 1, width: "100%" }}
+                        >
+                            Login
+                        </Button>
+                    )}
                 </Drawer>
 
                 <main className="bg-[#F5F5F5]">
