@@ -9,9 +9,14 @@ const imageProfileMockUrl =
     "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg";
 
 const userNavigation = [
-    { name: "Profile", to: "/profile" },
-    { name: "Cart", to: "/" },
-    { name: "Logout", to: "/logout" },
+    { name: "โปรไฟล์", to: "/profile" },
+    { name: "ออกจากระบบ", to: "/logout" },
+];
+
+const userNavigationMenu = [
+    { name: "โปรไฟล์", to: "/profile" },
+    { name: "รถเข็น", to: "/" },
+    { name: "ออกจากระบบ", to: "/logout" },
 ];
 
 export default function userLayout() {
@@ -97,7 +102,7 @@ export default function userLayout() {
                                                         <MenuItem key={item.name}>
                                                             <a
                                                                 onClick={() => navigate(item.to)}
-                                                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden cursor-pointer"
+                                                                className="block px-4 py-2 text-base text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden cursor-pointer font-[Kanit]"
                                                             >
                                                                 {item.name}
                                                             </a>
@@ -109,13 +114,13 @@ export default function userLayout() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="hidden md:block">
+                                <div className="hidden md:block ">
                                     <Button
                                         type="primary"
                                         onClick={() => navigate("/login")}
-                                        style={{ borderRadius: 5, letterSpacing: 1 }}
+                                        style={{ borderRadius: 5, fontFamily: "Kanit" }}
                                     >
-                                        Login
+                                        เข้าสู่ระบบ
                                     </Button>
                                 </div>
                             )}
@@ -142,9 +147,9 @@ export default function userLayout() {
                 >
                     {userInfo ? (
                         <div className="flex flex-col gap-2">
-                            {userNavigation.map((item) => (
+                            {userNavigationMenu.map((item) => (
                                 <button
-                                    className=" p-2 rounded-sm transition py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-black cursor-pointer"
+                                    className=" p-2 rounded-sm transition py-2 text-gray-700 hover:bg-gray-100 hover:text-black cursor-pointer font-[Kanit] text-lg"
                                     onClick={() => navigate(item.to)}
                                 >
                                     {item.name}
@@ -155,9 +160,9 @@ export default function userLayout() {
                         <Button
                             type="primary"
                             onClick={() => navigate("/login")}
-                            style={{ borderRadius: 5, letterSpacing: 1, width: "100%" }}
+                            style={{ borderRadius: 5, width: "100%", fontFamily: "Kanit" }}
                         >
-                            Login
+                            เข้าสู่ระบบ
                         </Button>
                     )}
                 </Drawer>
