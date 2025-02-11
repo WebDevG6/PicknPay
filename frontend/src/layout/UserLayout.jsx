@@ -15,7 +15,7 @@ const userNavigation = [
 
 const userNavigationMenu = [
     { name: "โปรไฟล์", to: "/profile" },
-    { name: "รถเข็น", to: "/" },
+    { name: "รถเข็น", to: "/customer/cart" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
@@ -80,7 +80,10 @@ export default function userLayout() {
                                 <div className="hidden md:block">
                                     <div className="ml-4 flex items-center md:ml-6">
                                         <div className="flex items-center gap-2">
-                                            <button className="inline-flex justify-center items-center text-center cursor-pointer text-gray-400 hover:text-[#4169E2] transition">
+                                            <button
+                                                onClick={() => navigate("/customer/cart")}
+                                                className="inline-flex justify-center items-center text-center cursor-pointer text-gray-400 hover:text-[#4169E2] transition"
+                                            >
                                                 <i className="fi fi-rr-shopping-cart text-2xl translate-y-[3.5px]" />
                                             </button>
 

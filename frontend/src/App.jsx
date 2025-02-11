@@ -15,6 +15,7 @@ import Products from "./pages/admin/Products";
 import Dashboard from "./pages/admin/Dashboard";
 import Customers from "./pages/admin/Customers";
 import CheckAuth from "./context/CheckAuth";
+import Cart from "./pages/Cart";
 
 function App() {
     return (
@@ -32,6 +33,11 @@ function App() {
                         </Route>
                     </Route>
                     <Route element={<RequiredAuth />}>
+                        <Route element={<RequireCustomerRole />}>
+                            <Route element={<UserLayout />}>
+                                <Route path="/customer/cart" element={<Cart />} />
+                            </Route>
+                        </Route>
                         <Route element={<RequireAdminRole />}>
                             <Route element={<AdminLayout />}>
                                 <Route path="/admin/*" element={<Navigate to={"/admin/dashboard"} />} />
