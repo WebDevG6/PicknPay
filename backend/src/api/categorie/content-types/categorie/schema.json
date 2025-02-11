@@ -15,9 +15,6 @@
     "name": {
       "type": "string"
     },
-    "description": {
-      "type": "text"
-    },
     "products": {
       "type": "relation",
       "relation": "oneToMany",

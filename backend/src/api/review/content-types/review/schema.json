@@ -28,14 +28,9 @@
       "inversedBy": "reviews"
     },
     "rating": {
-      "type": "enumeration",
-      "enum": [
-        "Amazing",
-        "Good",
-        "Fair",
-        "Poor",
-        "Terrible"
-      ]
+      "type": "biginteger",
+      "max": "5",
+      "min": "1"
     }
   }
 }
