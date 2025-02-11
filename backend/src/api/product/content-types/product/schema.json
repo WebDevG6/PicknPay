@@ -13,16 +13,19 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "text"
     },
     "price": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "required": true
     },
     "stock": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "category": {
       "type": "relation",
@@ -41,6 +44,15 @@
       "relation": "oneToMany",
       "target": "api::cart-item.cart-item",
       "mappedBy": "product"
+    },
+    "picture": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
     }
   }
 }
