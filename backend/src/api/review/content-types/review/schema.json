@@ -13,7 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "comment": {
-      "type": "string"
+      "type": "string",
+      "unique": false
     },
     "product": {
       "type": "relation",
@@ -29,8 +30,9 @@
     },
     "rating": {
       "type": "biginteger",
-      "max": "5",
-      "min": "1"
+      "max": "05",
+      "min": "01",
+      "required": false
     }
   }
 }

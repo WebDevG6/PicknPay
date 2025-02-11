@@ -13,16 +13,19 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "text"
     },
     "price": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "required": true
     },
     "stock": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "category": {
       "type": "relation",
@@ -45,7 +48,7 @@
     "picture": {
       "type": "media",
       "multiple": true,
-      "required": false,
+      "required": true,
       "allowedTypes": [
         "images",
         "files"
