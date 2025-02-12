@@ -23,7 +23,7 @@ function Cart() {
         {
             id: 2,
             imageUrl:
-                "https://www.converse.co.th/media/catalog/product/cache/8fcecb462959d400cda3532b9c3dc9f0/a/1/a12712c_a_08x1_1.png",
+                "https://mercular.s3.ap-southeast-1.amazonaws.com/upload/products/2016/01/Marshall-Mode-In-Ear-Black-Gold-Left-Right.jpg",
             productName: "test2",
             price: 1280,
             quantity: 2,

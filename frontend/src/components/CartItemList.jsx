@@ -20,20 +20,20 @@ function CartItemList({ dataSource, setCartItems }) {
 
     return (
         <div className="relative overflow-x-auto font-[Kanit]">
-            <table className="w-full text-sm text-center">
+            <table className="w-full text-sm text-center  table-fixed">
                 <thead className="text-base">
                     <tr className="border-b-1 border-[#D9D9D9]">
-                        <th scope="col" className="p-4"></th>
-                        <th scope="col" className="px-6 py-3 font-semibold">
+                        <th scope="col" className="p-4 w-[50px]"></th>
+                        <th scope="col" className="px-6 py-3 font-semibold w-[200px]">
                             สินค้า
                         </th>
-                        <th scope="col" className="px-6 py-3 font-semibold">
+                        <th scope="col" className="px-6 py-3 font-semibold w-[100px]">
                             ราคา
                         </th>
-                        <th scope="col" className="px-6 py-3 font-semibold">
+                        <th scope="col" className="px-6 py-3 font-semibold w-[100px]">
                             จำนวน
                         </th>
-                        <th scope="col" className="px-6 py-3 font-semibold"></th>
+                        <th scope="col" className="px-6 py-3 font-semibold w-[50px]"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +69,7 @@ function CartItemList({ dataSource, setCartItems }) {
                                     min={1}
                                     max={99}
                                     defaultValue={item.quantity}
+                                    style={{ width: "80px", textAlign: "center" }}
                                     onChange={(value) => handleChangeQuantity({ value: value, itemId: item.id })}
                                 />
                             </td>
