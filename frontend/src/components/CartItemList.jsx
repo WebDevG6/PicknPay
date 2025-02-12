@@ -48,13 +48,15 @@ function CartItemList({ dataSource, setCartItems }) {
                                 <div className="flex flex-col justify-between text-left">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-xl">{item.productName}</p>
-                                        <p className="text-sm">฿{item.price}</p>
+                                        <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>
                                     </div>
                                     <p className="text-xs text-gray-500">รายละเอียดเพิ่มเติม</p>
                                 </div>
                             </th>
 
-                            <td className="px-6 py-4 text-xl">฿{item.price * item.quantity}</td>
+                            <td className="px-6 py-4 text-xl">
+                                ฿{(item.price * item.quantity).toLocaleString("en-US")}
+                            </td>
                             <td className="px-6 py-4">Laptop</td>
                             <td className="px-6 py-4">
                                 <button
