@@ -1,6 +1,7 @@
 import React from "react";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
+import { InputNumber } from "antd";
 
 function CartItemList({ dataSource, setCartItems }) {
     const handleCheck = (itemId) => {
@@ -9,6 +10,12 @@ function CartItemList({ dataSource, setCartItems }) {
 
     const handleDelete = (itemId) => {
         setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    };
+
+    const handleChangeQuantity = ({ value, itemId }) => {
+        setCartItems((prevItems) =>
+            prevItems.map((item) => (item.id === itemId ? { ...item, quantity: value } : item))
+        );
     };
 
     return (
@@ -50,14 +57,21 @@ function CartItemList({ dataSource, setCartItems }) {
                                         <p className="text-xl">{item.productName}</p>
                                         <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>
                                     </div>
-                                    <p className="text-xs text-gray-500">รายละเอียดเพิ่มเติม</p>
+                                    <p className="text-xs text-gray-500 cursor-pointer">รายละเอียดเพิ่มเติม</p>
                                 </div>
                             </th>
 
                             <td className="px-6 py-4 text-xl">
                                 ฿{(item.price * item.quantity).toLocaleString("en-US")}
                             </td>
-                            <td className="px-6 py-4">Laptop</td>
+                            <td className="px-6 py-4">
+                                <InputNumber
+                                    min={1}
+                                    max={99}
+                                    defaultValue={item.quantity}
+                                    onChange={(value) => handleChangeQuantity({ value: value, itemId: item.id })}
+                                />
+                            </td>
                             <td className="px-6 py-4">
                                 <button
                                     onClick={() => handleDelete(item.id)}
