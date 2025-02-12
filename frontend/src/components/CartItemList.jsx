@@ -52,7 +52,7 @@ function CartItemList({ dataSource, setCartItems }) {
                             </td>
                             <th scope="row" className="px-6 py-4 font-light flex flex-row gap-4">
                                 <img src={item.imageUrl} className="w-28 h-28 object-cover rounded-sm" />
-                                <div className="flex flex-col justify-between text-left">
+                                <div className="flex flex-col justify-between text-left py-2">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-xl">{item.productName}</p>
                                         <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>
