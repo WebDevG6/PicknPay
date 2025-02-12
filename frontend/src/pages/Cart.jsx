@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Divider, Button, Input } from "antd";
 import CartItemList from "../components/CartItemList";
 
 function Cart() {
-    const cartSelectedItem = {
-        quantity: 3,
-        price: 6370,
+    const [cartSelectedItem, setSelectItem] = useState({
+        quantity: 0,
+        price: 0,
         discount: 0,
         deliveryCost: 0,
-    };
+    });
 
     const [cartItems, setCartItems] = useState([
         {
@@ -30,6 +30,19 @@ function Cart() {
             isSelect: false,
         },
     ]);
+
+    useEffect(() => {
+        const selectedItems = cartItems.filter((item) => item.isSelect);
+        const totalQuantity = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        setSelectItem({
+            quantity: totalQuantity,
+            price: totalPrice,
+            discount: 0,
+            deliveryCost: 0,
+        });
+    }, [cartItems]);
 
     return (
         <div className="flex flex-col gap-2">
