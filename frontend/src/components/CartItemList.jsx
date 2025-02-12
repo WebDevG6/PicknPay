@@ -7,11 +7,15 @@ function CartItemList({ dataSource, setCartItems }) {
         setCartItems(dataSource.map((item) => (item.id === itemId ? { ...item, isSelect: !item.isSelect } : item)));
     };
 
+    const handleDelete = (itemId) => {
+        setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    };
+
     return (
         <div className="relative overflow-x-auto font-[Kanit]">
             <table className="w-full text-sm text-center">
                 <thead className="text-base">
-                    <tr>
+                    <tr className="border-b-1 border-[#D9D9D9]">
                         <th scope="col" className="p-4"></th>
                         <th scope="col" className="px-6 py-3 font-semibold">
                             สินค้า
@@ -52,7 +56,14 @@ function CartItemList({ dataSource, setCartItems }) {
 
                             <td className="px-6 py-4 text-xl">฿{item.price * item.quantity}</td>
                             <td className="px-6 py-4">Laptop</td>
-                            <td className="px-6 py-4">del</td>
+                            <td className="px-6 py-4">
+                                <button
+                                    onClick={() => handleDelete(item.id)}
+                                    className="bg-[#E8E8E8] hover:bg-red-500 hover:text-white text-[#797979] transition w-8 h-8  rounded-sm items-center flex justify-center cursor-pointer"
+                                >
+                                    <i className="fi fi-rs-trash text-base translate-y-[2px]" />
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
