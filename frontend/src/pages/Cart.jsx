@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Divider, Button } from "antd";
 import CartItemList from "../components/CartItemList";
 
@@ -10,10 +10,11 @@ function Cart() {
         deliveryCost: 0,
     };
 
-    const cartItems = [
+    const [cartItems, setCartItems] = useState([
         {
             id: 1,
-            imageUrl: "",
+            imageUrl:
+                "https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2023/12/Product/lg-27mr400-b-27-ips-fhd-monitor-100hz-front-view.jpg",
             productName: "test",
             price: 3790,
             quantity: 1,
@@ -21,13 +22,14 @@ function Cart() {
         },
         {
             id: 2,
-            imageUrl: "",
+            imageUrl:
+                "https://www.converse.co.th/media/catalog/product/cache/8fcecb462959d400cda3532b9c3dc9f0/a/1/a12712c_a_08x1_1.png",
             productName: "test2",
             price: 1280,
             quantity: 2,
             isSelect: false,
         },
-    ];
+    ]);
 
     return (
         <div className="flex flex-col gap-2">
@@ -37,7 +39,7 @@ function Cart() {
             </div>
             <div className="grid grid-cols-24 gap-4">
                 <div className="bg-white col-span-17 rounded-sm p-4">
-                    <CartItemList dataSource={cartItems} />
+                    <CartItemList dataSource={cartItems} setCartItems={setCartItems} />
                 </div>
                 <div className="bg-white col-span-7 rounded-sm p-4 font-[Kanit] ">
                     <div>

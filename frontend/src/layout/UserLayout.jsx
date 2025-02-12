@@ -152,6 +152,7 @@ export default function userLayout() {
                         <div className="flex flex-col gap-2">
                             {userNavigationMenu.map((item) => (
                                 <button
+                                    key={item.name}
                                     className=" p-2 rounded-sm transition py-2 text-gray-700 hover:bg-gray-100 hover:text-black cursor-pointer font-[Kanit] text-lg"
                                     onClick={() => navigate(item.to)}
                                 >
