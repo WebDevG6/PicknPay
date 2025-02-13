@@ -36,3 +36,15 @@ body {
 .slick-dots li button:hover {
     background-color: #4169e2 !important;
 }
+
+.ant-notification-notice {
+    font-family: "Kanit", sans-serif;
+}
+
+.ant-notification-notice-message {
+    font-weight: 500;
+}
+
+.ant-notification-notice-description {
+    font-weight: 300;
+}

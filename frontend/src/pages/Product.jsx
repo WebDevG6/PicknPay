@@ -1,18 +1,53 @@
-import React from "react";
+import React, { useRef } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
 import { useParams } from "react-router-dom";
-import { Spin, Rate, Button, InputNumber } from "antd";
+import { Spin, Rate, Button, InputNumber, notification } from "antd";
+import { useAddItem } from "../hooks/service";
 
 function Product() {
+    const addItem = useAddItem();
     const { productId } = useParams();
     const { data: productDetail, isLoading, error } = useProductDetail(productId);
+    const quantityRef = useRef(1);
+
+    const [api, contextHolder] = notification.useNotification();
+    const successNotification = () => {
+        api.success({
+            message: "เพิ่มสินค้าไปยังรถเข็นสำเร็จ",
+            description: productDetail.name,
+            duration: 3,
+        });
+    };
+    const errorNotification = () => {
+        api.error({
+            message: "เพิ่มสินค้าไปยังรถเข็นไม่สำเร็จ",
+            description: productDetail.name,
+            duration: 3,
+        });
+    };
 
     const averageRating =
         productDetail?.reviews?.reduce((acc, review) => acc + review.rating, 0) / productDetail?.reviews?.length || 0;
 
+    const handleAddItem = async () => {
+        const quantity = quantityRef.current.value;
+        await addItem.mutateAsync(
+            { quantity: quantity, productId: productId },
+            {
+                onSuccess: () => {
+                    successNotification();
+                },
+                onError: () => {
+                    errorNotification();
+                },
+            }
+        );
+    };
+
     return (
         <Spin spinning={isLoading}>
+            {contextHolder}
             <div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6">
                 <div className="col-span-5">
                     <ProductCarousel images={productDetail.picture} />
@@ -35,10 +70,11 @@ function Product() {
                     </p>
                     <div className="flex flex-row items-center gap-4">
                         <p className="font-[Kanit] text-xl">จำนวน</p>
-                        <InputNumber defaultValue={1} min={1} max={99} style={{ fontSize: 18 }} />
+                        <InputNumber defaultValue={1} min={1} max={99} style={{ fontSize: 18 }} ref={quantityRef} />
                     </div>
                     <div className="grid grid-cols-2 gap-4 lg:pr-48 pr-0">
                         <Button
+                            onClick={handleAddItem}
                             style={{
                                 gridColumn: "span 1",
                                 borderRadius: 6,
@@ -75,7 +111,6 @@ function Product() {
                             <p className="font-light">จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ xxxx บาท</p>
                         </div>
                     </div>
-                    {console.log(productDetail)}
                 </div>
             </div>
         </Spin>

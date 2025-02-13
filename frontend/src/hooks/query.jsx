@@ -18,6 +18,7 @@ export function useCartItem() {
                 quantity: Number(item.quantity),
                 isSelect: item.isSelect,
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
+                productId: item.product.id,
             }));
         },
     });

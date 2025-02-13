@@ -12,6 +12,7 @@ const conf = {
         `/cart-items?populate=cart_id&populate=product.picture&filters[cart_id][documentId]=${cartId}`,
     updateCartItem: (cartItemId = "") => `/cart-items/${cartItemId}`,
     getProductDetail: (productId = "") => `/products?filters[id][$eq]=${productId}&populate=*`,
+    cartUrl: (cartId = "") => `/carts/${cartId}`,
 };
 
 export default conf;

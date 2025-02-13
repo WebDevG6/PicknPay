@@ -1,4 +1,5 @@
 import React, { useCallback, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { InputNumber } from "antd";
@@ -10,6 +11,7 @@ function CartItemList({ dataSource }) {
     const { updateUserInfo } = useContext(authContext);
     const updateCartItem = useUpdateCartItem();
     const deleteCartItem = useDeleteCartItem();
+    const navigate = useNavigate();
 
     const handleCheck = async ({ itemId, itemIsSelect }) => {
         await updateCartItem.mutateAsync({ itemId: itemId, data: { isSelect: !itemIsSelect } });
@@ -98,7 +100,12 @@ function CartItemList({ dataSource }) {
                                         <p className="text-xl">{item.productName}</p>
                                         <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>
                                     </div>
-                                    <p className="text-xs text-gray-500 cursor-pointer">รายละเอียดเพิ่มเติม</p>
+                                    <p
+                                        onClick={() => navigate(`/products/${item.productId}`)}
+                                        className="text-xs text-gray-500 cursor-pointer hover:underline"
+                                    >
+                                        รายละเอียดเพิ่มเติม
+                                    </p>
                                 </div>
                             </th>
 
