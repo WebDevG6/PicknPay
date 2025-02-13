@@ -63,7 +63,7 @@ function CartItemList({ dataSource }) {
                 <thead className="text-base">
                     <tr className="border-b-1 border-[#D9D9D9]">
                         <th scope="col" className="p-4 w-[50px]"></th>
-                        <th scope="col" className="px-6 py-3 font-semibold w-[200px]">
+                        <th scope="col" className="px-6 py-3 font-semibold w-[300px]">
                             สินค้า
                         </th>
                         <th scope="col" className="px-6 py-3 font-semibold w-[100px]">
