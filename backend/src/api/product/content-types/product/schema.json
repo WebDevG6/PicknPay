@@ -13,19 +13,16 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "description": {
       "type": "text"
     },
     "price": {
-      "type": "biginteger",
-      "required": true
+      "type": "biginteger"
     },
     "stock": {
-      "type": "integer",
-      "required": true
+      "type": "integer"
     },
     "category": {
       "type": "relation",
@@ -45,14 +42,12 @@
       "target": "api::cart-item.cart-item",
       "mappedBy": "product"
     },
-    "picture": {
-      "type": "media",
-      "multiple": true,
-      "required": true,
+    "image": {
       "allowedTypes": [
-        "images",
-        "files"
-      ]
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }
