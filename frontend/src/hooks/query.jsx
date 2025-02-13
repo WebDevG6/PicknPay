@@ -34,3 +34,16 @@ export function useUpdateCartItem() {
         },
     });
 }
+
+export function useDeleteCartItem() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ itemId }) => {
+            const response = await ax.delete(conf.updateCartItem(itemId));
+            return response.data;
+        },
+        onSettled: async (_, error) => {
+            error ? console.log(error) : queryClient.invalidateQueries({ queryKey: ["cartItem"] });
+        },
+    });
+}

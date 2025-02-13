@@ -2,18 +2,19 @@ import React, { useCallback } from "react";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { InputNumber } from "antd";
-import { useUpdateCartItem } from "../hooks/query";
+import { useUpdateCartItem, useDeleteCartItem } from "../hooks/query";
 import debounce from "lodash.debounce";
 
 function CartItemList({ dataSource }) {
     const updateCartItem = useUpdateCartItem();
+    const deleteCartItem = useDeleteCartItem();
 
     const handleCheck = async ({ itemId, itemIsSelect }) => {
         await updateCartItem.mutateAsync({ itemId: itemId, data: { isSelect: !itemIsSelect } });
     };
 
-    const handleDelete = (itemId) => {
-        // setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    const handleDelete = async (itemId) => {
+        await deleteCartItem.mutateAsync({ itemId: itemId });
     };
 
     const debouncedHandleChangeQuantity = useCallback(
@@ -88,7 +89,7 @@ function CartItemList({ dataSource }) {
                             </td>
                             <td className="px-6 py-4">
                                 <button
-                                    onClick={() => handleDelete(item.id)}
+                                    onClick={() => handleDelete(item.documentId)}
                                     className="bg-[#E8E8E8] hover:bg-red-500 hover:text-white text-[#797979] transition w-8 h-8  rounded-sm items-center flex justify-center cursor-pointer"
                                 >
                                     <i className="fi fi-rs-trash text-base translate-y-[2px]" />
