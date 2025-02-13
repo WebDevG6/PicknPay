@@ -48,3 +48,14 @@ export function useDeleteCartItem() {
         },
     });
 }
+
+export function useProductDetail(productId) {
+    return useSuspenseQuery({
+        queryKey: ["productItem"],
+        queryFn: async () => {
+            const response = await ax.get(conf.getProductDetail(productId));
+            return response.data.data[0];
+        },
+        enabled: !!productId,
+    });
+}
