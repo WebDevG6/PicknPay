@@ -40,7 +40,7 @@ export default function userLayout() {
                 },
             }}
         >
-            <div className="min-h-full">
+            <div className="min-h-full z-50">
                 <Disclosure as="nav" className="bg-white  drop-shadow-lg">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-14 items-center justify-between">
