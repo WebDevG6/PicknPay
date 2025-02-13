@@ -17,7 +17,7 @@ export function useCartItem() {
                 price: Number(item.product.price),
                 quantity: Number(item.quantity),
                 isSelect: item.isSelect,
-                imageUrl: conf.urlPrefix + item.product.image.url,
+                imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
             }));
         },
     });

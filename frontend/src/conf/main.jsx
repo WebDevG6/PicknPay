@@ -9,7 +9,7 @@ const conf = {
     jwtSessionStorageKey: "auth.jwt",
     userEndpoint: "/users/",
     userGetCartItem: (cartId = "") =>
-        `/cart-items?populate=cart_id&populate=product.image&filters[cart_id][documentId]=${cartId}`,
+        `/cart-items?populate=cart_id&populate=product.picture&filters[cart_id][documentId]=${cartId}`,
     updateCartItem: (cartItemId = "") => `/cart-items/${cartItemId}`,
 };
 
