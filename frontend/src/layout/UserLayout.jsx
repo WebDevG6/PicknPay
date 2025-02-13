@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Button, ConfigProvider, Input, Drawer, Divider } from "antd";
+import { Button, ConfigProvider, Input, Drawer } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import CartQuantity from "../components/CartQuantity";
 import { authContext } from "../context/AuthContext";
 
 const imageProfileMockUrl =
@@ -82,8 +83,12 @@ export default function userLayout() {
                                         <div className="flex items-center gap-2">
                                             <button
                                                 onClick={() => navigate("/customer/cart")}
-                                                className="inline-flex justify-center items-center text-center cursor-pointer text-gray-400 hover:text-[#4169E2] transition"
+                                                className="relative inline-flex justify-center items-center text-center cursor-pointer text-gray-400 hover:text-[#4169E2] transition"
                                             >
+                                                <div className="absolute -top-1 -right-2.5 bg-red-500 text-white text-[10px] font-light px-1.5 py-0.5 rounded-full z-50">
+                                                    <CartQuantity />
+                                                </div>
+
                                                 <i className="fi fi-rr-shopping-cart text-2xl translate-y-[3.5px]" />
                                             </button>
 

@@ -5,7 +5,7 @@ const conf = {
     apiUrlPrefix: `${urlPrefix}/api`,
     loginEndpoint: "/auth/local",
     registerEndpoint: "/auth/local/register",
-    jwtUserEndpoint: "/users/me?populate=*",
+    jwtUserEndpoint: "/users/me?populate[0]=cart_id.cart_items_id&populate[1]=role",
     jwtSessionStorageKey: "auth.jwt",
     userEndpoint: "/users/",
     userGetCartItem: (cartId = "") =>

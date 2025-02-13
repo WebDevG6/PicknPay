@@ -1,25 +1,54 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { InputNumber } from "antd";
 import { useUpdateCartItem, useDeleteCartItem } from "../hooks/query";
+import { authContext } from "../context/AuthContext";
 import debounce from "lodash.debounce";
 
 function CartItemList({ dataSource }) {
+    const { updateUserInfo } = useContext(authContext);
     const updateCartItem = useUpdateCartItem();
     const deleteCartItem = useDeleteCartItem();
 
     const handleCheck = async ({ itemId, itemIsSelect }) => {
         await updateCartItem.mutateAsync({ itemId: itemId, data: { isSelect: !itemIsSelect } });
+
+        updateUserInfo((prev) => ({
+            ...prev,
+            cart_id: {
+                ...prev.cart_id,
+                cart_items_id: prev.cart_id.cart_items_id.map((item) =>
+                    item.documentId === itemId ? { ...item, isSelect: !itemIsSelect } : item
+                ),
+            },
+        }));
     };
 
     const handleDelete = async (itemId) => {
         await deleteCartItem.mutateAsync({ itemId: itemId });
+
+        updateUserInfo((prev) => ({
+            ...prev,
+            cart_id: {
+                ...prev.cart_id,
+                cart_items_id: prev.cart_id.cart_items_id.filter((item) => item.documentId !== itemId),
+            },
+        }));
     };
 
     const debouncedHandleChangeQuantity = useCallback(
         debounce(async ({ value, itemId }) => {
             await updateCartItem.mutateAsync({ itemId: itemId, data: { quantity: value } });
+            updateUserInfo((prev) => ({
+                ...prev,
+                cart_id: {
+                    ...prev.cart_id,
+                    cart_items_id: prev.cart_id.cart_items_id.map((item) =>
+                        item.documentId === itemId ? { ...item, quantity: value } : item
+                    ),
+                },
+            }));
         }, 300),
         []
     );
