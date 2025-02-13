@@ -1,5 +1,6 @@
 import React from "react";
 import Carousel from "../components/Carousel";
+import RecommendedItem from "../components/RecommendedItem";
 import { Link } from "react-router-dom";
 
 function Home() {
@@ -23,21 +24,18 @@ function Home() {
                     </Link>
                 ))}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-8"> {/* Added mt-8 for margin-top */}
-                <div className="lg:col-span-1 flex flex-col"> {/* Added flex and flex-col */}
-                    {[
-                        { name: "IDK" },
-                    ].map((item, index) => (
-                        <div key={index} className="bg-gray-100 p-20 rounded-lg shadow-md flex flex-col items-center flex-grow"> {/* Added flex-grow */}
-                            <img src={item.image} alt={item.name} className="w-24 h-24 mb-2 object-contain" />
-                            <p className="text-lg font-bold text-blue-700">{item.name}</p>
-                        </div>
-                    ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 mt-6">
+                {/* กล่องสีน้ำเงิน */}
+                <div className="lg:col-span-1 flex flex-col h-full">
+                    <RecommendedItem />
                 </div>
-                <div className="lg:col-span-2 flex flex-col "> {/* Added flex and flex-col */}
-                    <Carousel className="flex-grow" /> {/* Added flex-grow */}
+
+                {/* Carousel */}
+                <div className="lg:col-span-2 flex flex-col h-full">
+                    <Carousel className="flex-grow h-full" />
                 </div>
             </div>
+
         </div>
     );
 }
