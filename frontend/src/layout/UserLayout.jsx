@@ -85,7 +85,7 @@ export default function userLayout() {
                                                 onClick={() => navigate("/customer/cart")}
                                                 className="relative inline-flex justify-center items-center text-center cursor-pointer text-gray-400 hover:text-[#4169E2] transition"
                                             >
-                                                <div className="absolute -top-1 -right-2.5 bg-red-500 text-white text-[10px] font-light px-1.5 py-0.5 rounded-full z-50">
+                                                <div className="absolute -top-1 -right-2.5 bg-red-500 text-white text-[10px] font-light px-1.5 py-0.5 min-w-[18px] rounded-full z-50">
                                                     <CartQuantity />
                                                 </div>
 
