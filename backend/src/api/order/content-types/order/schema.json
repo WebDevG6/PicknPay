@@ -13,7 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "order_id": {
-      "type": "string"
+      "type": "string",
+      "unique": true,
+      "required": true
     },
     "cart": {
       "type": "relation",
@@ -28,7 +30,8 @@
         "To ship",
         "To receive",
         "Complete"
-      ]
+      ],
+      "required": true
     }
   }
 }

@@ -13,7 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "comment": {
-      "type": "string"
+      "type": "string",
+      "unique": false
     },
     "product": {
       "type": "relation",
@@ -28,14 +29,10 @@
       "inversedBy": "reviews"
     },
     "rating": {
-      "type": "enumeration",
-      "enum": [
-        "Amazing",
-        "Good",
-        "Fair",
-        "Poor",
-        "Terrible"
-      ]
+      "type": "biginteger",
+      "max": "05",
+      "min": "01",
+      "required": false
     }
   }
 }

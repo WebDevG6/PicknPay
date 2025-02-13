@@ -1,6 +1,6 @@
 import { Routes, BrowserRouter, Route, Navigate } from "react-router";
 import { UserContextProvider } from "./context/AuthContext";
-import UserLayout from "./layout/userLayout";
+import UserLayout from "./layout/UserLayout";
 import RequiredAuth from "./context/RequireAuth";
 import RequireCustomerRole from "./context/RequireCustomerRole";
 import RequireAdminRole from "./context/RequireAdminRole";

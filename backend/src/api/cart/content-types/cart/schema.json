@@ -13,7 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "cart_id": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "cart_items_id": {
       "type": "relation",

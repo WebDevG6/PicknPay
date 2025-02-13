@@ -13,7 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "cart_item_id": {
-      "type": "string"
+      "type": "string",
+      "unique": true,
+      "required": true
     },
     "product": {
       "type": "relation",
@@ -22,7 +24,8 @@
       "inversedBy": "cart_items"
     },
     "quantity": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "required": true
     },
     "cart_id": {
       "type": "relation",

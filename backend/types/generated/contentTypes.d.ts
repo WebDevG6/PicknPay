@@ -382,7 +382,9 @@ export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
   };
   attributes: {
     cart_id: Schema.Attribute.Relation<'manyToOne', 'api::cart.cart'>;
-    cart_item_id: Schema.Attribute.String;
+    cart_item_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -394,7 +396,7 @@ export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    quantity: Schema.Attribute.BigInteger;
+    quantity: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -413,7 +415,9 @@ export interface ApiCartCart extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    cart_id: Schema.Attribute.String;
+    cart_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     cart_items_id: Schema.Attribute.Relation<
       'oneToMany',
       'api::cart-item.cart-item'
@@ -451,14 +455,15 @@ export interface ApiCategorieCategorie extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::categorie.categorie'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -486,11 +491,14 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
       Schema.Attribute.Private;
-    order_id: Schema.Attribute.String;
+    order_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
     status_order: Schema.Attribute.Enumeration<
       ['To pay', 'To ship', 'To receive', 'Complete']
-    >;
+    > &
+      Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -527,11 +535,13 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'api::product.product'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    price: Schema.Attribute.BigInteger;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    picture: Schema.Attribute.Media<'images' | 'files', true> &
+      Schema.Attribute.Required;
+    price: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
-    stock: Schema.Attribute.Integer;
+    stock: Schema.Attribute.Integer & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -562,9 +572,14 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    rating: Schema.Attribute.Enumeration<
-      ['Amazing', 'Good', 'Fair', 'Poor', 'Terrible']
-    >;
+    rating: Schema.Attribute.BigInteger &
+      Schema.Attribute.SetMinMax<
+        {
+          max: '05';
+          min: '01';
+        },
+        string
+      >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
