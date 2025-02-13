@@ -29,6 +29,10 @@
       "relation": "manyToOne",
       "target": "api::cart.cart",
       "inversedBy": "cart_items_id"
+    },
+    "isSelect": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

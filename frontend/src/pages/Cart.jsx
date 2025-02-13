@@ -1,35 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Divider, Button, Input } from "antd";
 import CartItemList from "../components/CartItemList";
+import { useCartItem } from "../hooks/query";
 
 function Cart() {
-    const [cartSelectedItem, setSelectItem] = useState({
-        quantity: 0,
-        price: 0,
-        discount: 0,
-        deliveryCost: 0,
-    });
-
-    const [cartItems, setCartItems] = useState([
-        {
-            id: 1,
-            imageUrl:
-                "https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2023/12/Product/lg-27mr400-b-27-ips-fhd-monitor-100hz-front-view.jpg",
-            productName: "test",
-            price: 3790,
-            quantity: 1,
-            isSelect: true,
-        },
-        {
-            id: 2,
-            imageUrl:
-                "https://mercular.s3.ap-southeast-1.amazonaws.com/upload/products/2016/01/Marshall-Mode-In-Ear-Black-Gold-Left-Right.jpg",
-            productName: "test2",
-            price: 1280,
-            quantity: 2,
-            isSelect: false,
-        },
-    ]);
+    const { data: cartItems } = useCartItem();
+    const [cartSelectedItem, setSelectItem] = useState([]);
 
     useEffect(() => {
         const selectedItems = cartItems.filter((item) => item.isSelect);
@@ -52,7 +28,7 @@ function Cart() {
             </div>
             <div className="grid grid-cols-24 gap-4">
                 <div className="bg-white col-span-17 rounded-sm p-4">
-                    <CartItemList dataSource={cartItems} setCartItems={setCartItems} />
+                    <CartItemList dataSource={cartItems} />
                 </div>
                 <div className="bg-white col-span-7 rounded-sm p-4 font-[Kanit] ">
                     <div className="flex flex-col gap-4">

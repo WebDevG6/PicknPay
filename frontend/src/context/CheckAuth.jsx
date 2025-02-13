@@ -1,4 +1,4 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import conf from "../conf/main";

@@ -1,21 +1,30 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { InputNumber } from "antd";
+import { useUpdateCartItem } from "../hooks/query";
+import debounce from "lodash.debounce";
 
-function CartItemList({ dataSource, setCartItems }) {
-    const handleCheck = (itemId) => {
-        setCartItems(dataSource.map((item) => (item.id === itemId ? { ...item, isSelect: !item.isSelect } : item)));
+function CartItemList({ dataSource }) {
+    const updateCartItem = useUpdateCartItem();
+
+    const handleCheck = async ({ itemId, itemIsSelect }) => {
+        await updateCartItem.mutateAsync({ itemId: itemId, data: { isSelect: !itemIsSelect } });
     };
 
     const handleDelete = (itemId) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+        // setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
     };
 
+    const debouncedHandleChangeQuantity = useCallback(
+        debounce(async ({ value, itemId }) => {
+            await updateCartItem.mutateAsync({ itemId: itemId, data: { quantity: value } });
+        }, 300),
+        []
+    );
+
     const handleChangeQuantity = ({ value, itemId }) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) => (item.id === itemId ? { ...item, quantity: value } : item))
-        );
+        debouncedHandleChangeQuantity({ value, itemId });
     };
 
     return (
@@ -43,7 +52,9 @@ function CartItemList({ dataSource, setCartItems }) {
                                 <div className="flex items-center">
                                     <Checkbox
                                         checked={item.isSelect}
-                                        onChange={() => handleCheck(item.id)}
+                                        onChange={() =>
+                                            handleCheck({ itemId: item.documentId, itemIsSelect: item.isSelect })
+                                        }
                                         className="transition group size-4.5 rounded-sm p-1 ring-2 ring-[#D9D9D9] data-[checked]:ring-[#466EE4] ring-inset data-[checked]:bg-[#466EE4] bg-[#F5F5F5] cursor-pointer"
                                     >
                                         <CheckIcon className="hidden size-4 fill-white group-data-[checked]:block translate-x-[-3.2px] translate-y-[-3px]" />
@@ -70,7 +81,9 @@ function CartItemList({ dataSource, setCartItems }) {
                                     max={99}
                                     defaultValue={item.quantity}
                                     style={{ width: "80px", textAlign: "center" }}
-                                    onChange={(value) => handleChangeQuantity({ value: value, itemId: item.id })}
+                                    onChange={(value) =>
+                                        handleChangeQuantity({ value: value, itemId: item.documentId })
+                                    }
                                 />
                             </td>
                             <td className="px-6 py-4">
