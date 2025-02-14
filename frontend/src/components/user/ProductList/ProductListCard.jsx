@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
     const product_discount = product.price;
     const product_amount = product.price - product_discount;
     const discountPercentage = ((product_amount / product.price) * 100).toFixed(0);
-    const imageUrl = `http://localhost:1337${product.images[0].url}`
+    const imageUrl = `http://localhost:1337${product.picture[0].url}`
     const navigate = useNavigate()
     Number(product_discount).toLocaleString();
     Number(product.price).toLocaleString();
@@ -19,20 +19,22 @@ const ProductCard = ({ product }) => {
             hoverable
             className="border shadow-md hover:shadow-lg transition-transform transform hover:scale-103 rounded-lg overflow-hidden"
             cover={
+
                 <div className="relative w-full flex justify-center items-center bg-white p-4 h-36 sm:h-44 md:h-48 lg:h-52 xl:h-60">
                     {discountPercentage > 0 && (
                         <div className="absolute top-2 right-2 font-[Kanit] bg-red-500 text-white px-3 py-1 rounded-md text-xs sm:text-sm font-bold shadow-md">
                             ลด {discountPercentage}%
                         </div>
                     )}
-                    <div className="flex justify-center items-center w-full h-full">
+                    <div className="relative w-full h-full">
                         <img
                             alt={product.name}
                             src={imageUrl}
-                            className="max-w-full max-h-full object-contain rounded-md"
+                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-contain rounded-md"
                         />
                     </div>
                 </div>
+
             }
         >
             <h1 className="font-[Kanit] text-sm sm:text-base md:text-lg font-semibold text-left text-gray-800 truncate">{product.name}</h1>

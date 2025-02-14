@@ -11,7 +11,9 @@ const ProductListFilter = ({ products }) => {
     const { selectedBrand, toggleBrand } = useBrandStore();
     const resetFilters = useFilterStore((state) => state.resetFilters);
     const brandList = useMemo(() => {
-        const uniqueBrands = [...new Set(products.map(({ brand }) => brand?.trim()).filter(Boolean))];
+        const uniqueBrands = [
+            ...new Set(products.map(({ brands }) => brands?.brandname?.trim()).filter(Boolean))
+        ];
         return uniqueBrands;
     }, [products]);
 

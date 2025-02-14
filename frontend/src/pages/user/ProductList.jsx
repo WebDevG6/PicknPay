@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { List, Button, Layout, Spin, Empty, ConfigProvider } from "antd";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import useProducts from "../../components/user/ProductList/useProducts";
+import useProducts from "../../hooks/useProducts";
 import usePriceStore from "../../components/user/ProductList/usePriceStore";
 import useBrandStore from "../../components/user/ProductList/useBrandStore";
 import ProductListCard from "../../components/user/ProductList/ProductListCard";
@@ -23,16 +23,18 @@ const ProductList = () => {
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
+    console.log(products)
     useEffect(() => {
         if (productsLoading) return;
         if (!params.has("category") || !category || !VALID_CATEGORIES.includes(category)) {
             setFilteredProducts(null);
             return;
         }
+
         const newFilteredProducts = (products || [])
             .filter((product) => product.category.name.trim().toLowerCase() === category)
             .filter((product) => product.price >= price[0] && product.price <= price[1])
-            .filter(product => !selectedBrand.length || selectedBrand.includes(product.brand));
+            .filter((product) => !selectedBrand.length || selectedBrand.includes(product.brands.brandname));
 
         setFilteredProducts(newFilteredProducts);
     }, [products, category, price, productsLoading, params, selectedBrand]);
@@ -49,7 +51,7 @@ const ProductList = () => {
                             <Spin size="large" />
                         </div>
                     ) : filteredProducts === null || filteredProducts.length === 0 ? (
-                        <div className="top-0 left-0 w-full h-full flex-col mt-14 ">
+                        <div className="top-0 left-0 w-full h-full flex-col mt-12 ">
                             <Empty description="ไม่มีสินค้าที่ตรงกับหมวดหมู่นี้" className="items-center justify-center" />
                         </div>
                     ) : (
