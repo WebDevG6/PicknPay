@@ -58,7 +58,7 @@ const ProductList = () => {
                     ) : (
                         <List
                             className="w-full rounded-lg"
-                            grid={{ gutter: 24, xs: 1, sm: 2, md: 3, lg: 3, xl: 4 }}
+                            grid={{ gutter: 24, xs: 2, sm: 2, md: 3, lg: 3, xl: 4 }}
                             dataSource={filteredProducts.slice(0, visibleCount)}
                             renderItem={(product) => (
                                 <motion.div

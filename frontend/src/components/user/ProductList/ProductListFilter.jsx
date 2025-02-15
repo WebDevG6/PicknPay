@@ -17,7 +17,6 @@ const ProductListFilter = ({ products }) => {
         () => [
             { label: "ช่วงราคา", hasIcon: true },
             { label: "แบรนด์", hasIcon: true },
-            { label: "ประเภทสินค้า", hasIcon: true },
         ],
         []
     );
@@ -28,7 +27,6 @@ const ProductListFilter = ({ products }) => {
     const sectionRefs = {
         ช่วงราคา: useRef(null),
         แบรนด์: useRef(null),
-        ประเภทสินค้า: useRef(null),
     };
 
     const showDrawer = useCallback((filterLabel) => {
@@ -66,7 +64,7 @@ const ProductListFilter = ({ products }) => {
                         <Flex
                             gap="small"
                             wrap="wrap"
-                            className="w-full justify-center sm:justify-start grid grid-cols-2 sm:flex"
+                            className="w-full justify-center sm:justify-start grid grid-cols-1 sm:flex"
                         >
                             <Button
                                 type="primary"
@@ -81,7 +79,7 @@ const ProductListFilter = ({ products }) => {
                                     key={index}
                                     type="primary"
                                     onClick={() => showDrawer(label)}
-                                    className="w-fit px-6 py-2 md:w-auto gap-1"
+                                    className="w-fit sm:w-fit px-6 py-2 md:w-auto gap-1"
                                 >
                                     <span className="font-[Kanit]">{label}</span>
                                     {hasIcon && <DownOutlined className="ml-1" />}
@@ -155,23 +153,6 @@ const ProductListFilter = ({ products }) => {
                         ))}
                     </div>
                 </section>
-                <Divider />
-                {/* <section className="flex flex-col items-center w-full">
-                    <Title
-                        level={5}
-                        ref={sectionRefs["ประเภทสินค้า"]}
-                        className="font-[Kanit] flex justify-center mt-4"
-                    >
-                        ประเภทสินค้า
-                    </Title>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <Divider />
-                </section> */}
             </Drawer>
         </div>
     );
