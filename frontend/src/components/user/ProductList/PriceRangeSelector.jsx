@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
-import { Input, Slider } from "antd";
+import { Input } from "antd";
 import usePriceStore from "./usePriceStore";
 
 const PriceRangeSelector = () => {
@@ -24,13 +24,17 @@ const PriceRangeSelector = () => {
     return (
         <div className="flex flex-col items-center gap-4 w-full p-4">
             <RangeSlider
+                className="custom-slider"
                 min={0}
                 max={100000}
                 step={100}
                 rangeSlideDisabled={true}
                 value={price}
                 onInput={handleSliderChange}
-                className="w-full max-w-lg size-1"
+                style={{
+                    "--range-slider-thumb-width": "8px",
+                    "--range-slider-thumb-height": "8px"
+                }}
             />
             <div className="flex items-center gap-4">
                 <div className="flex flex-col items-start gap-1">
@@ -39,7 +43,7 @@ const PriceRangeSelector = () => {
                         type="number"
                         value={price[0]}
                         onChange={handleMinChange}
-                        className="w-32 text-lg font-semibold"
+                        className="w-32 text-lg font-[Kanit]"
                         prefix="฿"
                     />
                 </div>
@@ -50,7 +54,7 @@ const PriceRangeSelector = () => {
                         type="number"
                         value={price[1]}
                         onChange={handleMaxChange}
-                        className="w-32 text-lg font-semibold"
+                        className="w-32 text-lg font-[Kanit]"
                         prefix="฿"
                     />
                 </div>
