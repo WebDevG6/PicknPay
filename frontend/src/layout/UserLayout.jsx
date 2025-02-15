@@ -59,7 +59,11 @@ export default function userLayout() {
                                     </p>
                                 </div>
                                 <div className="hidden md:block">
-                                    <Button style={{ padding: 8, borderRadius: 5 }} type="primary">
+                                    <Button
+                                        style={{ padding: 8, borderRadius: 5 }}
+                                        type="primary"
+                                        onClick={() => navigate("/")}
+                                    >
                                         <i className="fi fi-rr-apps text-xl translate-y-[2.8px]"></i>
                                         <span className="font-[Kanit]">สินค้าทั้งหมด</span>
                                     </Button>
