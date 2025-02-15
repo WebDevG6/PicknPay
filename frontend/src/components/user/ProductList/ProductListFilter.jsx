@@ -100,7 +100,7 @@ const ProductListFilter = ({ products }) => {
                 afterOpenChange={onDrawerOpen}
                 styles={{ body: { padding: "3px" } }}
                 footer={
-                    <div className="p-4 flex justify-between gap-2">
+                    <div className="p-4 flex flex-col sm:flex-row justify-between gap-4 w-full px-0.5">
                         <Button
                             type="primary"
                             danger
@@ -109,7 +109,7 @@ const ProductListFilter = ({ products }) => {
                                 onClose();
                             }}
                             style={{ fontFamily: "Kanit" }}
-                            className="w-1/2 px-1"
+                            className="w-full sm:w-auto sm:min-w-[150px] px-4"
                         >
                             ล้างตัวกรองทั้งหมด
                         </Button>
@@ -119,11 +119,13 @@ const ProductListFilter = ({ products }) => {
                                 onClose();
                             }}
                             style={{ fontFamily: "Kanit" }}
-                            className="w-1/2 px-1"
+                            className="w-full sm:w-auto sm:min-w-[150px] px-4"
                         >
                             เสร็จสิ้น
                         </Button>
                     </div>
+
+
                 }
             >
                 <section className="flex flex-col items-center w-full px-1">
