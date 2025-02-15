@@ -8,7 +8,6 @@ import useBrandStore from "../../components/user/ProductList/useBrandStore";
 import ProductListCard from "../../components/user/ProductList/ProductListCard";
 import ProductListFilter from "../../components/user/ProductList/ProductListFilter";
 
-
 const { Content } = Layout;
 const PAGE_SIZE = 12;
 const VALID_CATEGORIES = ["headphone", "mouse", "keyboard", "microphone", "computer", "loudspeaker"];
@@ -23,7 +22,6 @@ const ProductList = () => {
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
-    console.log(products)
     useEffect(() => {
         if (productsLoading) return;
         if (!params.has("category") || !category || !VALID_CATEGORIES.includes(category)) {
@@ -52,7 +50,10 @@ const ProductList = () => {
                         </div>
                     ) : filteredProducts === null || filteredProducts.length === 0 ? (
                         <div className="top-0 left-0 w-full h-full flex-col mt-12 ">
-                            <Empty description="ไม่มีสินค้าที่ตรงกับหมวดหมู่นี้" className="items-center justify-center" />
+                            <Empty
+                                description="ไม่มีสินค้าที่ตรงกับหมวดหมู่นี้"
+                                className="items-center justify-center"
+                            />
                         </div>
                     ) : (
                         <List
@@ -92,7 +93,11 @@ const ProductList = () => {
                                 },
                             }}
                         >
-                            <Button type="primary" className="px-6 py-2 text-lg font-[Kanit]" onClick={loadMoreProducts}>
+                            <Button
+                                type="primary"
+                                className="px-6 py-2 text-lg font-[Kanit]"
+                                onClick={loadMoreProducts}
+                            >
                                 คลิกเพื่อโหลดดูต่อ
                             </Button>
                         </ConfigProvider>

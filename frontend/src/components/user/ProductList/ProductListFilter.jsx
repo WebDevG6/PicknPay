@@ -1,22 +1,17 @@
 import React, { useState, useRef, useCallback, useMemo } from "react";
-import { Button, Drawer, Typography, Flex, ConfigProvider, Divider } from "antd";
+import { Button, Drawer, Flex, ConfigProvider, Divider } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import PriceRangeSelector from "./PriceRangeSelector";
 import useBrandStore from "./useBrandStore";
 import useFilterStore from "./useFilterStore";
 
-const { Title } = Typography;
-
 const ProductListFilter = ({ products }) => {
     const { selectedBrand, toggleBrand } = useBrandStore();
     const resetFilters = useFilterStore((state) => state.resetFilters);
     const brandList = useMemo(() => {
-        const uniqueBrands = [
-            ...new Set(products.map(({ brands }) => brands?.brandname?.trim()).filter(Boolean))
-        ];
+        const uniqueBrands = [...new Set(products.map(({ brands }) => brands?.brandname?.trim()).filter(Boolean))];
         return uniqueBrands;
     }, [products]);
-
 
     const filters = useMemo(
         () => [
@@ -31,9 +26,9 @@ const ProductListFilter = ({ products }) => {
     const [initialScrollTo, setInitialScrollTo] = useState(null);
 
     const sectionRefs = {
-        "ช่วงราคา": useRef(null),
-        "แบรนด์": useRef(null),
-        "ประเภทสินค้า": useRef(null),
+        ช่วงราคา: useRef(null),
+        แบรนด์: useRef(null),
+        ประเภทสินค้า: useRef(null),
     };
 
     const showDrawer = useCallback((filterLabel) => {
@@ -41,7 +36,9 @@ const ProductListFilter = ({ products }) => {
         setOpen(true);
     }, []);
 
-    const onClose = () => { setOpen(false) }
+    const onClose = () => {
+        setOpen(false);
+    };
 
     const onDrawerOpen = useCallback(() => {
         if (initialScrollTo && sectionRefs[initialScrollTo]?.current) {
@@ -51,7 +48,6 @@ const ProductListFilter = ({ products }) => {
             });
         }
     }, [initialScrollTo]);
-
 
     return (
         <div className="w-full relative">
@@ -67,7 +63,11 @@ const ProductListFilter = ({ products }) => {
                     }}
                 >
                     <Flex vertical gap="small" className="w-full min-w-0 overflow-hidden">
-                        <Flex gap="small" wrap="wrap" className="w-full justify-center sm:justify-start grid grid-cols-2 sm:flex">
+                        <Flex
+                            gap="small"
+                            wrap="wrap"
+                            className="w-full justify-center sm:justify-start grid grid-cols-2 sm:flex"
+                        >
                             <Button
                                 type="primary"
                                 onClick={() => showDrawer(null)}
@@ -92,44 +92,51 @@ const ProductListFilter = ({ products }) => {
                 </ConfigProvider>
             </div>
 
-            <Drawer title={<Title level={4} className="font-[Kanit]">ตัวกรองทั้งหมด</Title>}
+            <Drawer
+                title={<p className="font-[Kanit] text-xl">ตัวกรองทั้งหมด</p>}
                 open={open}
                 onClose={() => setOpen(false)}
-                className="font-[Kanit]" width={350} afterOpenChange={onDrawerOpen}
-                bodyStyle={{ padding: "3px" }}
+                width={350}
+                afterOpenChange={onDrawerOpen}
+                styles={{ body: { padding: "3px" } }}
                 footer={
                     <div className="p-4 flex justify-between gap-2">
                         <Button
                             type="primary"
-                            danger onClick={() => {
+                            danger
+                            onClick={() => {
                                 resetFilters();
                                 onClose();
-                            }} className="w-1/2 px-1" >
+                            }}
+                            style={{ fontFamily: "Kanit" }}
+                            className="w-1/2 px-1"
+                        >
                             ล้างตัวกรองทั้งหมด
                         </Button>
                         <Button
                             type="primary"
                             onClick={() => {
                                 onClose();
-                            }} className="w-1/2 px-1" >
+                            }}
+                            style={{ fontFamily: "Kanit" }}
+                            className="w-1/2 px-1"
+                        >
                             เสร็จสิ้น
                         </Button>
                     </div>
-                }    >
-
+                }
+            >
                 <section className="flex flex-col items-center w-full px-1">
-                    <Title level={5} ref={sectionRefs["ช่วงราคา"]} className="font-[Kanit] flex justify-center mt-4">
+                    <p ref={sectionRefs["ช่วงราคา"]} className="font-[Kanit] flex justify-center mt-4 text-xl">
                         ช่วงราคา
-                    </Title>
+                    </p>
                     <PriceRangeSelector />
-                    <Divider />
                 </section>
-
-
+                <Divider />
                 <section className="flex flex-col items-center w-full ">
-                    <Title level={5} ref={sectionRefs["แบรนด์"]} className="font-[Kanit] flex justify-center mt-4">
+                    <p ref={sectionRefs["แบรนด์"]} className="font-[Kanit] flex justify-center mt-4 text-xl">
                         แบรนด์
-                    </Title>
+                    </p>
                     <div className="max-h-40 overflow-y-auto w-full px-4">
                         {brandList.map((brand) => (
                             <label key={brand} className="flex justify-between py-2 cursor-pointer w-full">
@@ -138,19 +145,21 @@ const ProductListFilter = ({ products }) => {
                                         type="checkbox"
                                         checked={selectedBrand.includes(brand)}
                                         onChange={() => toggleBrand(brand)}
-                                        className="w-5 h-5 accent-blue-500 font-[Kanit]"
+                                        className="w-5 h-5 accent-blue-500 font-[Kanit] cursor-pointer"
                                     />
                                     <span>{brand}</span>
                                 </div>
                             </label>
                         ))}
                     </div>
-                    <Divider />
                 </section>
-
-
-                <section className="flex flex-col items-center w-full">
-                    <Title level={5} ref={sectionRefs["ประเภทสินค้า"]} className="font-[Kanit] flex justify-center mt-4">
+                <Divider />
+                {/* <section className="flex flex-col items-center w-full">
+                    <Title
+                        level={5}
+                        ref={sectionRefs["ประเภทสินค้า"]}
+                        className="font-[Kanit] flex justify-center mt-4"
+                    >
                         ประเภทสินค้า
                     </Title>
                     <p>บลาาา</p>
@@ -160,8 +169,7 @@ const ProductListFilter = ({ products }) => {
                     <p>บลาาา</p>
                     <p>บลาาา</p>
                     <Divider />
-                </section>
-
+                </section> */}
             </Drawer>
         </div>
     );

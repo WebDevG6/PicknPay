@@ -4,7 +4,6 @@ import "react-range-slider-input/dist/style.css";
 import { Input } from "antd";
 import usePriceStore from "./usePriceStore";
 
-
 const PriceRangeSelector = () => {
     const price = usePriceStore((state) => state.price);
     const setPrice = usePriceStore((state) => state.setPrice);
@@ -33,24 +32,24 @@ const PriceRangeSelector = () => {
                 className="w-full max-w-lg size-1"
             />
             <div className="flex items-center gap-4">
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start gap-1">
                     <span className=" text-gray-500 text-sm font-[Kanit]">ต่ำสุด</span>
                     <Input
                         type="number"
                         value={price[0]}
                         onChange={handleMinChange}
-                        className="w-32 text-lg font-[Kanit]"
+                        className="w-32 text-lg font-semibold"
                         prefix="฿"
                     />
                 </div>
-                <span className="text-xl font-semibold mt-4">-</span>
-                <div className="flex flex-col items-start">
+                <span className="text-xl font-semibold mt-4 text-gray-500">-</span>
+                <div className="flex flex-col items-start gap-1">
                     <span className="text-gray-500 text-sm font-[Kanit]">สูงสุด</span>
                     <Input
                         type="number"
                         value={price[1]}
                         onChange={handleMaxChange}
-                        className="w-32 text-lg font-[Kanit]"
+                        className="w-32 text-lg font-semibold"
                         prefix="฿"
                     />
                 </div>

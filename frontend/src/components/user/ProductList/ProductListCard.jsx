@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
             <h1 className="font-[Kanit] text-sm sm:text-base md:text-lg font-semibold text-left text-gray-800 truncate">
                 {product.name}
             </h1>
-            <p className="text-left mt-2">
+            <div className="text-left mt-2">
                 {product_discount !== product.price ? (
                     <>
                         <span className="text-base sm:text-lg md:text-lg font-bold text-black mr-2 truncate">
@@ -56,7 +56,7 @@ const ProductCard = ({ product }) => {
                 <p className="font-[Kanit] text-left mt-3.5 truncate">
                     <span className="text-yellow-300 text-xs sm:text-sm md:text-sm">ส่งไวถึงใจ</span>
                 </p>
-            </p>
+            </div>
         </Card>
     );
 };
