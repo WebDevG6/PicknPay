@@ -13,6 +13,8 @@ const conf = {
     updateCartItem: (cartItemId = "") => `/cart-items/${cartItemId}`,
     getProductDetail: (productId = "") => `/products?filters[id][$eq]=${productId}&populate=*`,
     cartUrl: (cartId = "") => `/carts/${cartId}`,
+    productsEndpoint: "/products",
+    categoriesEndpoint: "/categories",
 };
 
 export default conf;

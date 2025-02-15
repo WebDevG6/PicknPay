@@ -17,6 +17,7 @@ import Customers from "./pages/admin/Customers";
 import CheckAuth from "./context/CheckAuth";
 import Cart from "./pages/Cart";
 import Product from "./pages/Product";
+import ProductList from "./pages/user/ProductList";
 
 function App() {
     return (
@@ -31,7 +32,8 @@ function App() {
                     <Route element={<CheckAuth />}>
                         <Route element={<UserLayout />}>
                             <Route index path="/" element={<Home />} />
-                            <Route index path="/products/:productId" element={<Product />} />
+                            <Route path="/products/:productId" element={<Product />} />
+                            <Route path="/products" element={<ProductList />} />
                         </Route>
                     </Route>
                     <Route element={<RequiredAuth />}>
