@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
-import { Input } from "antd";
+import { Input, Slider } from "antd";
 import usePriceStore from "./usePriceStore";
 
 const PriceRangeSelector = () => {
@@ -27,6 +27,7 @@ const PriceRangeSelector = () => {
                 min={0}
                 max={100000}
                 step={100}
+                rangeSlideDisabled={true}
                 value={price}
                 onInput={handleSliderChange}
                 className="w-full max-w-lg size-1"
