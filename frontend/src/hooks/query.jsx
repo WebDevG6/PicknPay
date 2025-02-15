@@ -3,6 +3,7 @@ import { useContext } from "react";
 import conf from "../conf/main";
 import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { authContext } from "../context/AuthContext";
+import axios from "axios";
 
 export function useCartItem() {
     const { userInfo } = useContext(authContext);
@@ -18,6 +19,7 @@ export function useCartItem() {
                 quantity: Number(item.quantity),
                 isSelect: item.isSelect,
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
+                productId: item.product.id,
             }));
         },
     });
@@ -46,5 +48,16 @@ export function useDeleteCartItem() {
         onSettled: async (_, error) => {
             error ? console.log(error) : queryClient.invalidateQueries({ queryKey: ["cartItem"] });
         },
+    });
+}
+
+export function useProductDetail(productId) {
+    return useSuspenseQuery({
+        queryKey: ["productItem"],
+        queryFn: async () => {
+            const response = await ax.get(conf.getProductDetail(productId));
+            return response.data.data[0];
+        },
+        enabled: !!productId,
     });
 }

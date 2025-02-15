@@ -70,19 +70,19 @@ function Cart() {
                             <p className="font-semibold tracking-wide">สรุปการสั่งซื้อ</p>
                             <div className="flex flex-row justify-between font-light">
                                 <p>ยอดรวมสินค้า ({cartSelectedItem.quantity} ชิ้น)</p>
-                                <p>฿{cartSelectedItem.price}</p>
+                                <p>฿{cartSelectedItem?.price?.toLocaleString("en-US")}</p>
                             </div>
                             <div className="flex flex-row justify-between font-light">
                                 <p>โค้ดส่วนลด</p>
-                                <p>฿{cartSelectedItem.discount}</p>
+                                <p>฿{cartSelectedItem?.discount?.toLocaleString("en-US")}</p>
                             </div>
                             <div className="flex flex-row justify-between font-light">
                                 <p>ค่าจัดส่ง</p>
-                                <p>฿{cartSelectedItem.deliveryCost}</p>
+                                <p>฿{cartSelectedItem?.deliveryCost?.toLocaleString("en-US")}</p>
                             </div>
                             <div className="flex flex-row justify-between font-semibold">
                                 <p>ยอดสุทธิ</p>
-                                <p>฿{cartSelectedItem.price}</p>
+                                <p>฿{cartSelectedItem?.price?.toLocaleString("en-US")}</p>
                             </div>
                         </div>
 

@@ -14,8 +14,8 @@
   "attributes": {
     "cart_item_id": {
       "type": "string",
-      "unique": true,
-      "required": true
+      "unique": false,
+      "required": false
     },
     "product": {
       "type": "relation",

@@ -40,7 +40,7 @@ export default function userLayout() {
                 },
             }}
         >
-            <div className="min-h-full">
+            <div className="min-h-full z-50">
                 <Disclosure as="nav" className="bg-white  drop-shadow-lg">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-14 items-center justify-between">
@@ -59,7 +59,11 @@ export default function userLayout() {
                                     </p>
                                 </div>
                                 <div className="hidden md:block">
-                                    <Button style={{ padding: 8, borderRadius: 5 }} type="primary">
+                                    <Button
+                                        style={{ padding: 8, borderRadius: 5 }}
+                                        type="primary"
+                                        onClick={() => navigate("/")}
+                                    >
                                         <i className="fi fi-rr-apps text-xl translate-y-[2.8px]"></i>
                                         <span className="font-[Kanit]">สินค้าทั้งหมด</span>
                                     </Button>
@@ -93,15 +97,14 @@ export default function userLayout() {
                                             </button>
 
                                             <Menu as="div" className="relative ml-3">
-                                                <div>
-                                                    <MenuButton className="relative flex max-w-xs items-center rounded-full cursor-pointer text-sm hover:ring-2 transition ring-[#4169E2]">
-                                                        <img
-                                                            alt="profile"
-                                                            src={imageProfileMockUrl}
-                                                            className="size-8 rounded-full"
-                                                        />
-                                                    </MenuButton>
-                                                </div>
+                                                <MenuButton className="relative flex max-w-xs items-center rounded-full cursor-pointer text-sm hover:ring-2 transition ring-[#4169E2]">
+                                                    <img
+                                                        alt="profile"
+                                                        src={imageProfileMockUrl}
+                                                        className="size-8 rounded-full"
+                                                    />
+                                                </MenuButton>
+
                                                 <MenuItems
                                                     transition
                                                     className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"

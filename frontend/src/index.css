@@ -13,3 +13,38 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.slick-prev,
+.slick-next {
+    color: #9aa1ae !important;
+    font-size: 24px !important;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    color: #4169e2 !important;
+}
+
+.slick-dots li button {
+    background-color: #9aa1ae !important;
+}
+
+.slick-dots li.slick-active button {
+    background-color: #4169e2 !important;
+}
+
+.slick-dots li button:hover {
+    background-color: #4169e2 !important;
+}
+
+.ant-notification-notice {
+    font-family: "Kanit", sans-serif;
+}
+
+.ant-notification-notice-message {
+    font-weight: 500;
+}
+
+.ant-notification-notice-description {
+    font-weight: 300;
+}
