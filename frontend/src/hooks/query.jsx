@@ -1,7 +1,7 @@
 import ax from "../conf/ax";
 import { useContext } from "react";
 import conf from "../conf/main";
-import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from "@tanstack/react-query";
 import { authContext } from "../context/AuthContext";
 import axios from "axios";
 
@@ -61,3 +61,13 @@ export function useProductDetail(productId) {
         enabled: !!productId,
     });
 }
+
+export const useReviews = () => {
+    return useQuery({
+        queryKey: ["reviews"], // ไม่มี id แล้ว เพราะดึงทั้งหมด
+        queryFn: async () => {
+            const response = await axios.get(`${conf.apiUrlPrefix}/reviews?populate=*`);
+            return response.data.data;
+        },
+    });
+};
