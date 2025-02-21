@@ -66,17 +66,7 @@ export const useReviews = () => {
     return useQuery({
         queryKey: ["reviews"], // ไม่มี id แล้ว เพราะดึงทั้งหมด
         queryFn: async () => {
-            const response = await axios.get(`${conf.apiUrlPrefix}/reviews?populate=*`);
-            return response.data.data;
-        },
-    });
-};
-
-export const useProducts = () => {
-    return useQuery({
-        queryKey: ["products"],
-        queryFn: async () => {
-            const response = await axios.get(`${conf.apiUrlPrefix + conf.productsEndpoint}?populate=*`);
+            const response = await axios.get(`${conf.apiUrlPrefix}/reviews?populate=product.picture`);
             return response.data.data;
         },
     });

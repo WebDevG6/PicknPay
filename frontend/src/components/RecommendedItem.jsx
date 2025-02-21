@@ -1,6 +1,8 @@
 import React from "react";
 import { useReviews } from "../hooks/query";
 import { Link } from "react-router-dom";
+import conf from "../conf/main";
+
 function RecommendedItem() {
     const { data: reviews, isLoading, error } = useReviews();
 
@@ -28,11 +30,12 @@ function RecommendedItem() {
                                 <p className="text-xs text-black">
                                     ฿ {Number(review.product?.price).toLocaleString("en-US")}
                                 </p>
+
                             </div>
                             {/* รูป (Col 2) */}
                             <div className="w-20 h-20 flex-shrink-0 flex items-center justify-center">
                                 <img
-                                    src={review.product?.image || "https://via.placeholder.com/80"}
+                                    src={conf.urlPrefix + review.product?.picture[0]?.formats.small.url}
                                     alt={review.product?.name || "Product image"}
                                     className="w-full h-full object-contain rounded-md"
                                 />
