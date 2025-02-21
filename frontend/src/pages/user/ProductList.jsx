@@ -40,7 +40,7 @@ const ProductList = () => {
     const loadMoreProducts = () => setVisibleCount((prev) => prev + PAGE_SIZE);
 
     return (
-        <div className="w-full relative min-h-[40vh] ">
+        <div className="w-full z-0 min-h-[40vh] ">
             <Layout className="min-h-screen bg-gray-300">
                 <ProductListFilter products={products} />
                 <Content className="flex justify-center items-center w-full py-6">
@@ -58,7 +58,7 @@ const ProductList = () => {
                     ) : (
                         <List
                             className="w-full rounded-lg"
-                            grid={{ gutter: 24, xs: 1, sm: 2, md: 3, lg: 3, xl: 4 }}
+                            grid={{ gutter: 24, xs: 2, sm: 2, md: 3, lg: 3, xl: 4 }}
                             dataSource={filteredProducts.slice(0, visibleCount)}
                             renderItem={(product) => (
                                 <motion.div
