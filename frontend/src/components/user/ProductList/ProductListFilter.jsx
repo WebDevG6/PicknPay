@@ -48,7 +48,7 @@ const ProductListFilter = ({ products }) => {
     }, [initialScrollTo]);
 
     return (
-        <div className="w-full relative">
+        <div className="w-full ">
             <div className="rounded-lg bg-[#6d8ce8] p-3 w-full mx-auto">
                 <ConfigProvider
                     theme={{

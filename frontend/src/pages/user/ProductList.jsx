@@ -40,7 +40,7 @@ const ProductList = () => {
     const loadMoreProducts = () => setVisibleCount((prev) => prev + PAGE_SIZE);
 
     return (
-        <div className="w-full relative min-h-[40vh] ">
+        <div className="w-full z-0 min-h-[40vh] ">
             <Layout className="min-h-screen bg-gray-300">
                 <ProductListFilter products={products} />
                 <Content className="flex justify-center items-center w-full py-6">
