@@ -17,6 +17,7 @@ function Product() {
             message: "เพิ่มสินค้าไปยังรถเข็นสำเร็จ",
             description: productDetail.name,
             duration: 3,
+            placement: "bottomLeft",
         });
     };
     const errorNotification = () => {
@@ -24,6 +25,7 @@ function Product() {
             message: "เพิ่มสินค้าไปยังรถเข็นไม่สำเร็จ",
             description: productDetail.name,
             duration: 3,
+            placement: "bottomLeft",
         });
     };
 

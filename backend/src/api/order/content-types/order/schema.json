@@ -12,25 +12,19 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "order_id": {
-      "type": "string",
-      "unique": true,
-      "required": true
-    },
-    "cart": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::cart.cart",
-      "inversedBy": "order"
-    },
     "status_order": {
       "type": "enumeration",
       "enum": [
-        "To pay",
-        "To ship",
-        "To receive",
-        "Complete"
+        "processing",
+        "succeeded",
+        "payment_failed",
+        "shipping",
+        "delivered"
       ],
+      "required": true
+    },
+    "order_items": {
+      "type": "json",
       "required": true
     }
   }
