@@ -6,11 +6,15 @@ const CartQuantity = () => {
     const [quantity, setQuantity] = useState(0);
 
     useEffect(() => {
-        setQuantity(
-            userInfo.cart_id.cart_items_id
-                .map((item) => (item.isSelect ? Number(item.quantity) : 0))
-                .reduce((a, b) => a + b)
-        );
+        if (userInfo.cart_id.cart_items_id.length !== 0) {
+            setQuantity(
+                userInfo.cart_id.cart_items_id
+                    .map((item) => (item.isSelect ? Number(item.quantity) : 0))
+                    .reduce((a, b) => a + b)
+            );
+        } else {
+            setQuantity(0);
+        }
     }, [userInfo]);
 
     return <div>{quantity}</div>;
