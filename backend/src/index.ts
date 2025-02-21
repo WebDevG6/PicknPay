@@ -1,20 +1,27 @@
-// import type { Core } from '@strapi/strapi';
-
 export default {
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+    register() {},
 
-  /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
-   */
-  bootstrap(/* { strapi }: { strapi: Core.Strapi } */) {},
+    bootstrap({ strapi }: { strapi: any }) {
+        strapi.db.lifecycles.subscribe({
+            models: ["plugin::users-permissions.user"],
+
+            async afterCreate(event) {
+                const { result } = event;
+
+                if (result && result.id) {
+                    try {
+                        await strapi.entityService.create("api::cart.cart", {
+                            data: {
+                                users_permissions_user: result.id,
+                            },
+                        });
+
+                        strapi.log.info(`Cart created for user ${result.id}`);
+                    } catch (error) {
+                        strapi.log.error("Error creating cart:", error);
+                    }
+                }
+            },
+        });
+    },
 };
