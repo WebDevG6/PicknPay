@@ -1,12 +1,15 @@
 import { factories } from "@strapi/strapi";
 
 export default factories.createCoreController(
-    "api::order.order",
+    "plugin::users-permissions.user",
     ({ strapi }) => ({
-        async countOrders(ctx) {
+        async count(ctx) {
             try {
-                const count =
-                    await strapi.entityService.count("api::order.order");
+                const count = await strapi.db
+                    .query("plugin::users-permissions.user")
+                    .count({
+                        where: { role: { name: "Customer" } },
+                    });
                 return ctx.send({ total: count });
             } catch (error) {
                 ctx.throw(500, error);

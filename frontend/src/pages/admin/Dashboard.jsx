@@ -1,5 +1,6 @@
 import { Card, Row, Space, Statistic, Col, Table, Divider, theme } from "antd";
 import React from "react";
+import useDataAdmin from "../../hooks/useDataAdmin";
 import { ShoppingOutlined, UserOutlined, DollarOutlined, ProductOutlined } from "@ant-design/icons";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from "chart.js";
@@ -59,15 +60,18 @@ const data = [
 ];
 
 
+
+
 const Dashboard = () => {
+    const { totalProducts, totalCustomers, totalOrders } = useDataAdmin();
     return (
         <div className="w-full overflow-hidden ">
             <Row gutter={[16, 16]} className="p-[8px] ">
                 <Col xs={24} md={12} className="flex items-center justify-center text-center">
                     <Row gutter={[16, 16]} className="flex flex-wrap h-full">
-                        <DashboardCard icon={<ShoppingOutlined className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />} title={"Orders"} value={12322} />
-                        <DashboardCard icon={<ProductOutlined className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />} title={"Products"} value={12322} />
-                        <DashboardCard icon={<UserOutlined className="text-2xl !text-[purple] rounded-xl p-2  bg-cyan-600/20 h-full" />} title={"Customers"} value={12322} />
+                        <DashboardCard icon={<ShoppingOutlined className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />} title={"Orders"} value={totalOrders} />
+                        <DashboardCard icon={<ProductOutlined className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />} title={"Products"} value={totalProducts} />
+                        <DashboardCard icon={<UserOutlined className="text-2xl !text-[purple] rounded-xl p-2  bg-cyan-600/20 h-full" />} title={"Customers"} value={totalCustomers} />
                         <DashboardCard icon={<DollarOutlined className="text-2xl !text-[orange] rounded-xl p-2  bg-yellow-400/20 h-full" />} title={"Revenue"} value={12322} />
                     </Row>
                 </Col>
