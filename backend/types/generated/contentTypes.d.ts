@@ -408,9 +408,7 @@ export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
   };
   attributes: {
     cart_id: Schema.Attribute.Relation<'manyToOne', 'api::cart.cart'>;
-    cart_item_id: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+    cart_item_id: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
