@@ -71,3 +71,13 @@ export const useReviews = () => {
         },
     });
 };
+
+export const useProducts = () => {
+    return useQuery({
+        queryKey: ["products"],
+        queryFn: async () => {
+            const response = await axios.get(`${conf.apiUrlPrefix + conf.productsEndpoint}?populate=*`);
+            return response.data.data;
+        },
+    });
+};
