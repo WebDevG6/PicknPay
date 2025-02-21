@@ -1,85 +1,85 @@
-import React from "react";
-import { Avatar, Rate, Space, Table, Input } from "antd";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Avatar, Rate, Space, Table, Input, Button } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import conf from "../../conf/main";
 
-const getInventory = () => {
-    return fetch("https://dummyjson.com/products").then((res) => res.json());
+// ฟังก์ชันดึงข้อมูลจาก API
+const fetchProducts = async () => {
+    const res = await fetch("http://localhost:1337/api/products?populate=*");
+    const json = await res.json();
+
+    return json.data.map((product) => ({
+        key: product.id,
+        thumbnail: conf.urlPrefix + product.picture[0]?.formats.small.url,
+        title: product.name,
+        price: product.price,
+        stock: product.stock,
+        category: product.category?.name || "N/A",
+        brand: product.brands?.brandname || "N/A",
+        createdAt: new Date(product.createdAt).toLocaleString(),
+    }));
 };
 
 const Products = () => {
-    const [loading, setLoading] = useState(false);
-    const [dataSource, setDataSource] = useState([]);
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ["products"],
+        queryFn: fetchProducts,
+    });
+    
     const [searchedText, setSearchedText] = useState("");
     const [sortOrder, setSortOrder] = useState("ascend");
 
-    useEffect(() => {
-        setLoading(true);
-        getInventory().then((res) => {
-            setDataSource(res.products);
-            setLoading(false);
-        });
-    }, []);
-
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
-            <Input placeholder="Search here..." style={{ width: "100%", marginBottom: 20 }} onSearch={(value) => { setSearchedText(value) }} onChange={(e) => { setSearchedText(e.target.value) }} />
             <Space size={20} direction="vertical">
-                <Table
-                    loading={loading}
-                    columns={[
-                        {
-                            title: "Thumbnail",
-                            dataIndex: "thumbnail",
-                            render: (link) => {
-                                return <Avatar src={link} />;
-                            },
-                        },
-                        {
-                            title: "Title",
-                            dataIndex: "title",
-                            filteredValue: searchedText ? [searchedText] : null,
-                            onFilter: (value, record) => String(record.title).toLowerCase().includes(value.toLowerCase()),
-                            sorter: (a, b) => a.title.localeCompare(b.title),
-                            sortOrder,
-                            onHeaderCell: () => ({
-                                onClick: () => setSortOrder(sortOrder === "ascend" ? "descend" : "ascend"),
-                            }),
-                        },
-                        {
-                            title: "Price",
-                            dataIndex: "price",
-                            render: (value) => <span>฿{value}</span>,
-                        },
-                        {
-                            title: "Rating",
-                            dataIndex: "rating",
-                            render: (rating) => {
-                                return <Rate value={rating} allowHalf disabled />;
-                            },
-                        },
-                        {
-                            title: "Stock",
-                            dataIndex: "stock",
-                        },
-
-                        {
-                            title: "Brand",
-                            dataIndex: "brand",
-                        },
-                        {
-                            title: "Category",
-                            dataIndex: "category",
-                        },
-                    ]}
-                    dataSource={dataSource}
-                    pagination={{
-                        pageSize: 8,
-                    }}
-                    scroll={{ x: "max-content" }}
-                >
-
-                </Table>
+                <Input
+                    placeholder="Search here..."
+                    style={{ width: "100%", marginBottom: 20 }}
+                    onChange={(e) => setSearchedText(e.target.value)}
+                />
             </Space>
+            <Table
+                loading={isLoading}
+                columns={[
+                    {
+                        title: "Preview",
+                        dataIndex: "thumbnail",
+                        render: (link) => <Avatar src={<img src={link}/>} />, 
+                    },
+                    {
+                        title: "Product Name",
+                        dataIndex: "title",
+                        filteredValue: searchedText ? [searchedText] : null,
+                        onFilter: (value, record) => String(record.title).toLowerCase().includes(value.toLowerCase()),
+                        sorter: (a, b) => a.title.localeCompare(b.title),
+                        sortOrder,
+                        onHeaderCell: () => ({
+                            onClick: () => setSortOrder(sortOrder === "ascend" ? "descend" : "ascend"),
+                        }),
+                    },
+                    {
+                        title: "Price",
+                        dataIndex: "price",
+                        render: (value) => <span>฿{value}</span>,
+                    },
+                    {
+                        title: "Stock",
+                        dataIndex: "stock",
+                    },
+                    {
+                        title: "Brand",
+                        dataIndex: "brand",
+                    },
+                    {
+                        title: "Category",
+                        dataIndex: "category",
+                    },
+                    
+                ]}
+                dataSource={data}
+                pagination={{ pageSize: 8 }}
+                scroll={{ x: "max-content" }}
+            />
         </div>
     );
 };
