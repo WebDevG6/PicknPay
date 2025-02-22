@@ -1,15 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
-    Modal,
-    Form,
-    Input,
-    InputNumber,
-    Select,
-    Button,
-    Upload,
-    Image,
-    message,
-    Spin
+    Modal, Form, Input, InputNumber, Select, Button, Upload, Image, message, Spin
 } from "antd";
 import {
     UploadOutlined,
@@ -25,114 +16,170 @@ import "swiper/css/pagination";
 import ax from "../../conf/ax";
 import conf from "../../conf/main";
 import useProducts from "../../hooks/useProducts";
+import useEditProductStore from "./useEditProductStore";
 
 const { confirm } = Modal;
 
 const EditProductModal = ({ visible, onClose, product }) => {
-    const { categories, updateProduct, productsLoading } = useProducts();
+    const { categories, productsLoading } = useProducts();
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const [originalPictures, setOriginalPictures] = useState([]);
-    const [pictureList, setPictureList] = useState([]);
-    const [selectedPicture, setSelectedPicture] = useState(null);
+
+    const {
+        loading,
+        originalPictures,
+        pictureList,
+        selectedPicture,
+        setLoading,
+        setOriginalPictures,
+        setPictureList,
+        setSelectedPicture,
+        handleLocalPreview,
+        confirmDeletePicture,
+    } = useEditProductStore();
 
     useEffect(() => {
-        if (visible && product) {
-            const pictures = product.picture || [];
-            setOriginalPictures(pictures);
-            setPictureList(pictures);
-            setSelectedPicture(pictures.length > 0 ? pictures[0].url : null);
+        const fetchProductData = async () => {
+            try {
+                const response = await ax.get(`/products/${product.documentId}?populate=*`);
+                const productData = response.data.data;
+                const pictures = productData.picture || [];
+                setOriginalPictures(pictures);
+                setPictureList(pictures);
+                setSelectedPicture(pictures.length > 0 ? pictures[0].url : null);
 
-            form.setFieldsValue({
-                name: product.name,
-                price: product.price,
-                stock: product.stock,
-                description: product.description,
-                category: product.category?.id || null,
-            });
+                form.setFieldsValue({
+                    name: productData.name,
+                    price: productData.price,
+                    stock: productData.stock,
+                    description: productData.description,
+                    category: productData.category?.id || null,
+                    brand: productData.brands?.brandname || '',
+                });
+            } catch (error) {
+                console.error("Failed to fetch product data:", error);
+            }
+        };
+
+        if (visible && product) {
+            fetchProductData();
         }
     }, [visible, product]);
-    const handleLocalPreview = (file) => {
-        const previewUrl = URL.createObjectURL(file);
-        setPictureList((prev) => [
-            ...prev,
-            {
-                file,
-                previewUrl,
-            },
-        ]);
-        setSelectedPicture(previewUrl);
-        return false;
+
+    const getOrCreateBrand = async (brandName) => {
+        if (!brandName) return null;
+
+        try {
+            const response = await ax.get("/brands");
+            const existingBrand = response.data.data.find(
+                (brand) => brand.brandname.toLowerCase() === brandName.toLowerCase()
+            );
+
+            if (existingBrand) {
+                return existingBrand.id;
+            }
+
+            const newBrandResponse = await ax.post("/brands", {
+                data: { brandname: brandName },
+            });
+
+            return newBrandResponse.data.data.id;
+        } catch (error) {
+            console.error("Error fetching/creating brand:", error.response?.data || error.message);
+            return null;
+        }
     };
 
-    const confirmDeletePicture = (picture) => {
+    const handleUpdate = async (values) => {
         confirm({
             title: "คุณแน่ใจหรือไม่?",
             icon: <ExclamationCircleOutlined />,
-            content: "การลบรูปนี้จะไม่สามารถกู้คืนได้",
-            okText: "ใช่, ลบเลย",
+            content: "คุณกำลังจะบันทึกการเปลี่ยนแปลงสินค้า",
+            okText: "ใช่, บันทึก",
             cancelText: "ยกเลิก",
-            onOk() {
-                const updated = pictureList.filter((pic) => pic !== picture);
-                setPictureList(updated);
+            onOk: async () => {
+                setLoading(true);
+                try {
+                    const newPictures = pictureList.filter((pic) => pic.file && !pic.id);
+                    const uploadedIds = [];
 
-                if (updated.length > 0) {
-                    const firstPic = updated[0];
-                    setSelectedPicture(firstPic.url ?? firstPic.previewUrl);
-                } else {
-                    setSelectedPicture(null);
+                    for (const pic of newPictures) {
+                        const formData = new FormData();
+                        formData.append("files", pic.file);
+                        const response = await ax.post(`${conf.apiUrlPrefix}/upload`, formData, {
+                            headers: { "Content-Type": "multipart/form-data" },
+                        });
+                        if (response.data && response.data.length > 0) {
+                            uploadedIds.push(response.data[0].id);
+                        }
+                    }
+
+                    const oldIds = pictureList
+                        .filter((p) => p.id && !p.file)
+                        .map((p) => p.id);
+
+                    const allImageIds = [...oldIds, ...uploadedIds];
+
+                    if (!values.brand) {
+                        message.error("กรุณากรอกแบรนด์!");
+                        setLoading(false);
+                        return;
+                    }
+                    const brandId = await getOrCreateBrand(values.brand);
+                    if (!brandId) {
+                        message.error("ไม่สามารถสร้าง/อัปเดตแบรนด์ได้!");
+                        setLoading(false);
+                        return;
+                    }
+                    const categoryObj = categories.find((cat) => cat.id === values.category);
+                    const categoryId = categoryObj?.id || null;
+
+                    if (!categoryId) {
+                        message.error("หมวดหมู่ไม่ถูกต้อง!");
+                        setLoading(false);
+                        return;
+                    }
+
+
+                    const productData = {
+                        data: {
+                            name: values.name,
+                            description: values.description,
+                            price: values.price.toString(),
+                            stock: Number(values.stock),
+                            category: { id: categoryId },
+                            picture: allImageIds,
+                            brands: { id: brandId },
+                        },
+                    };
+                    const response = await ax.put(`/products/${product.documentId}`, productData, {
+                        headers: { "Content-Type": "application/json" },
+                    });
+                    const removedPictures = originalPictures.filter(
+                        (origPic) => !pictureList.some((pic) => pic.id === origPic.id)
+                    );
+
+                    for (const removedPic of removedPictures) {
+                        if (removedPic.id) {
+                            await ax.delete(`${conf.apiUrlPrefix}/upload/files/${removedPic.id}`);
+                        }
+                    }
+
+                    message.success("อัปเดตสินค้าสำเร็จ!");
+                    onClose();
+                } catch (error) {
+                    console.error("Update Failed:", error);
+                    console.error("Error Response:", error.response?.data);
+                    message.error("อัปเดตสินค้าล้มเหลว!");
+                } finally {
+                    setLoading(false);
                 }
+            },
+            onCancel: () => {
+                console.log("ผู้ใช้ยกเลิกการบันทึก");
             },
         });
     };
-    const handleUpdate = async (values) => {
-        setLoading(true);
 
-        try {
-            const newPictures = pictureList.filter((pic) => pic.file && !pic.id);
-            const uploadedIds = [];
-
-            for (const pic of newPictures) {
-                const formData = new FormData();
-                formData.append("files", pic.file);
-                const response = await ax.post(`${conf.apiUrlPrefix}/upload`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-                if (response.data && response.data.length > 0) {
-                    uploadedIds.push(response.data[0].id);
-                }
-            }
-            const oldIds = pictureList
-                .filter((p) => p.id && !p.file)
-                .map((p) => p.id);
-
-            // รวม id รูปทั้งหมด
-            const allImageIds = [...oldIds, ...uploadedIds];
-            await updateProduct({
-                documentId: product.documentId,
-                productData: {
-                    ...values,
-                    picture: allImageIds,
-                },
-            });
-            const removedPictures = originalPictures.filter(
-                (origPic) => !pictureList.some((pic) => pic.id === origPic.id)
-            );
-
-            for (const removedPic of removedPictures) {
-                await ax.delete(`${conf.apiUrlPrefix}/upload/files/${removedPic.id}`);
-            }
-
-            // เสร็จเรียบร้อย
-            message.success("อัปเดตสินค้าสำเร็จ!");
-            onClose();
-        } catch (error) {
-            console.error("Update Failed:", error);
-            message.error("อัปเดตสินค้าล้มเหลว!");
-        } finally {
-            setLoading(false);
-        }
-    };
     const handleCancel = () => {
         setPictureList(originalPictures);
         setSelectedPicture(
@@ -224,9 +271,7 @@ const EditProductModal = ({ visible, onClose, product }) => {
                                     icon={<DeleteOutlined />}
                                     onClick={() => {
                                         const foundPic = pictureList.find((pic) => {
-                                            const src = pic.url
-                                                ? `${conf.urlPrefix}${pic.url}`
-                                                : pic.previewUrl;
+                                            const src = pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl;
                                             return src === selectedPicture;
                                         });
                                         if (foundPic) confirmDeletePicture(foundPic);
@@ -249,7 +294,7 @@ const EditProductModal = ({ visible, onClose, product }) => {
                                 <Input />
                             </Form.Item>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <Form.Item
                                     label="ราคา"
                                     name="price"
@@ -265,6 +310,13 @@ const EditProductModal = ({ visible, onClose, product }) => {
                                     ]}
                                 >
                                     <InputNumber min={0} className="w-full" />
+                                </Form.Item>
+                                <Form.Item
+                                    label="แบรนด์"
+                                    name="brand"
+                                    rules={[{ required: true, message: "กรุณากรอกแบรนด์" }]}
+                                >
+                                    <Input placeholder="Enter brand" />
                                 </Form.Item>
                             </div>
 
@@ -299,6 +351,5 @@ const EditProductModal = ({ visible, onClose, product }) => {
         </Modal>
     );
 };
-
 
 export default EditProductModal;
