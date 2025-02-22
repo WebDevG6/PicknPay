@@ -10,12 +10,12 @@ const imageProfileMockUrl =
     "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg";
 
 const userNavigation = [
-    { name: "โปรไฟล์", to: "/profile" },
+    { name: "โปรไฟล์", to: "/customer/profile" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
 const userNavigationMenu = [
-    { name: "โปรไฟล์", to: "/profile" },
+    { name: "โปรไฟล์", to: "/customer/profile" },
     { name: "รถเข็น", to: "/customer/cart" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];

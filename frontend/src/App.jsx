@@ -18,6 +18,7 @@ import CheckAuth from "./context/CheckAuth";
 import Cart from "./pages/Cart";
 import Product from "./pages/Product";
 import ProductList from "./pages/user/ProductList";
+import Profile from "./pages/user/Profile";
 
 function App() {
     return (
@@ -39,7 +40,9 @@ function App() {
                     <Route element={<RequiredAuth />}>
                         <Route element={<RequireCustomerRole />}>
                             <Route element={<UserLayout />}>
+                                <Route path="/customer/*" element={<Navigate to={"/customer/profile"} />} />
                                 <Route path="/customer/cart" element={<Cart />} />
+                                <Route path="/customer/profile" element={<Profile />} />
                             </Route>
                         </Route>
                         <Route element={<RequireAdminRole />}>
