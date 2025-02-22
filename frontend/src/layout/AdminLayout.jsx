@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Layout, Menu, theme, Badge, Drawer } from "antd";
-import { DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined, LogoutOutlined, ShoppingOutlined, BellOutlined } from "@ant-design/icons";
+import { DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined, LogoutOutlined, ShoppingOutlined, BellOutlined, UnorderedListOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import { authContext } from "../context/AuthContext";
 
 const { Sider, Content } = Layout;
@@ -31,10 +31,13 @@ function AdminLayout() {
     const layoutTitle = {
         1: { label: "Dashboard", path: "/admin/dashboard" },
         2: { label: "Orders", path: "/admin/orders" },
-        3: { label: "Products", path: "/admin/products" },
-        4: { label: "Customers", path: "/admin/customers" },
-        5: { label: "Logout", path: "/logout" },
+        3: { label: "Product List", path: "/admin/products/list" },
+        4: { label: "Add Products", path: "/admin/products/add" },
+        5: { label: "Manage Products", path: "/admin/products/manage" },
+        6: { label: "Customers", path: "/admin/customers" },
+        7: { label: "Logout", path: "/logout" },
     };
+
     const showDrawer = () => {
         setOpen(true);
     };
@@ -49,10 +52,28 @@ function AdminLayout() {
     }, [location.pathname]);
 
     const handleMenuClick = (menu) => {
-        navigate(layoutTitle[menu.key].path);
+        if (layoutTitle[menu.key]) {
+            navigate(layoutTitle[menu.key].path);
+        }
     };
 
-    const items = [getItem("Dashboard", "1", <DashboardOutlined />), getItem("Orders", "2", <ShoppingCartOutlined />), getItem("Products", "3", <AppstoreOutlined />), getItem("Customers", "4", <UserOutlined />), getItem("Logout", "5", <LogoutOutlined />)];
+
+    const items = [
+        getItem("Dashboard", "1", <DashboardOutlined />),
+        getItem("Orders", "2", <ShoppingCartOutlined />),
+        {
+            key: "products",
+            icon: <AppstoreOutlined />,
+            label: "Products",
+            children: [
+                getItem("Product List", "3", <UnorderedListOutlined />),
+                getItem("Add Products", "4", <PlusOutlined />),
+                getItem("Manage Products", "5", <SettingOutlined />),
+            ],
+        },
+        getItem("Customers", "6", <UserOutlined />),
+        getItem("Logout", "7", <LogoutOutlined />),
+    ];
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
