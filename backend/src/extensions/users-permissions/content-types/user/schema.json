@@ -88,6 +88,12 @@
       "relation": "oneToOne",
       "target": "api::cart.cart",
       "mappedBy": "users_permissions_user"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "customer"
     }
   }
 }

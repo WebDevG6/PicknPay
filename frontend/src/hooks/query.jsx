@@ -19,6 +19,7 @@ export function useCartItem() {
                 isSelect: item.isSelect,
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
                 productId: item.product.id,
+                productDocumentId: item.product.documentId,
             }));
         },
     });

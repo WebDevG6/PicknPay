@@ -16,6 +16,7 @@ const conf = {
     cartUrl: (cartId = "") => `/carts/${cartId}`,
     productsEndpoint: "/products",
     categoriesEndpoint: "/categories",
+    orderEndpoint: "/orders",
 };
 
 export default conf;

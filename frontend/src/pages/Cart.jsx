@@ -2,8 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import { Divider, Button, Input } from "antd";
 import CartItemList from "../components/CartItemList";
 import { useCartItem } from "../hooks/query";
+import { loadStripe } from "@stripe/stripe-js";
+import ax from "../conf/ax";
+import conf from "../conf/main";
 
 function Cart() {
+    const stripePromise = loadStripe(
+        "pk_test_51QrA19IqshdqteMviIRbdDZP1v9Xmuhq5toGui7qILPAkvoZyx2Kz4GQfzDzRVD2zl5pPzyDLeTYKYA04he3CTuF00eBRJw9RM"
+    );
     const { data: cartItems } = useCartItem();
     const [cartSelectedItem, setSelectItem] = useState([]);
 
@@ -19,6 +25,20 @@ function Cart() {
             deliveryCost: 0,
         });
     }, [cartItems]);
+
+    const handlePayment = async () => {
+        try {
+            const selectedItems = cartItems.filter((item) => item.isSelect);
+            const stripe = await stripePromise;
+            const res = await ax.post(conf.orderEndpoint, { order_items: selectedItems });
+
+            await stripe.redirectToCheckout({
+                sessionId: res.data.stripeSession.id,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <div className="flex flex-col gap-2">
@@ -93,6 +113,7 @@ function Cart() {
                                 height: 40,
                                 borderRadius: 5,
                             }}
+                            onClick={handlePayment}
                         >
                             <p className="font-semibold font-[Kanit] tracking-wide">สั่งซื้อ</p>
                         </Button>
