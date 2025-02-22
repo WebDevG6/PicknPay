@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Upload, Button } from "antd";
+import { Upload, Button, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 const UploadProductImages = ({ onImageUpload, reset }) => {
@@ -12,7 +12,17 @@ const UploadProductImages = ({ onImageUpload, reset }) => {
         }
     }, [reset]);
 
+    const isValidImage = (file) => {
+        const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+        return allowedTypes.includes(file.type);
+    };
+
     const handleUpload = ({ file, onSuccess }) => {
+        if (!isValidImage(file)) {
+            message.error("อัปโหลดได้เฉพาะไฟล์ PNG, JPG, JPEG เท่านั้น!");
+            return;
+        }
+
         setTimeout(() => {
             const newImages = [...images, file];
             setImages(newImages);
@@ -34,8 +44,17 @@ const UploadProductImages = ({ onImageUpload, reset }) => {
             <div className="flex gap-3 flex-wrap">
                 {images.map((img, index) => (
                     <div key={index} className="relative w-20 h-20">
-                        <img src={URL.createObjectURL(img)} alt={`Product ${index + 1}`} className="w-full h-full object-cover rounded-md border cursor-pointer" />
-                        <button className="absolute top-1 right-1 bg-red-500 text-white text-xs p-1 rounded-full hover:bg-red-600" onClick={() => removeImage(img)}>✕</button>
+                        <img
+                            src={URL.createObjectURL(img)}
+                            alt={`Product ${index + 1}`}
+                            className="w-full h-full object-cover rounded-md border cursor-pointer"
+                        />
+                        <button
+                            className="absolute top-1 right-1 bg-red-500 text-white text-xs p-1 rounded-full hover:bg-red-600"
+                            onClick={() => removeImage(img)}
+                        >
+                            ✕
+                        </button>
                     </div>
                 ))}
             </div>

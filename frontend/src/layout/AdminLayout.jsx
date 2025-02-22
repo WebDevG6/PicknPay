@@ -32,7 +32,7 @@ function AdminLayout() {
         1: { label: "Dashboard", path: "/admin/dashboard" },
         2: { label: "Orders", path: "/admin/orders" },
         3: { label: "Product List", path: "/admin/products/list" },
-        4: { label: "Add Products", path: "/admin/products/add" },
+        4: { label: "Add a product", path: "/admin/products/add" },
         5: { label: "Manage Products", path: "/admin/products/manage" },
         6: { label: "Customers", path: "/admin/customers" },
         7: { label: "Logout", path: "/logout" },
