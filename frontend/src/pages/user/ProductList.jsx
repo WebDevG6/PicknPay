@@ -32,7 +32,9 @@ const ProductList = () => {
         const newFilteredProducts = (products || [])
             .filter((product) => product.category.name.trim().toLowerCase() === category)
             .filter((product) => product.price >= price[0] && product.price <= price[1])
-            .filter((product) => !selectedBrand.length || selectedBrand.includes(product.brands.brandname));
+            .filter((product) =>
+                !selectedBrand.length || (product.brands && selectedBrand.includes(product.brands.brandname))
+            );
 
         setFilteredProducts(newFilteredProducts);
     }, [products, category, price, productsLoading, params, selectedBrand]);
