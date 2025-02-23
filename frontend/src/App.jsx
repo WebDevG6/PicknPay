@@ -19,7 +19,6 @@ import Product from "./pages/Product";
 import ProductList from "./pages/user/ProductList";
 import AddProduct from "./pages/admin/AddProducts";
 import ManangeProducts from "./pages/admin/ManangeProducts";
-import AdminProductsList from "./pages/admin/AdminProductsList";
 
 
 function App() {
@@ -52,10 +51,9 @@ function App() {
                                 <Route path="orders" element={<Orders />} />
                                 <Route path="customers" element={<Customers />} />
                                 <Route path="products">
-                                    <Route index element={<AdminProductsList />} />
-                                    <Route path="add" element={<AddProduct />} />
+                                    <Route index element={<ManangeProducts />} />
                                     <Route path="manage" element={<ManangeProducts />} />
-                                    <Route path="list" element={<AdminProductsList />} />
+                                    <Route path="add" element={<AddProduct />} />
                                 </Route>
                             </Route>
                         </Route>

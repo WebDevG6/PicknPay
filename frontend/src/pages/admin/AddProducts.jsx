@@ -1,13 +1,14 @@
-import { useState, useCallback } from "react";
-import { Form, Input, InputNumber, message } from "antd";
-import { Button } from "@headlessui/react";
+import { useState, useCallback, useEffect } from "react";
+import { Form, Input, InputNumber, message, Select, Button } from "antd";
 import UploadProductImages from "../../components/admin/UploadProductImages";
 import CategoryButtons from "../../components/admin/CategoryButtons";
 import ax from "../../conf/ax";
 import useProducts from "../../hooks/useProducts";
+import useEditProductStore from "../../components/admin/useEditProductStore";
 
 const AddProduct = () => {
     const { categories } = useProducts();
+    const { brands, fetchBrands } = useEditProductStore();
     const [formData, setFormData] = useState({
         name: "",
         price: null,
@@ -18,6 +19,11 @@ const AddProduct = () => {
         stock: "",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        fetchBrands();
+    }, []);
+
 
     const handleChange = (key, value) => {
         setFormData((prev) => ({ ...prev, [key]: value }));
@@ -44,31 +50,15 @@ const AddProduct = () => {
             return [];
         }
     };
-    const getOrCreateBrand = async (brandName) => {
-        try {
-            const response = await ax.get("/brands");
-            const existingBrand = response.data.data.find(
-                (brand) => brand.brandname.toLowerCase() === brandName.toLowerCase()
-            );
-
-            if (existingBrand) {
-                return existingBrand.id;
-            }
-
-            const newBrandResponse = await ax.post("/brands", {
-                data: { brandname: brandName },
-            });
-
-            return newBrandResponse.data.data.id;
-        } catch (error) {
-            console.error("Error fetching/creating brand:", error.response?.data || error.message);
-            return null;
-        }
-    };
 
     const [resetImages, setResetImages] = useState(false);
 
     const handleSubmit = async () => {
+        if (isSubmitting) {
+            message.warning("กำลังเพิ่มสินค้า กรุณารอสักครู่...");
+            return;
+        }
+
         if (!formData.name || !formData.price || !formData.category || !formData.brand || formData.picture.length === 0) {
             message.error("กรุณากรอกข้อมูลให้ครบถ้วน!");
             return;
@@ -92,13 +82,6 @@ const AddProduct = () => {
             return;
         }
 
-        const brandId = await getOrCreateBrand(formData.brand);
-        if (!brandId) {
-            message.error("ไม่สามารถสร้าง/อัปเดตแบรนด์ได้!");
-            setIsSubmitting(false);
-            return;
-        }
-
         const productData = {
             data: {
                 name: formData.name,
@@ -107,7 +90,7 @@ const AddProduct = () => {
                 stock: Number(formData.stock),
                 category: { id: categoryId },
                 picture: uploadedImageIds,
-                brands: { id: brandId },
+                brands: { id: formData.brand },
             },
         };
 
@@ -139,27 +122,34 @@ const AddProduct = () => {
         }
     };
 
+
     return (
         <div className="rounded-lg shadow-lg mx-10 my-4 p-8 bg-white">
             <Form layout="vertical">
-                <Form.Item label="Name">
-                    <Input placeholder="Enter product name" value={formData.name} onChange={(e) => handleChange("name", e.target.value)} />
+                <Form.Item label="ชื่อสินค้า">
+                    <Input placeholder="ระบุชื่อสินค้า" value={formData.name} onChange={(e) => handleChange("name", e.target.value)} />
                 </Form.Item>
 
-                <Form.Item label="Price">
-                    <InputNumber style={{ width: "100%" }} min={0} placeholder="Enter price" value={formData.price} onChange={(value) => handleChange("price", value)} />
+                <Form.Item label="ราคา">
+                    <InputNumber style={{ width: "100%" }} min={0} placeholder="กรอกราคาสินค้า (บาท)" value={formData.price} onChange={(value) => handleChange("price", value)} />
                 </Form.Item>
 
-                <Form.Item label="Brand">
-                    <Input placeholder="Enter brand" value={formData.brand} onChange={(e) => handleChange("brand", e.target.value)} />
+                <Form.Item label="แบรนด์">
+                    <Select
+                        placeholder="เลือกแบรนด์สินค้า"
+                        options={brands.length > 0 ? brands.map((b) => ({ value: b.id, label: b.name })) : []}
+                        onChange={(value) => handleChange("brand", value)}
+                        style={{ width: "100%" }}
+                        allowClear
+                    />
                 </Form.Item>
 
-                <Form.Item label="Stock">
-                    <InputNumber style={{ width: "100%" }} min={0} placeholder="Enter stock" value={formData.stock} onChange={(value) => handleChange("stock", value)} />
+                <Form.Item label="จำนวนคงเหลือ(สต็อก)">
+                    <InputNumber style={{ width: "100%" }} min={0} placeholder="กรอกจำนวนสินค้าคงเหลือ" value={formData.stock} onChange={(value) => handleChange("stock", value)} />
                 </Form.Item>
 
-                <Form.Item label="Description">
-                    <Input.TextArea placeholder="Enter description" rows={4} value={formData.description} onChange={(e) => handleChange("description", e.target.value)} />
+                <Form.Item label="รายละเอียดสินค้า">
+                    <Input.TextArea placeholder="ใส่รายละเอียดสินค้าให้ครบถ้วน" rows={4} value={formData.description} onChange={(e) => handleChange("description", e.target.value)} />
                 </Form.Item>
 
                 <CategoryButtons handleCategorySelect={handleCategorySelect} selectedCategory={formData.category} />
@@ -169,11 +159,13 @@ const AddProduct = () => {
                 </div>
 
                 <Button
-                    className={`w-full bg-blue-500 text-white font-medium py-2 rounded-md transition-all ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"}`}
+                    type="primary"
+                    htmlType="submit"
+                    loading={isSubmitting}
+                    block
                     onClick={handleSubmit}
-                    disabled={isSubmitting}
                 >
-                    {isSubmitting ? "Submitting..." : "Submit"}
+                    เพิ่มสินค้า
                 </Button>
             </Form>
         </div>

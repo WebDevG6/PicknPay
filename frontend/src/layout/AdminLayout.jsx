@@ -31,11 +31,10 @@ function AdminLayout() {
     const layoutTitle = {
         1: { label: "Dashboard", path: "/admin/dashboard" },
         2: { label: "Orders", path: "/admin/orders" },
-        3: { label: "Product List", path: "/admin/products/list" },
+        3: { label: "Manage Products", path: "/admin/products/manage" },
         4: { label: "Add a product", path: "/admin/products/add" },
-        5: { label: "Manage Products", path: "/admin/products/manage" },
-        6: { label: "Customers", path: "/admin/customers" },
-        7: { label: "Logout", path: "/logout" },
+        5: { label: "Customers", path: "/admin/customers" },
+        6: { label: "Logout", path: "/logout" },
     };
 
     const showDrawer = () => {
@@ -66,13 +65,12 @@ function AdminLayout() {
             icon: <AppstoreOutlined />,
             label: "Products",
             children: [
-                getItem("Product List", "3", <UnorderedListOutlined />),
+                getItem("Manage Products", "3", <SettingOutlined />),
                 getItem("Add Products", "4", <PlusOutlined />),
-                getItem("Manage Products", "5", <SettingOutlined />),
             ],
         },
-        getItem("Customers", "6", <UserOutlined />),
-        getItem("Logout", "7", <LogoutOutlined />),
+        getItem("Customers", "5", <UserOutlined />),
+        getItem("Logout", "6", <LogoutOutlined />),
     ];
 
     return (

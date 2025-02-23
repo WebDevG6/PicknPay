@@ -1,13 +1,6 @@
 import { useEffect } from "react";
-import {
-    Modal, Form, Input, InputNumber, Select, Button, Upload, Image, message, Spin
-} from "antd";
-import {
-    UploadOutlined,
-    DeleteOutlined,
-    ExclamationCircleOutlined
-} from "@ant-design/icons";
-
+import { Modal, Form, Button, Upload, Image, message, Spin } from "antd";
+import { UploadOutlined, DeleteOutlined, } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -17,19 +10,19 @@ import ax from "../../conf/ax";
 import conf from "../../conf/main";
 import useProducts from "../../hooks/useProducts";
 import useEditProductStore from "./useEditProductStore";
+import EditProductForm from "./EditProductForm";
 
-const { confirm } = Modal;
-
-const EditProductModal = ({ visible, onClose, product }) => {
-    const { categories, productsLoading } = useProducts();
+const EditProductModal = ({ visible }) => {
+    const { productsLoading } = useProducts();
     const [form] = Form.useForm();
+    const MAX_IMAGES = 5;
 
     const {
-        loading,
+        editingProduct,
+        setEditingProduct,
         originalPictures,
         pictureList,
         selectedPicture,
-        setLoading,
         setOriginalPictures,
         setPictureList,
         setSelectedPicture,
@@ -40,7 +33,7 @@ const EditProductModal = ({ visible, onClose, product }) => {
     useEffect(() => {
         const fetchProductData = async () => {
             try {
-                const response = await ax.get(`/products/${product.documentId}?populate=*`);
+                const response = await ax.get(`/products/${editingProduct.documentId}?populate=*`);
                 const productData = response.data.data;
                 const pictures = productData.picture || [];
                 setOriginalPictures(pictures);
@@ -60,132 +53,15 @@ const EditProductModal = ({ visible, onClose, product }) => {
             }
         };
 
-        if (visible && product) {
+        if (visible && editingProduct) {
             fetchProductData();
         }
-    }, [visible, product]);
-
-    const getOrCreateBrand = async (brandName) => {
-        if (!brandName) return null;
-
-        try {
-            const response = await ax.get("/brands");
-            const existingBrand = response.data.data.find(
-                (brand) => brand.brandname.toLowerCase() === brandName.toLowerCase()
-            );
-
-            if (existingBrand) {
-                return existingBrand.id;
-            }
-
-            const newBrandResponse = await ax.post("/brands", {
-                data: { brandname: brandName },
-            });
-
-            return newBrandResponse.data.data.id;
-        } catch (error) {
-            console.error("Error fetching/creating brand:", error.response?.data || error.message);
-            return null;
-        }
-    };
-
-    const handleUpdate = async (values) => {
-        confirm({
-            title: "คุณแน่ใจหรือไม่?",
-            icon: <ExclamationCircleOutlined />,
-            content: "คุณกำลังจะบันทึกการเปลี่ยนแปลงสินค้า",
-            okText: "ใช่, บันทึก",
-            cancelText: "ยกเลิก",
-            onOk: async () => {
-                setLoading(true);
-                try {
-                    const newPictures = pictureList.filter((pic) => pic.file && !pic.id);
-                    const uploadedIds = [];
-
-                    for (const pic of newPictures) {
-                        const formData = new FormData();
-                        formData.append("files", pic.file);
-                        const response = await ax.post(`${conf.apiUrlPrefix}/upload`, formData, {
-                            headers: { "Content-Type": "multipart/form-data" },
-                        });
-                        if (response.data && response.data.length > 0) {
-                            uploadedIds.push(response.data[0].id);
-                        }
-                    }
-
-                    const oldIds = pictureList
-                        .filter((p) => p.id && !p.file)
-                        .map((p) => p.id);
-
-                    const allImageIds = [...oldIds, ...uploadedIds];
-
-                    if (!values.brand) {
-                        message.error("กรุณากรอกแบรนด์!");
-                        setLoading(false);
-                        return;
-                    }
-                    const brandId = await getOrCreateBrand(values.brand);
-                    if (!brandId) {
-                        message.error("ไม่สามารถสร้าง/อัปเดตแบรนด์ได้!");
-                        setLoading(false);
-                        return;
-                    }
-                    const categoryObj = categories.find((cat) => cat.id === values.category);
-                    const categoryId = categoryObj?.id || null;
-
-                    if (!categoryId) {
-                        message.error("หมวดหมู่ไม่ถูกต้อง!");
-                        setLoading(false);
-                        return;
-                    }
-
-
-                    const productData = {
-                        data: {
-                            name: values.name,
-                            description: values.description,
-                            price: values.price.toString(),
-                            stock: Number(values.stock),
-                            category: { id: categoryId },
-                            picture: allImageIds,
-                            brands: { id: brandId },
-                        },
-                    };
-                    const response = await ax.put(`/products/${product.documentId}`, productData, {
-                        headers: { "Content-Type": "application/json" },
-                    });
-                    const removedPictures = originalPictures.filter(
-                        (origPic) => !pictureList.some((pic) => pic.id === origPic.id)
-                    );
-
-                    for (const removedPic of removedPictures) {
-                        if (removedPic.id) {
-                            await ax.delete(`${conf.apiUrlPrefix}/upload/files/${removedPic.id}`);
-                        }
-                    }
-
-                    message.success("อัปเดตสินค้าสำเร็จ!");
-                    onClose();
-                } catch (error) {
-                    console.error("Update Failed:", error);
-                    console.error("Error Response:", error.response?.data);
-                    message.error("อัปเดตสินค้าล้มเหลว!");
-                } finally {
-                    setLoading(false);
-                }
-            },
-            onCancel: () => {
-                console.log("ผู้ใช้ยกเลิกการบันทึก");
-            },
-        });
-    };
+    }, [visible, editingProduct]);
 
     const handleCancel = () => {
+        setEditingProduct(null);
         setPictureList(originalPictures);
-        setSelectedPicture(
-            originalPictures.length > 0 ? originalPictures[0].url : null
-        );
-        onClose();
+        setSelectedPicture(originalPictures.length > 0 ? originalPictures[0].url : null);
     };
 
     return (
@@ -204,7 +80,7 @@ const EditProductModal = ({ visible, onClose, product }) => {
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="flex flex-col items-center">
-                        <h3 className="text-lg font-semibold mb-2">📸 รูปสินค้า</h3>
+                        <h3 className="text-lg font-semibold mb-2">รูปสินค้า</h3>
                         {pictureList.length > 0 ? (
                             <Swiper
                                 modules={[Navigation, Pagination]}
@@ -241,7 +117,7 @@ const EditProductModal = ({ visible, onClose, product }) => {
                                 return (
                                     <div
                                         key={index}
-                                        className={`w-20 h-20 rounded-md overflow-hidden cursor-pointer flex justify-center items-center border-2 transition-all 
+                                        className={`relative w-20 h-20 rounded-md overflow-hidden cursor-pointer flex justify-center items-center border-2 transition-all 
                     ${selectedPicture === thumbSrc ? "border-blue-500" : "border-gray-300"}`}
                                         onClick={() => setSelectedPicture(thumbSrc)}
                                     >
@@ -256,14 +132,23 @@ const EditProductModal = ({ visible, onClose, product }) => {
                         </div>
 
                         <div className="flex flex-wrap gap-2 mt-4">
-                            <Upload
-                                listType="picture"
-                                maxCount={5}
-                                showUploadList={false}
-                                beforeUpload={handleLocalPreview}
-                            >
-                                <Button icon={<UploadOutlined />}>อัปโหลดรูปใหม่</Button>
-                            </Upload>
+                            {pictureList.length < MAX_IMAGES && (
+                                <Upload
+                                    listType="picture"
+                                    maxCount={MAX_IMAGES}
+                                    showUploadList={false}
+                                    beforeUpload={(file) => {
+                                        if (pictureList.length >= MAX_IMAGES) {
+                                            message.error(`สามารถอัปโหลดได้สูงสุด ${MAX_IMAGES} รูป`);
+                                            return Upload.LIST_IGNORE;
+                                        }
+                                        handleLocalPreview(file);
+                                        return false;
+                                    }}
+                                >
+                                    <Button icon={<UploadOutlined />}>อัปโหลดรูปใหม่</Button>
+                                </Upload>
+                            )}
 
                             {selectedPicture && (
                                 <Button
@@ -284,67 +169,7 @@ const EditProductModal = ({ visible, onClose, product }) => {
                     </div>
 
                     <div className="w-full">
-                        <h3 className="text-lg font-semibold mb-2">รายละเอียดสินค้า</h3>
-                        <Form form={form} layout="vertical" onFinish={handleUpdate}>
-                            <Form.Item
-                                label="ชื่อสินค้า"
-                                name="name"
-                                rules={[{ required: true, message: "กรุณากรอกชื่อสินค้า" }]}
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <Form.Item
-                                    label="ราคา"
-                                    name="price"
-                                    rules={[{ required: true, message: "กรุณากรอกราคา" }]}
-                                >
-                                    <InputNumber min={0} className="w-full" />
-                                </Form.Item>
-                                <Form.Item
-                                    label="จำนวนสต็อก"
-                                    name="stock"
-                                    rules={[
-                                        { required: true, message: "กรุณากรอกจำนวนสต็อก" },
-                                    ]}
-                                >
-                                    <InputNumber min={0} className="w-full" />
-                                </Form.Item>
-                                <Form.Item
-                                    label="แบรนด์"
-                                    name="brand"
-                                    rules={[{ required: true, message: "กรุณากรอกแบรนด์" }]}
-                                >
-                                    <Input placeholder="Enter brand" />
-                                </Form.Item>
-                            </div>
-
-                            <Form.Item
-                                label="หมวดหมู่"
-                                name="category"
-                                rules={[{ required: true, message: "กรุณาเลือกหมวดหมู่" }]}
-                            >
-                                <Select placeholder="เลือกหมวดหมู่">
-                                    {categories.map((cat) => (
-                                        <Select.Option key={cat.id} value={cat.id}>
-                                            {cat.name}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item label="คำอธิบายสินค้า" name="description">
-                                <Input.TextArea rows={4} />
-                            </Form.Item>
-
-                            <div className="flex justify-end gap-2">
-                                <Button onClick={handleCancel}>ยกเลิก</Button>
-                                <Button type="primary" htmlType="submit" loading={loading}>
-                                    บันทึกการเปลี่ยนแปลง
-                                </Button>
-                            </div>
-                        </Form>
+                        <EditProductForm form={form} product={editingProduct} onUpdate={handleCancel} onCancel={handleCancel} />
                     </div>
                 </div>
             )}
