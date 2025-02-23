@@ -1,20 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import conf from "../conf/main";
-import axios from "axios";
+import ax from "../conf/ax";
 
 const fetchOrdersCount = async () => {
-    const response = await axios.get(conf.apiUrlPrefix + "/orders/count");
+    const response = await ax.get(conf.apiUrlPrefix + "/orders/count");
     return response.data.total;
 };
 
 const fetchProductsCount = async () => {
-    const response = await axios.get(conf.apiUrlPrefix + "/products/count");
+    const response = await ax.get(conf.apiUrlPrefix + "/products/count");
     return response.data.total;
 };
 
 const fetchCusCount = async () => {
-    const response = await axios.get(conf.apiUrlPrefix + "/users/count-customers");
+    const response = await ax.get(conf.apiUrlPrefix + "/users/count-customers");
     return response.data.total;
+};
+
+const fetchCustomers = async () => {
+    const response = await ax.get(`${conf.apiUrlPrefix}/users?filters[role][name][$eq]=Customer&populate=*`);
+    return response.data;
 };
 
 const useDataAdmin = () => {
@@ -33,16 +38,24 @@ const useDataAdmin = () => {
         queryFn: fetchCusCount,
     });
 
+    const { data: customers = [], error: customersError, isLoading: customersLoading } = useQuery({
+        queryKey: ["customers"],
+        queryFn: fetchCustomers,
+    });
+
     return {
         totalOrders,
         totalProducts,
         totalCustomers,
+        customers,
         ordersLoading,
         productsLoading,
         cusLoading,
+        customersLoading,
         ordersError,
         productsError,
         cusError,
+        customersError,
     };
 };
 

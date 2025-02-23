@@ -7,7 +7,7 @@ import conf from "../../conf/main";
 const { Option } = Select;
 
 const ProductTable = ({ onEdit }) => {
-    const { products, productsLoading, deleteProduct } = useProducts();
+    const { products, productsLoading, deleteProduct, refetchProducts } = useProducts();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -24,6 +24,7 @@ const ProductTable = ({ onEdit }) => {
     const handleDelete = () => {
         if (selectedProduct) {
             deleteProduct(selectedProduct.documentId);
+            refetchProducts()
         }
         setIsModalOpen(false);
     };

@@ -25,13 +25,17 @@ const useProducts = () => {
         queryFn: fetchProducts,
     });
 
+    const refetchProducts = () => {
+        queryClient.invalidateQueries(["products"]);
+    };
+
     const deleteProductMutation = useMutation({
         mutationFn: async (documentId) => {
             await ax.delete(`${conf.apiUrlPrefix}${conf.productsEndpoint}/${documentId}`);
         },
         onSuccess: () => {
             message.success("ลบสินค้าสำเร็จ!");
-            queryClient.invalidateQueries(["products"]); // รีเฟรชข้อมูลสินค้า
+            refetchProducts()
         },
         onError: (error) => {
             console.error("Error deleting product:", error);
@@ -46,7 +50,7 @@ const useProducts = () => {
             });
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(["products"]);
+            refetchProducts()
         },
         onError: (error) => {
             console.error("Error updating product:", error);
@@ -63,6 +67,7 @@ const useProducts = () => {
         productsError,
         deleteProduct: deleteProductMutation.mutate,
         updateProduct: updateProductMutation.mutate,
+        refetchProducts,
     };
 };
 

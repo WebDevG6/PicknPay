@@ -6,7 +6,7 @@ import ax from "../../conf/ax";
 import conf from "../../conf/main";
 
 const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
-    const { categories, updateProduct } = useProducts();
+    const { categories, refetchProducts } = useProducts();
     const useEditProduct = useEditProductStore();
     const { setEditingProduct, loading, setLoading, pictureList, brands, fetchBrands } = useEditProduct;
     const [formValues, setFormValues] = useState({});
@@ -104,6 +104,7 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
             setEditingProduct((prev) => ({ ...prev, ...updatedProduct }));
             message.success("อัปเดตสินค้าสำเร็จ!");
             onUpdate();
+            refetchProducts()
         } catch (error) {
             console.error("Update Failed:", error);
             message.error("อัปเดตสินค้าล้มเหลว!");

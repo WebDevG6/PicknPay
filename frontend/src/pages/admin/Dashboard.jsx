@@ -60,8 +60,8 @@ const Dashboard = () => {
                 </Col>
                 <Col xs={24} sm={24} md={8}>
                     <div className="text-center bg-white rounded-lg p-2 shadow-md min-h-[315px]">
-                        <Divider>Product List</Divider>
-                        <ProductsTable />
+                        <Divider>Customer List</Divider>
+                        <CustomerTable />
                     </div>
                 </Col>
             </Row>
@@ -182,42 +182,50 @@ const BarChart = () => {
     );
 };
 
-
-const ProductsTable = () => {
-    const { products, productsLoading, productsError } = useProducts();
+const CustomerTable = () => {
+    const { customers } = useDataAdmin();
+    const { productsLoading, productsError } = useProducts();
 
     if (productsLoading) return <p>Loading...</p>;
     if (productsError) return <p>Error loading products</p>;
 
     const columns = [
         {
-            title: "Product Name",
-            dataIndex: "name",
-            key: "name",
+            title: "First Name",
+            dataIndex: "firstname",
+            key: "firstname",
+            ellipsis: true,
+            width: 150,
+        },
+        {
+            title: "Last Name",
+            dataIndex: "lastname",
+            key: "lastname",
+            ellipsis: true,
+            width: 150,
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
             ellipsis: true,
             width: 200,
         },
         {
-            title: "Price",
-            dataIndex: "price",
-            key: "price",
-            align: "right",
-            width: 100,
-        },
-        {
-            title: "Stock",
-            dataIndex: "stock",
-            key: "stock",
-            align: "right",
-            width: 80,
+            title: "Address",
+            dataIndex: "address",
+            key: "address",
+            ellipsis: true,
+            width: 400,
         },
     ];
 
-    const dataSource = products.map(product => ({
-        key: product.id,
-        name: product.name,
-        price: product.price,
-        stock: product.stock,
+    const dataSource = customers.map(customer => ({
+        key: customer.id,
+        firstname: customer.firstname || "-",
+        lastname: customer.lastname || "-",
+        email: customer.email || "-",
+        address: customer.address || "No Address Provided",
     }));
 
     return (
