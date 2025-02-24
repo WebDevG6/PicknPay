@@ -3,6 +3,7 @@ import Stripe from "stripe";
 const STRIPE_SECRET_KEY = process.env.STRIPE_KEY;
 const STRIPE_WEBHOOK_KEY = process.env.STRIPE_WEBHOOK_KEY;
 const stripe = new Stripe(STRIPE_SECRET_KEY);
+const updatedProducts = new Set();
 
 export default {
     async webhookHandler(ctx) {
@@ -62,6 +63,10 @@ async function handleCheckoutSessionCompleted(eventData, products) {
 
 async function updateStock(products) {
     for (const product of products) {
+        if (updatedProducts.has(product.productDocumentId)) {
+            continue;
+        }
+
         try {
             const productDetail = await strapi.db.query("api::product.product").findOne({
                 where: { documentId: product.productDocumentId },
@@ -73,6 +78,8 @@ async function updateStock(products) {
                     where: { documentId: product.productDocumentId },
                     data: { stock: newStock },
                 });
+
+                updatedProducts.add(product.productDocumentId);
             }
         } catch (error) {
             console.error(`Error updating stock for product ${product.productDocumentId}:`, error);
