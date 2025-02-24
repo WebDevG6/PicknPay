@@ -39,6 +39,14 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                 shipping_address_collection: { allowed_countries: ["TH"] },
                 locale: "th",
                 customer_email: ctx.state.user.email,
+                metadata: {
+                    products: JSON.stringify(
+                        order_items.map((product) => ({
+                            productDocumentId: product.productDocumentId,
+                            productQuantity: product.quantity,
+                        }))
+                    ),
+                },
             });
 
             await strapi.service("api::order.order").create({
