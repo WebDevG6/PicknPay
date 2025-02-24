@@ -68,7 +68,7 @@ async function handleCheckoutSessionCompleted(eventData, products, cartItems) {
     try {
         await strapi.db.query("api::order.order").update({
             where: { stripeId },
-            data: { status_order: "succeeded" },
+            data: { status_order: "succeeded", value: eventData.amount_total / 100 },
         });
 
         await updateStock(products);

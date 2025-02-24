@@ -36,6 +36,12 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
+    },
+    "value": {
+      "type": "integer",
+      "required": false,
+      "min": 0,
+      "default": 0
     }
   }
 }
