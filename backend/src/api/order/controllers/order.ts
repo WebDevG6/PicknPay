@@ -47,6 +47,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                         }))
                     ),
                 },
+                expires_at: Math.floor(Date.now() / 1000) + 1800,
             });
 
             await strapi.service("api::order.order").create({

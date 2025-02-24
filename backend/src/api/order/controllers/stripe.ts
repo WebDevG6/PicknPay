@@ -37,8 +37,10 @@ export default {
                 await handleCheckoutSessionCompleted(eventData, products);
                 break;
             case "checkout.session.expired":
+                await handleCheckoutSessionFailed(eventData);
                 break;
             case "payment_intent.canceled":
+                await handleCheckoutSessionFailed(eventData);
                 break;
             default:
                 console.log(`Unhandled event type: ${event.type}`);
@@ -46,6 +48,18 @@ export default {
         }
     },
 };
+
+async function handleCheckoutSessionFailed(eventData) {
+    const stripeId = eventData.id;
+    try {
+        await strapi.db.query("api::order.order").update({
+            where: { stripeId },
+            data: { status_order: "payment_failed" },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 async function handleCheckoutSessionCompleted(eventData, products) {
     const stripeId = eventData.id;
