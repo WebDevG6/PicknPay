@@ -25,8 +25,10 @@ export default {
         }
 
         let products;
+        let cartItems;
         try {
             products = JSON.parse(eventData.metadata.products || "[]");
+            cartItems = JSON.parse(eventData.metadata.cartItems || "[]");
         } catch (error) {
             console.error("Failed to parse metadata products:", error);
             return ctx.badRequest("Invalid metadata format.");
@@ -34,7 +36,7 @@ export default {
 
         switch (event.type) {
             case "checkout.session.completed":
-                await handleCheckoutSessionCompleted(eventData, products);
+                await handleCheckoutSessionCompleted(eventData, products, cartItems);
                 break;
             case "checkout.session.expired":
                 await handleCheckoutSessionFailed(eventData);
@@ -61,7 +63,7 @@ async function handleCheckoutSessionFailed(eventData) {
     }
 }
 
-async function handleCheckoutSessionCompleted(eventData, products) {
+async function handleCheckoutSessionCompleted(eventData, products, cartItems) {
     const stripeId = eventData.id;
     try {
         await strapi.db.query("api::order.order").update({
@@ -70,6 +72,7 @@ async function handleCheckoutSessionCompleted(eventData, products) {
         });
 
         await updateStock(products);
+        await Promise.all(cartItems.map((item) => deleteCustomerCartItem(item.documentId)));
     } catch (error) {
         console.error("Error processing checkout session completion:", error);
     }
@@ -98,5 +101,15 @@ async function updateStock(products) {
         } catch (error) {
             console.error(`Error updating stock for product ${product.productDocumentId}:`, error);
         }
+    }
+}
+
+async function deleteCustomerCartItem(cartItemId: string) {
+    try {
+        await strapi.db.query("api::cart-item.cart-item").delete({
+            where: { documentId: cartItemId },
+        });
+    } catch (err) {
+        console.log(err);
     }
 }

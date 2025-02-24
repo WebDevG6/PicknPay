@@ -46,6 +46,11 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                             productQuantity: product.quantity,
                         }))
                     ),
+                    cartItems: JSON.stringify(
+                        order_items.map((product) => ({
+                            documentId: product.documentId,
+                        }))
+                    ),
                 },
                 expires_at: Math.floor(Date.now() / 1000) + 1800,
             });
