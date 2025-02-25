@@ -161,18 +161,18 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 form.setFieldsValue(allValues);
             }}
         >
-            <Form.Item label="ชื่อสินค้า" name="name" rules={[{ message: "กรุณากรอกชื่อสินค้า" }]}>
+            <Form.Item label="ชื่อสินค้า" name="name" rules={[{ message: "กรุณากรอกชื่อสินค้า", required: false }]}>
                 <Input maxLength={1000} />
             </Form.Item>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Form.Item label="ราคา" name="price" rules={[{ message: "กรุณากรอกราคา" }]}>
+                <Form.Item label="ราคา" name="price" rules={[{ message: "กรุณากรอกราคา", required: false }]}>
                     <InputNumber min={0} max={1000000} className="w-full" />
                 </Form.Item>
-                <Form.Item label="จำนวนสต็อก" name="stock" rules={[{ message: "กรุณากรอกจำนวนสต็อก" }]}>
+                <Form.Item label="จำนวนสต็อก" name="stock" rules={[{ message: "กรุณากรอกจำนวนสต็อก", required: false }]}>
                     <InputNumber min={0} max={10000} className="w-full" />
                 </Form.Item>
-                <Form.Item label="แบรนด์" name="brand" rules={[{ message: "กรุณาเลือกแบรนด์" }]}>
+                <Form.Item label="แบรนด์" name="brand" rules={[{ message: "กรุณาเลือกแบรนด์", required: false }]}>
                     <Select
                         placeholder="เลือกแบรนด์สินค้า"
                         options={brands.map((b) => ({ value: b.id, label: b.name }))}
@@ -180,7 +180,7 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 </Form.Item>
             </div>
 
-            <Form.Item label="หมวดหมู่" name="category" rules={[{ message: "กรุณาเลือกหมวดหมู่" }]}>
+            <Form.Item label="หมวดหมู่" name="category" rules={[{ message: "กรุณาเลือกหมวดหมู่", required: false }]}>
                 <Select placeholder="เลือกหมวดหมู่">
                     {categories.map((cat) => (
                         <Select.Option key={cat.id} value={cat.id}>
@@ -190,7 +190,7 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 </Select>
             </Form.Item>
 
-            <Form.Item label="คำอธิบายสินค้า" name="description" >
+            <Form.Item label="คำอธิบายสินค้า" name="description" rules={[{ message: "กรุณากรอกรายละเอียดสินค้า", required: false }]} >
                 <Input.TextArea rows={4} maxLength={10000} />
             </Form.Item>
 
