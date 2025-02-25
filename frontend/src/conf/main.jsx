@@ -17,6 +17,7 @@ const conf = {
     productsEndpoint: "/products",
     categoriesEndpoint: "/categories",
     orderEndpoint: "/orders",
+    validateCouponEndpoint: "validate-coupon",
 };
 
 export default conf;

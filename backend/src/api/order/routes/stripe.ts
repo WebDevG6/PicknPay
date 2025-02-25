@@ -13,5 +13,13 @@ export default {
                 policies: [],
             },
         },
+        {
+            method: "POST",
+            path: "/validate-coupon",
+            handler: "order.validateCoupon",
+            config: {
+                auth: false,
+            },
+        },
     ],
 };
