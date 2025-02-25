@@ -1,8 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import { Layout, Menu, theme, Badge, Drawer } from "antd";
-import { DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined, LogoutOutlined, ShoppingOutlined, BellOutlined } from "@ant-design/icons";
-import { authContext } from "../context/AuthContext";
+import { Layout, Menu, theme, Button, Drawer } from "antd";
+import {
+    DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined,
+    LogoutOutlined, ShoppingOutlined, PlusOutlined,
+    SettingOutlined, MenuOutlined,
+} from "@ant-design/icons";
 
 const { Sider, Content } = Layout;
 
@@ -14,33 +18,23 @@ function AdminLayout() {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
     const navigate = useNavigate();
     const location = useLocation();
-    const [open, setOpen] = useState(false);
-    const { userInfo } = useContext(authContext);
+
     const [collapsed, setCollapsed] = useState(false);
+    const [mobileVisible, setMobileVisible] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState();
-    const siderStyle = {
-        overflow: "auto",
-        height: "100vh",
-        position: "sticky",
-        insetInlineStart: 0,
-        top: 0,
-        bottom: 0,
-    };
+    const [isMobile, setIsMobile] = useState(false);
+
+
     const layoutTitle = {
         1: { label: "Dashboard", path: "/admin/dashboard" },
         2: { label: "Orders", path: "/admin/orders" },
-        3: { label: "Products", path: "/admin/products" },
-        4: { label: "Customers", path: "/admin/customers" },
-        5: { label: "Logout", path: "/logout" },
-    };
-    const showDrawer = () => {
-        setOpen(true);
-    };
-
-    const onClose = () => {
-        setOpen(false);
+        3: { label: "Manage Products", path: "/admin/products/manage" },
+        4: { label: "Add a product", path: "/admin/products/add" },
+        5: { label: "Customers", path: "/admin/customers" },
+        6: { label: "Logout", path: "/logout" },
     };
 
     useEffect(() => {
@@ -49,14 +43,62 @@ function AdminLayout() {
     }, [location.pathname]);
 
     const handleMenuClick = (menu) => {
-        navigate(layoutTitle[menu.key].path);
+        if (layoutTitle[menu.key]) {
+            navigate(layoutTitle[menu.key].path);
+            setMobileVisible(false);
+        }
     };
 
-    const items = [getItem("Dashboard", "1", <DashboardOutlined />), getItem("Orders", "2", <ShoppingCartOutlined />), getItem("Products", "3", <AppstoreOutlined />), getItem("Customers", "4", <UserOutlined />), getItem("Logout", "5", <LogoutOutlined />)];
+    const toggleMobileSidebar = () => {
+        setMobileVisible(!mobileVisible);
+    };
+
+    const items = [
+        getItem("Dashboard", "1", <DashboardOutlined />),
+        getItem("Orders", "2", <ShoppingCartOutlined />),
+        {
+            key: "products",
+            icon: <AppstoreOutlined />,
+            label: "Products",
+            children: [
+                getItem("Manage Products", "3", <SettingOutlined />),
+                getItem("Add Products", "4", <PlusOutlined />),
+            ],
+        },
+        getItem("Customers", "5", <UserOutlined />),
+        getItem("Logout", "6", <LogoutOutlined />),
+    ];
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <Sider style={{ siderStyle }} collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+            <Sider
+                collapsible
+                collapsed={collapsed}
+                onCollapse={(isCollapsed) => {
+                    if (!isCollapsed) {
+                        setTimeout(() => setCollapsed(false), 50);
+                    } else {
+                        setCollapsed(true);
+                    }
+                }}
+                breakpoint="md"
+                onBreakpoint={(broken) => {
+                    setIsMobile(broken);
+                    setCollapsed(broken);
+                }}
+                collapsedWidth={isMobile ? 0 : 80}
+                style={{
+                    height: "100vh",
+                    position: "fixed",
+                    left: 0,
+                    zIndex: 1000,
+                    width: collapsed ? 80 : 200,
+                    transition: "width 0.2s ease-in-out, max-width 0.6s ease-in-out",
+                    background: "#001529",
+                    overflow: "hidden",
+                    display: isMobile ? "none" : "block",
+                }}
+            >
                 <div
                     className="admin-panel"
                     style={{
@@ -68,70 +110,104 @@ function AdminLayout() {
                         fontSize: 24,
                         fontWeight: "bold",
                         width: "100%",
-                    }}>
+                    }}
+                >
                     <h1>
                         <ShoppingOutlined style={{ fontSize: 25 }} />
                         <span
                             className="ant-menu-title-content"
                             style={{
                                 marginLeft: 18,
-                                transition: "opacity 0.65s ease in-out 0.5s",
                                 opacity: collapsed ? 0 : 1,
                                 position: "absolute",
-                            }}>
+                                transition: "opacity 0.65s ease-in-out 0.5s",
+                            }}
+                        >
                             {!collapsed && "Admin"}
                         </span>
                     </h1>
                 </div>
 
-                <Menu style={{ padding: 6 }} theme="dark" selectedKeys={[selectedMenu]} mode="inline" items={items} onClick={handleMenuClick} />
+                <Menu theme="dark" selectedKeys={[selectedMenu]} mode="inline" items={items} onClick={handleMenuClick} />
             </Sider>
-            <Layout>
+            <Drawer
+                title="Admin Panel"
+                placement="left"
+                closable={true}
+                onClose={() => setMobileVisible(false)}
+                open={mobileVisible}
+                width={200}
+                destroyOnClose={true}
+                style={{
+                    background: "#001529",
+                    color: "white",
+                }}
+                headerStyle={{
+                    background: "#002140",
+                    color: "white",
+                }}
+                closeIcon={<span style={{ color: "white", fontSize: "16px" }}>✖</span>}
+            >
+
+                <Menu
+                    theme="dark"
+                    selectedKeys={[selectedMenu]}
+                    mode="inline"
+                    items={items}
+                    onClick={(menu) => {
+                        handleMenuClick(menu);
+                        setMobileVisible(false);
+                    }}
+                    style={{
+                        background: "#001529",
+                        color: "white",
+                    }}
+                />
+            </Drawer>
+
+            <Layout style={{ marginLeft: isMobile ? 0 : collapsed ? 80 : 200, transition: "margin-left 0.3s ease-in-out" }}>
                 <header
                     style={{
-                        padding: 23,
-                        paddingBlockEnd: 22,
+                        padding: 12,
                         background: colorBgContainer,
                         display: "flex",
-                        justifyContent: "center",
                         alignItems: "center",
+                        justifyContent: isMobile ? "flex-start" : "center",
                         width: "100%",
                         position: "relative",
-                    }}>
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+                        transition: "all 0.3s ease-in-out",
+                    }}
+                >
+
+                    {isMobile && (
+                        <Button
+                            icon={<MenuOutlined />}
+                            onClick={toggleMobileSidebar}
+                            style={{
+                                fontSize: 18,
+                                marginRight: 16,
+                                position: "relative",
+                                zIndex: 999,
+                            }}
+                        />
+                    )}
+
                     <h1
                         style={{
                             fontSize: 22,
                             color: "black",
                             fontWeight: "bold",
                             margin: 0,
-                            position: "absolute",
-                            left: "47%",
-                            transform: "translateX(-50%)",
+                            paddingLeft: isMobile ? 10 : 40,
                             whiteSpace: "nowrap",
-                        }}>
+                            transition: "all 0.3s ease-in-out",
+                        }}
+                    >
                         {layoutTitle[selectedMenu]?.label}
                     </h1>
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "14px",
-                            right: "18px",
-                            display: "flex",
-                            alignItems: "center",
-                        }}>
-                        <Badge size="small" count={5} style={{ fontSize: 12 }}>
-                            <BellOutlined
-                                style={{ fontSize: 20, color: "black", cursor: "pointer" }}
-                                onClick={showDrawer}
-                            />
-                        </Badge>
-                        <Drawer title="Notifications" onClose={onClose} open={open} width={250}>
-                            <p>🔔 Notification 1</p>
-                            <p>🔔 Notification 2</p>
-                            <p>🔔 Notification 3</p>
-                        </Drawer>
-                    </div>
                 </header>
+
 
                 <Content
                     style={{
@@ -140,7 +216,8 @@ function AdminLayout() {
                         background: colorBgContainer,
                         backgroundColor: "#f5f5f5",
                         borderRadius: borderRadiusLG,
-                    }}>
+                    }}
+                >
                     <Outlet />
                 </Content>
             </Layout>
