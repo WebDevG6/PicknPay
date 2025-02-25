@@ -1,7 +1,7 @@
 import ax from "../conf/ax";
 import { useContext } from "react";
 import conf from "../conf/main";
-import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from "@tanstack/react-query";
 import { authContext } from "../context/AuthContext";
 
 export function useCartItem() {
@@ -61,3 +61,13 @@ export function useProductDetail(productId) {
         enabled: !!productId,
     });
 }
+
+export const useReviews = () => {
+    return useSuspenseQuery({
+        queryKey: ["reviews"],
+        queryFn: async () => {
+            const response = await ax.get(conf.reviewsEndpoint);
+            return response.data.data;
+        },
+    });
+};
