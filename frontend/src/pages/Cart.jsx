@@ -82,11 +82,11 @@ function Cart() {
                 <p className="text-2xl font-semibold tracking-wide">รถเข็นของฉัน</p>
                 <p className="text-xl">(สินค้า {cartSelectedItem.quantity} ชิ้น)</p>
             </div>
-            <div className="grid grid-cols-24 gap-4">
-                <div className="bg-white col-span-17 rounded-sm p-4">
+            <div className="flex lg:flex-row flex-col-reverse gap-4">
+                <div className="bg-white lg:w-[70%] w-full rounded-sm p-4">
                     <CartItemList dataSource={cartItems} />
                 </div>
-                <div className="bg-white col-span-7 rounded-sm p-4 font-[Kanit]">
+                <div className="bg-white lg:w-[30%] w-full rounded-sm p-4 font-[Kanit]">
                     <div className="flex flex-col gap-4">
                         <p className="font-semibold tracking-wide">ใช้โค้ดส่วนลด</p>
                         <Form form={form} onFinish={handleCoupon}>
