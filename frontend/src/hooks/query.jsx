@@ -3,7 +3,7 @@ import { useContext } from "react";
 import conf from "../conf/main";
 import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from "@tanstack/react-query";
 import { authContext } from "../context/AuthContext";
-import axios from "axios";
+
 
 export function useCartItem() {
     const { userInfo } = useContext(authContext);
@@ -63,10 +63,10 @@ export function useProductDetail(productId) {
 }
 
 export const useReviews = () => {
-    return useQuery({
-        queryKey: ["reviews"], // ไม่มี id แล้ว เพราะดึงทั้งหมด
+    return useSuspenseQuery({
+        queryKey: ["reviews"],
         queryFn: async () => {
-            const response = await axios.get(`${conf.apiUrlPrefix}/reviews?populate=product.picture`);
+            const response = await ax.get(conf.reviewsEndpoint);
             return response.data.data;
         },
     });
