@@ -16,7 +16,7 @@
       "type": "enumeration",
       "enum": [
         "processing",
-        "succeeded",
+        "successed",
         "payment_failed",
         "shipping",
         "delivered"

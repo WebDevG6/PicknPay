@@ -518,7 +518,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     order_items: Schema.Attribute.JSON & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     status_order: Schema.Attribute.Enumeration<
-      ['processing', 'succeeded', 'payment_failed', 'shipping', 'delivered']
+      ['processing', 'successed', 'payment_failed', 'shipping', 'delivered']
     > &
       Schema.Attribute.Required;
     stripeId: Schema.Attribute.String & Schema.Attribute.Required;
