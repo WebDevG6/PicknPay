@@ -83,7 +83,7 @@ export default function userLayout() {
                                     filterOption={(inputValue, option) =>
                                         option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                                     }
-                                    placeholder="ค้นหารายการสินค้า"
+                                    placeholder={<p className="ml-1">ค้นหารายการสินค้า</p>}
                                     allowClear
                                     prefix={<SearchOutlined style={{ fontSize: 16, color: "#9AA1AE" }} />}
                                     style={{
