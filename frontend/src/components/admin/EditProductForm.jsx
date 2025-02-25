@@ -11,6 +11,7 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
     const { setEditingProduct, loading, setLoading, pictureList, brands, fetchBrands } = useEditProduct;
     const [formValues, setFormValues] = useState({});
 
+
     useEffect(() => {
         fetchBrands();
     }, []);
@@ -30,6 +31,14 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
         }
     }, [product, form]);
 
+    useEffect(() => {
+        if (!product) {
+            setFormValues({});
+            form.resetFields();
+        }
+    }, [product, form]);
+
+
     const handleUpdate = async () => {
         try {
             if (loading) {
@@ -38,6 +47,12 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
             }
             const values = await form.validateFields();
             setLoading(true);
+
+            if (pictureList.length === 0) {
+                message.error("กรุณาอัปโหลดรูปภาพอย่างน้อย 1 รูป!");
+                setLoading(false);
+                return;
+            }
 
             if (!values.brand) {
                 message.error("กรุณาเลือกแบรนด์ให้ถูกต้อง!");
@@ -71,21 +86,32 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 return;
             }
 
-            const newPictures = pictureList.filter((pic) => pic.file && !pic.id);
-            const uploadedIds = [];
+            let uploadedIds = [];
+            let oldIds = pictureList.filter((p) => p.id).map((p) => p.id);
 
-            for (const pic of newPictures) {
-                const formData = new FormData();
-                formData.append("files", pic.file);
-                const response = await ax.post(`${conf.apiUrlPrefix}/upload`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-                if (response.data?.length > 0) {
-                    uploadedIds.push(response.data[0].id);
+            for (const pic of pictureList) {
+                if (!pic.id && pic.originFileObj) {
+                    const formData = new FormData();
+                    formData.append("files", pic.originFileObj);
+
+                    try {
+                        const response = await ax.post(`${conf.apiUrlPrefix}/upload`, formData, {
+                            headers: { "Content-Type": "multipart/form-data" },
+                        });
+
+                        if (response.data?.length > 0) {
+                            uploadedIds.push(response.data[0].id);
+                        }
+                    } catch (uploadError) {
+                        console.error("Upload Failed:", uploadError);
+                        message.error("อัปโหลดรูปภาพล้มเหลว!");
+                        setLoading(false);
+                        return;
+                    }
                 }
             }
 
-            const oldIds = pictureList.filter((p) => p.id && !p.file).map((p) => p.id);
+
             const allImageIds = [...oldIds, ...uploadedIds];
 
             const productData = {
@@ -96,18 +122,24 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                     stock: Number(values.stock),
                     category: { id: values.category },
                     picture: allImageIds,
-                    brands: { id: selectedBrand.id },
+                    brands: { id: selectedBrand.brand },
                 },
             };
+
             const response = await ax.put(`/products/${product.documentId}?populate=*`, productData);
-            const updatedProduct = response.data.data;
-            setEditingProduct((prev) => ({ ...prev, ...updatedProduct }));
-            message.success("อัปเดตสินค้าสำเร็จ!");
-            onUpdate();
-            refetchProducts()
+
+            if (response.data.data) {
+                setEditingProduct(response.data.data);
+                message.success("อัปเดตสินค้าสำเร็จ!");
+                onUpdate();
+                refetchProducts()
+            } else {
+                message.error("อัปเดตสินค้าไม่สำเร็จ!");
+            }
         } catch (error) {
             console.error("Update Failed:", error);
             message.error("อัปเดตสินค้าล้มเหลว!");
+            console.log(error)
         } finally {
             setLoading(false);
         }
@@ -131,10 +163,10 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Form.Item label="ราคา" name="price" rules={[{ required: true, message: "กรุณากรอกราคา" }]}>
-                    <InputNumber min={0} className="w-full" />
+                    <InputNumber min={0} max={1000000} className="w-full" />
                 </Form.Item>
                 <Form.Item label="จำนวนสต็อก" name="stock" rules={[{ required: true, message: "กรุณากรอกจำนวนสต็อก" }]}>
-                    <InputNumber min={0} className="w-full" />
+                    <InputNumber min={0} max={10000} className="w-full" />
                 </Form.Item>
                 <Form.Item label="แบรนด์" name="brand" rules={[{ required: true, message: "กรุณาเลือกแบรนด์" }]}>
                     <Select

@@ -36,8 +36,13 @@ const AddProduct = () => {
     const uploadImages = async () => {
         if (formData.picture.length === 0) return [];
 
+
         const formDataUpload = new FormData();
-        formData.picture.forEach((file) => formDataUpload.append("files", file));
+        console.log("Uploading files:", formData.picture);
+
+        formData.picture.forEach((file) => {
+            formDataUpload.append("files", file.originFileObj || file);
+        });
 
         try {
             const response = await ax.post("/upload", formDataUpload, {
@@ -47,9 +52,11 @@ const AddProduct = () => {
             return response.data.map((file) => file.id);
         } catch (error) {
             console.error("Error uploading images:", error.response?.data || error.message);
+            message.error("อัปโหลดรูปภาพล้มเหลว!");
             return [];
         }
     };
+
 
     const [resetImages, setResetImages] = useState(false);
 
@@ -78,6 +85,7 @@ const AddProduct = () => {
         const uploadedImageIds = await uploadImages();
         if (uploadedImageIds.length === 0) {
             message.error("อัปโหลดรูปภาพล้มเหลว!");
+            console.log(error)
             setIsSubmitting(false);
             return;
         }
@@ -131,7 +139,7 @@ const AddProduct = () => {
                 </Form.Item>
 
                 <Form.Item label="ราคา">
-                    <InputNumber style={{ width: "100%" }} min={0} placeholder="กรอกราคาสินค้า (บาท)" value={formData.price} onChange={(value) => handleChange("price", value)} />
+                    <InputNumber style={{ width: "100%" }} min={0} max={1000000} placeholder="กรอกราคาสินค้า (บาท)" value={formData.price} onChange={(value) => handleChange("price", value)} />
                 </Form.Item>
 
                 <Form.Item label="แบรนด์">
@@ -145,7 +153,7 @@ const AddProduct = () => {
                 </Form.Item>
 
                 <Form.Item label="จำนวนคงเหลือ(สต็อก)">
-                    <InputNumber style={{ width: "100%" }} min={0} placeholder="กรอกจำนวนสินค้าคงเหลือ" value={formData.stock} onChange={(value) => handleChange("stock", value)} />
+                    <InputNumber style={{ width: "100%" }} min={0} max={10000} placeholder="กรอกจำนวนสินค้าคงเหลือ" value={formData.stock} onChange={(value) => handleChange("stock", value)} />
                 </Form.Item>
 
                 <Form.Item label="รายละเอียดสินค้า">

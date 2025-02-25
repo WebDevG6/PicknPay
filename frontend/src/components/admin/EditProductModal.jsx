@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Modal, Form, Button, Upload, Image, message, Spin } from "antd";
-import { UploadOutlined, DeleteOutlined, } from "@ant-design/icons";
+import { UploadOutlined, ExclamationCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -12,6 +12,8 @@ import useProducts from "../../hooks/useProducts";
 import useEditProductStore from "./useEditProductStore";
 import EditProductForm from "./EditProductForm";
 
+const { confirm } = Modal;
+
 const EditProductModal = ({ visible }) => {
     const { productsLoading } = useProducts();
     const [form] = Form.useForm();
@@ -22,47 +24,85 @@ const EditProductModal = ({ visible }) => {
         setEditingProduct,
         originalPictures,
         pictureList,
-        selectedPicture,
         setOriginalPictures,
         setPictureList,
         setSelectedPicture,
-        handleLocalPreview,
-        confirmDeletePicture,
     } = useEditProductStore();
 
+    const previewImageRef = useRef("");
+    const [previewVisible, setPreviewVisible] = useState(false);
+
+    const [fileList, setFileList] = useState([]);
+
+
+
     useEffect(() => {
-        const fetchProductData = async () => {
-            try {
-                const response = await ax.get(`/products/${editingProduct.documentId}?populate=*`);
-                const productData = response.data.data;
-                const pictures = productData.picture || [];
-                setOriginalPictures(pictures);
-                setPictureList(pictures);
-                setSelectedPicture(pictures.length > 0 ? pictures[0].url : null);
-
-                form.setFieldsValue({
-                    name: productData.name,
-                    price: productData.price,
-                    stock: productData.stock,
-                    description: productData.description,
-                    category: productData.category?.id || null,
-                    brand: productData.brands?.brandname || '',
-                });
-            } catch (error) {
-                console.error("Failed to fetch product data:", error);
-            }
-        };
-
         if (visible && editingProduct) {
+            const fetchProductData = async () => {
+                try {
+                    const response = await ax.get(`/products/${editingProduct.documentId}?populate=*`);
+                    const productData = response.data.data;
+                    const pictures = productData.picture || [];
+                    setOriginalPictures(pictures);
+                    setPictureList(pictures);
+                    setSelectedPicture(pictures.length > 0 ? pictures[0].url : null);
+
+                    form.setFieldsValue({
+                        name: productData.name,
+                        price: productData.price,
+                        stock: productData.stock,
+                        description: productData.description,
+                        category: productData.category?.id || null,
+                        brand: productData.brands?.brandname || '',
+                    });
+                } catch (error) {
+                    console.error("Failed to fetch product data:", error);
+                }
+            };
+
             fetchProductData();
         }
     }, [visible, editingProduct]);
 
+    const displayPictures = useMemo(() => pictureList, [pictureList]);
+
+    useEffect(() => {
+        setFileList(displayPictures.map((pic, index) => ({
+            uid: pic.uid || `file-${index}`,
+            name: `image-${index}`,
+            status: "done",
+            url: pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl,
+            originFileObj: pic.originFileObj || null,
+        })));
+    }, [displayPictures]);
+
     const handleCancel = () => {
+        form.resetFields();
         setEditingProduct(null);
         setPictureList(originalPictures);
         setSelectedPicture(originalPictures.length > 0 ? originalPictures[0].url : null);
     };
+
+    const showDeleteConfirm = (file) => {
+        confirm({
+            title: "คุณแน่ใจหรือไม่ว่าต้องการลบรูปนี้?",
+            icon: <ExclamationCircleOutlined />,
+            content: "รูปภาพที่ถูกลบจะไม่สามารถกู้คืนได้",
+            okText: "ลบ",
+            okType: "danger",
+            cancelText: "ยกเลิก",
+            onOk() {
+                const newList = pictureList.filter(pic =>
+                    (pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl) !== file.url
+                );
+
+                setPictureList(newList);
+            },
+        });
+    };
+
+
+
 
     return (
         <Modal
@@ -81,7 +121,7 @@ const EditProductModal = ({ visible }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="flex flex-col items-center">
                         <h3 className="text-lg font-semibold mb-2">รูปสินค้า</h3>
-                        {pictureList.length > 0 ? (
+                        {displayPictures.length > 0 ? (
                             <Swiper
                                 modules={[Navigation, Pagination]}
                                 navigation
@@ -89,19 +129,19 @@ const EditProductModal = ({ visible }) => {
                                 loop
                                 className="w-full max-w-lg"
                             >
-                                {pictureList.map((pic, index) => {
+                                {displayPictures.map((pic, index) => {
                                     const imgSrc = pic.url
                                         ? `${conf.urlPrefix}${pic.url}`
                                         : pic.previewUrl;
                                     return (
                                         <SwiperSlide
                                             key={index}
-                                            className="flex justify-center items-center h-[200px]"
+                                            className="flex justify-center items-center h-[180px] cursor-pointer"
                                         >
                                             <Image
                                                 src={imgSrc}
-                                                className="rounded-md max-h-[55%] max-w-[55%] object-contain mx-auto"
-                                                preview={false}
+                                                className="rounded-md max-h-[50%] max-w-[50%] object-contain mx-auto"
+                                                preview={true}
                                             />
                                         </SwiperSlide>
                                     );
@@ -110,62 +150,43 @@ const EditProductModal = ({ visible }) => {
                         ) : (
                             <p className="text-gray-500 text-center">ไม่มีรูปภาพ</p>
                         )}
-                        <div className="flex gap-2 mt-4 overflow-x-auto">
-                            {pictureList.map((pic, index) => {
-                                const thumbSrc = pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl;
 
-                                return (
-                                    <div
-                                        key={index}
-                                        className={`relative w-20 h-20 rounded-md overflow-hidden cursor-pointer flex justify-center items-center border-2 transition-all 
-                    ${selectedPicture === thumbSrc ? "border-blue-500" : "border-gray-300"}`}
-                                        onClick={() => setSelectedPicture(thumbSrc)}
-                                    >
-                                        <Image
-                                            src={thumbSrc}
-                                            preview={false}
-                                            className="w-auto h-auto max-w-full max-h-full object-contain"
-                                        />
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <Upload
+                            listType="picture-card"
+                            fileList={fileList}
 
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            {pictureList.length < MAX_IMAGES && (
-                                <Upload
-                                    listType="picture"
-                                    maxCount={MAX_IMAGES}
-                                    showUploadList={false}
-                                    beforeUpload={(file) => {
-                                        if (pictureList.length >= MAX_IMAGES) {
-                                            message.error(`สามารถอัปโหลดได้สูงสุด ${MAX_IMAGES} รูป`);
-                                            return Upload.LIST_IGNORE;
-                                        }
-                                        handleLocalPreview(file);
-                                        return false;
-                                    }}
-                                >
-                                    <Button icon={<UploadOutlined />}>อัปโหลดรูปใหม่</Button>
-                                </Upload>
-                            )}
+                            showUploadList={{ showPreviewIcon: false, removeIcon: <DeleteOutlined style={{ color: "red" }} />, motion: false, showDownloadIcon: true }}
+                            onRemove={showDeleteConfirm}
 
-                            {selectedPicture && (
-                                <Button
-                                    danger
-                                    icon={<DeleteOutlined />}
-                                    onClick={() => {
-                                        const foundPic = pictureList.find((pic) => {
-                                            const src = pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl;
-                                            return src === selectedPicture;
-                                        });
-                                        if (foundPic) confirmDeletePicture(foundPic);
-                                    }}
-                                >
-                                    ลบรูปที่เลือก
-                                </Button>
-                            )}
-                        </div>
+                            beforeUpload={(file) => {
+                                if (pictureList.length >= MAX_IMAGES) {
+                                    message.error(`สามารถอัปโหลดได้สูงสุด ${MAX_IMAGES} รูป`);
+                                    return Upload.LIST_IGNORE;
+                                }
+
+                                const newFile = {
+                                    previewUrl: URL.createObjectURL(file),
+                                    originFileObj: file,
+                                };
+
+                                const updatedPictures = [...pictureList, newFile];
+                                setPictureList(updatedPictures);
+
+                                return false;
+                            }}
+                        />
+
+
+                        {displayPictures.length < MAX_IMAGES && (
+                            <Button
+                                icon={<UploadOutlined />}
+                                onClick={() => document.querySelector(".ant-upload input[type='file']").click()}
+                                type="default"
+                                className="mt-2"
+                            >
+                                อัปโหลดรูปภาพ
+                            </Button>
+                        )}
                     </div>
 
                     <div className="w-full">
@@ -173,8 +194,19 @@ const EditProductModal = ({ visible }) => {
                     </div>
                 </div>
             )}
+            <Modal
+                open={previewVisible}
+                footer={null}
+                onCancel={() => setPreviewVisible(false)}
+            >
+                <Image
+                    style={{ width: "100%" }}
+                    src={previewImageRef.current}
+                />
+            </Modal>
         </Modal>
     );
 };
 
 export default EditProductModal;
+

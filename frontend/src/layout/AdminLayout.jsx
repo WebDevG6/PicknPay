@@ -105,7 +105,7 @@ function AdminLayout() {
                     height: "100vh",
                     position: "fixed",
                     left: 0,
-                    zIndex: 1001,
+                    zIndex: 1000,
                     width: collapsed ? 80 : 200,
                     transition: "width 0.2s ease-in-out, max-width 0.6s ease-in-out",
                     background: "#001529",
@@ -179,7 +179,7 @@ function AdminLayout() {
                                 marginRight: 16,
                                 position: "absolute",
                                 left: 15,
-                                zIndex: 1000,
+                                zIndex: 999,
                                 transition: "all 0.3s ease-in-out",
                             }}
                         />
@@ -193,7 +193,7 @@ function AdminLayout() {
                                 fontSize: 18,
                                 marginRight: 16,
                                 position: "relative",
-                                zIndex: 1000,
+                                zIndex: 999,
                             }}
                         />
                     )}
