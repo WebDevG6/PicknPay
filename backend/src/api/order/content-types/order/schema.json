@@ -38,10 +38,13 @@
       "inversedBy": "orders"
     },
     "value": {
-      "type": "integer",
+      "type": "float",
       "required": false,
       "min": 0,
       "default": 0
+    },
+    "coupon": {
+      "type": "string"
     }
   }
 }
