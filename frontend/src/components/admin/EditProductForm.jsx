@@ -5,6 +5,10 @@ import useEditProductStore from "./useEditProductStore";
 import ax from "../../conf/ax";
 import conf from "../../conf/main";
 
+message.config({
+    maxCount: 2,
+})
+
 const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
     const { categories, refetchProducts } = useProducts();
     const useEditProduct = useEditProductStore();
@@ -158,7 +162,7 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
             }}
         >
             <Form.Item label="ชื่อสินค้า" name="name" rules={[{ required: true, message: "กรุณากรอกชื่อสินค้า" }]}>
-                <Input />
+                <Input maxLength={1000} />
             </Form.Item>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -186,8 +190,8 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 </Select>
             </Form.Item>
 
-            <Form.Item label="คำอธิบายสินค้า" name="description">
-                <Input.TextArea rows={4} />
+            <Form.Item label="คำอธิบายสินค้า" name="description" >
+                <Input.TextArea rows={4} maxLength={10000} />
             </Form.Item>
 
             <div className="flex justify-end gap-2">

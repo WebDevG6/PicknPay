@@ -24,8 +24,8 @@ const CategoryButtons = ({ handleCategorySelect, selectedCategory }) => {
                 ${selectedCategory === cat ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-600 border-gray-300"}
                 hover:bg-blue-600 hover:text-white hover:border-blue-600`}
                     >
-                        <span className="flex-shrink-0 text-[6px] sm:text-[8px] mt-2">{categoryIcons[cat]}</span>
-                        <span className="text-[6px] sm:text-[12px] md:text-[14px] text-center py-1">{cat}</span>
+                        <span className="flex-shrink-0 text-[8px] sm:text-[12px] mt-2">{categoryIcons[cat]}</span>
+                        <span className="text-[12px] sm:text-[14px] md:text-[14px] text-center py-1">{cat}</span>
                     </Button>
                 ))}
             </div>

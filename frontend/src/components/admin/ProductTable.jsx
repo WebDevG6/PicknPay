@@ -3,6 +3,7 @@ import { Table, Button, Modal, Image, Spin, Input, Select, Slider } from "antd";
 import { EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import useProducts from "../../hooks/useProducts";
 import conf from "../../conf/main";
+import { motion } from "framer-motion";
 
 const { Option } = Select;
 
@@ -46,21 +47,34 @@ const ProductTable = ({ onEdit }) => {
         setPriceRange([0, 100000]);
     };
 
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: { delay: i * 0.1, duration: 0.3 },
+        }),
+    };
+
     const memoizedColumns = useMemo(() => [
         {
             title: "Thumbnail",
             dataIndex: "picture",
             className: "items-center",
-            width: 80,
+            width: 100,
             render: (pictures) =>
                 pictures?.length ? (
-                    <Image
-                        width={50}
-                        src={`${conf.urlPrefix}${pictures[0].url}`}
-                        placeholder={<Spin />}
-                        loading="lazy"
-                    />
-                ) : "No Image",
+                    <div className="flex justify-center items-center">
+                        <Image
+                            width={50}
+                            src={`${conf.urlPrefix}${pictures[0].url}`}
+                            placeholder={<Spin />}
+                            loading="lazy"
+                        />
+                    </div>
+                ) : (
+                    <div className="text-center">No Image</div>
+                ),
         },
         {
             title: "Name",
@@ -98,13 +112,15 @@ const ProductTable = ({ onEdit }) => {
                     <Button
                         icon={<EditOutlined />}
                         onClick={() => onEdit(record)}
-                        className="border-gray-300 text-gray-600 rounded-md p-2 hover:border-gray-400 hover:bg-gray-100"
+                        className="border-gray-300 text-gray-600 rounded-md p-2 
+                        hover:border-gray-400 hover:bg-gray-100 transition-all duration-300"
                     />
                     <Button
                         danger
                         icon={<DeleteOutlined />}
                         onClick={() => showDeleteModal(record)}
-                        className="border-red-300 text-red-600 rounded-md p-2 hover:border-red-400 hover:bg-red-100"
+                        className="border-red-300 text-red-600 rounded-md p-2 
+                        hover:border-red-400 hover:bg-red-100 transition-all duration-100"
                     />
                 </div>
             ),
@@ -112,14 +128,14 @@ const ProductTable = ({ onEdit }) => {
     ], [onEdit]);
 
     return (
-        <div className="min-h-[400px] flex flex-col items-center justify-center shadow-xl rounded-xl p-4 w-full">
+        <div className="min-h-[500px] flex flex-col items-center justify-center rounded-xl w-full p-2 bg-white shadow-md">
             {productsLoading ? (
                 <div className="flex flex-col items-center justify-center h-screen">
                     <Spin size="large" />
-                    <p className="mt-2 text-gray-500">Loading Products...</p>
+                    <p className="mt-2 text-gray-500">กำลังโหลดสินค้า...</p>
                 </div>
             ) : (
-                <div className="w-full">
+                <div className="w-full mt-2">
                     <div className="grid grid-cols-1 gap-4 mb-4 w-full">
                         <Input
                             prefix={<SearchOutlined />}
@@ -189,16 +205,31 @@ const ProductTable = ({ onEdit }) => {
                     </div>
 
 
-                    <Table
-                        columns={memoizedColumns}
-                        dataSource={filteredProducts}
-                        rowKey="id"
-                        pagination={{ pageSize: 10 }}
-                        size="small"
-                        bordered={false}
-                        scroll={{ x: "max-content" }}
-                        className="w-full"
-                    />
+                    <div className="flex flex-col min-h-[500px] rounded-2xl">
+                        <Table
+                            columns={memoizedColumns}
+                            dataSource={filteredProducts}
+                            rowKey="id"
+                            pagination={{ pageSize: 10 }}
+                            size="small"
+                            bordered={true}
+                            scroll={{ x: true }}
+                            className="w-full flex-grow"
+                            components={{
+                                body: {
+                                    wrapper: motion.tbody,
+                                    row: motion.tr,
+                                },
+                            }}
+                            rowClassName={(record, index) => "table-row"}
+                            onRow={(record, index) => ({
+                                initial: "hidden",
+                                animate: "visible",
+                                custom: index,
+                                variants: rowVariants,
+                            })}
+                        />
+                    </div>
                 </div>
             )}
 

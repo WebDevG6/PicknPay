@@ -6,13 +6,14 @@ import ax from "../../conf/ax";
 import useProducts from "../../hooks/useProducts";
 import useEditProductStore from "../../components/admin/useEditProductStore";
 
+
 const AddProduct = () => {
     const { categories } = useProducts();
     const { brands, fetchBrands } = useEditProductStore();
     const [formData, setFormData] = useState({
         name: "",
         price: null,
-        brand: "",
+        brand: null,
         description: "",
         category: null,
         picture: [],
@@ -52,7 +53,7 @@ const AddProduct = () => {
             return response.data.map((file) => file.id);
         } catch (error) {
             console.error("Error uploading images:", error.response?.data || error.message);
-            message.error("อัปโหลดรูปภาพล้มเหลว!");
+            setIsSubmitting(false);
             return [];
         }
     };
@@ -112,7 +113,7 @@ const AddProduct = () => {
             setFormData({
                 name: "",
                 price: null,
-                brand: "",
+                brand: undefined,
                 description: "",
                 category: null,
                 picture: [],
@@ -132,10 +133,10 @@ const AddProduct = () => {
 
 
     return (
-        <div className="rounded-lg shadow-lg mx-10 my-4 p-8 bg-white">
+        <div className="rounded-lg shadow-lg mx-8 my-4 p-8 bg-white">
             <Form layout="vertical">
                 <Form.Item label="ชื่อสินค้า">
-                    <Input placeholder="ระบุชื่อสินค้า" value={formData.name} onChange={(e) => handleChange("name", e.target.value)} />
+                    <Input placeholder="ระบุชื่อสินค้า" maxLength={1000} value={formData.name} onChange={(e) => handleChange("name", e.target.value)} />
                 </Form.Item>
 
                 <Form.Item label="ราคา">
@@ -145,10 +146,11 @@ const AddProduct = () => {
                 <Form.Item label="แบรนด์">
                     <Select
                         placeholder="เลือกแบรนด์สินค้า"
+                        value={formData.brand}
                         options={brands.length > 0 ? brands.map((b) => ({ value: b.id, label: b.name })) : []}
                         onChange={(value) => handleChange("brand", value)}
                         style={{ width: "100%" }}
-                        allowClear
+                        allowClear={true}
                     />
                 </Form.Item>
 
@@ -157,7 +159,7 @@ const AddProduct = () => {
                 </Form.Item>
 
                 <Form.Item label="รายละเอียดสินค้า">
-                    <Input.TextArea placeholder="ใส่รายละเอียดสินค้าให้ครบถ้วน" rows={4} value={formData.description} onChange={(e) => handleChange("description", e.target.value)} />
+                    <Input.TextArea placeholder="ใส่รายละเอียดสินค้าให้ครบถ้วน" maxLength={10000} rows={4} value={formData.description} onChange={(e) => handleChange("description", e.target.value)} />
                 </Form.Item>
 
                 <CategoryButtons handleCategorySelect={handleCategorySelect} selectedCategory={formData.category} />

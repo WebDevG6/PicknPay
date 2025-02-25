@@ -71,19 +71,6 @@ function AdminLayout() {
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <Button
-                className="hamburger-menu"
-                icon={<MenuOutlined />}
-                onClick={toggleMobileSidebar}
-                style={{
-                    position: "absolute",
-                    top: 15,
-                    left: 15,
-                    zIndex: 1000,
-                    display: isMobile ? "block" : "none",
-                }}
-            />
-
             <Sider
                 collapsible
                 collapsed={collapsed}
@@ -100,7 +87,6 @@ function AdminLayout() {
                     setCollapsed(broken);
                 }}
                 collapsedWidth={isMobile ? 0 : 80}
-                trigger={null}
                 style={{
                     height: "100vh",
                     position: "fixed",
@@ -144,7 +130,6 @@ function AdminLayout() {
 
                 <Menu theme="dark" selectedKeys={[selectedMenu]} mode="inline" items={items} onClick={handleMenuClick} />
             </Sider>
-
             <Drawer
                 title="Admin Panel"
                 placement="left"
@@ -152,14 +137,38 @@ function AdminLayout() {
                 onClose={() => setMobileVisible(false)}
                 open={mobileVisible}
                 width={200}
+                destroyOnClose={true}
+                style={{
+                    background: "#001529",
+                    color: "white",
+                }}
+                headerStyle={{
+                    background: "#002140",
+                    color: "white",
+                }}
+                closeIcon={<span style={{ color: "white", fontSize: "16px" }}>✖</span>}
             >
-                <Menu selectedKeys={[selectedMenu]} mode="inline" items={items} onClick={handleMenuClick} />
+
+                <Menu
+                    theme="dark"
+                    selectedKeys={[selectedMenu]}
+                    mode="inline"
+                    items={items}
+                    onClick={(menu) => {
+                        handleMenuClick(menu);
+                        setMobileVisible(false);
+                    }}
+                    style={{
+                        background: "#001529",
+                        color: "white",
+                    }}
+                />
             </Drawer>
 
             <Layout style={{ marginLeft: isMobile ? 0 : collapsed ? 80 : 200, transition: "margin-left 0.3s ease-in-out" }}>
                 <header
                     style={{
-                        padding: 16,
+                        padding: 12,
                         background: colorBgContainer,
                         display: "flex",
                         alignItems: "center",
@@ -170,20 +179,6 @@ function AdminLayout() {
                         transition: "all 0.3s ease-in-out",
                     }}
                 >
-                    {!isMobile && (
-                        <Button
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{
-                                fontSize: 18,
-                                marginRight: 16,
-                                position: "absolute",
-                                left: 15,
-                                zIndex: 999,
-                                transition: "all 0.3s ease-in-out",
-                            }}
-                        />
-                    )}
 
                     {isMobile && (
                         <Button

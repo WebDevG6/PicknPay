@@ -45,7 +45,6 @@ const useEditProductStore = create((set) => ({
                 });
             },
             onCancel: () => {
-                console.log("ยกเลิกการลบรูปภาพ");
             },
         });
     },

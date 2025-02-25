@@ -9,7 +9,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategorySca
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 
 const Dashboard = () => {
-    const { totalProducts, totalCustomers, totalOrders } = useDataAdmin();
+    const { totalProducts, totalCustomers } = useDataAdmin();
     return (
         <div className="w-full overflow-hidden ">
             <Row gutter={[16, 16]} className="p-[8px] ">
@@ -19,7 +19,7 @@ const Dashboard = () => {
                             icon={<ShoppingOutlined
                                 className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />}
                             title={"Orders"}
-                            value={totalOrders} />
+                            value={0} />
                         <DashboardCard
                             icon={<ProductOutlined
                                 className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />}
@@ -75,7 +75,7 @@ const DashboardCard = ({ title, value, icon }) => {
             <Card className="flex flex-col items-center justify-center w-full max-w-md shadow-md rounded-lg p-4">
                 <Space
                     direction="horizontal"
-                    className="flex items-center justify-center flex-wrap gap-2"
+                    className="flex items-start justify-start flex-wrap gap-6"
                 >
                     {icon}
                     <Statistic
@@ -86,9 +86,9 @@ const DashboardCard = ({ title, value, icon }) => {
                 </Space>
             </Card>
         </Col>
-
     );
 };
+
 const LineChart = () => {
     const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 

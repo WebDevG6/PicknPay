@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Space, Table, Input } from "antd";
 import useDataAdmin from "../../hooks/useDataAdmin";
+import { motion } from "framer-motion";
 
 const Customers = () => {
     const { customers, customersLoading } = useDataAdmin();
@@ -64,23 +65,49 @@ const Customers = () => {
         },
     ];
 
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: { delay: i * 0.1, duration: 0.3 },
+        }),
+    };
+
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <Input
-                placeholder="Search all columns..."
+                placeholder="ค้นหาลูกค้า..."
                 style={{ width: "100%", marginBottom: 20 }}
                 onChange={(e) => setSearchedText(e.target.value.toLowerCase())}
                 allowClear
             />
             <Space size={20} direction="vertical">
-                <Table
-                    loading={customersLoading}
-                    columns={columns}
-                    dataSource={filteredData}
-                    pagination={{ pageSize: 8 }}
-                    scroll={{ x: "max-content" }}
-                    bordered
-                />
+
+                <div className="flex flex-col min-h-[500px] rounded-2xl">
+                    <Table
+                        columns={columns}
+                        dataSource={filteredData}
+                        rowKey="id"
+                        pagination={{ pageSize: 8 }}
+                        bordered={true}
+                        scroll={{ x: true }}
+                        className="w-full flex-grow"
+                        components={{
+                            body: {
+                                wrapper: motion.tbody,
+                                row: motion.tr,
+                            },
+                        }}
+                        rowClassName={(record, index) => "table-row"}
+                        onRow={(record, index) => ({
+                            initial: "hidden",
+                            animate: "visible",
+                            custom: index,
+                            variants: rowVariants,
+                        })}
+                    />
+                </div>
             </Space>
         </div>
     );
