@@ -103,6 +103,7 @@ function Cart() {
                                             borderRight: 0,
                                             fontFamily: "Kanit",
                                             fontWeight: 300,
+                                            borderColor: discount.couponId ? "#4169E2" : undefined,
                                         }}
                                     />
                                 </Form.Item>
