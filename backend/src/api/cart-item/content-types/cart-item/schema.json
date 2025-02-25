@@ -12,11 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "cart_item_id": {
-      "type": "string",
-      "unique": false,
-      "required": false
-    },
     "product": {
       "type": "relation",
       "relation": "manyToOne",

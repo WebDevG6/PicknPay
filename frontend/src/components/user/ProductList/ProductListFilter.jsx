@@ -17,7 +17,6 @@ const ProductListFilter = ({ products }) => {
         () => [
             { label: "ช่วงราคา", hasIcon: true },
             { label: "แบรนด์", hasIcon: true },
-            { label: "ประเภทสินค้า", hasIcon: true },
         ],
         []
     );
@@ -28,7 +27,6 @@ const ProductListFilter = ({ products }) => {
     const sectionRefs = {
         ช่วงราคา: useRef(null),
         แบรนด์: useRef(null),
-        ประเภทสินค้า: useRef(null),
     };
 
     const showDrawer = useCallback((filterLabel) => {
@@ -50,7 +48,7 @@ const ProductListFilter = ({ products }) => {
     }, [initialScrollTo]);
 
     return (
-        <div className="w-full relative">
+        <div className="w-full ">
             <div className="rounded-lg bg-[#6d8ce8] p-3 w-full mx-auto">
                 <ConfigProvider
                     theme={{
@@ -66,7 +64,7 @@ const ProductListFilter = ({ products }) => {
                         <Flex
                             gap="small"
                             wrap="wrap"
-                            className="w-full justify-center sm:justify-start grid grid-cols-2 sm:flex"
+                            className="w-full justify-center sm:justify-start grid grid-cols-1 sm:flex"
                         >
                             <Button
                                 type="primary"
@@ -81,7 +79,7 @@ const ProductListFilter = ({ products }) => {
                                     key={index}
                                     type="primary"
                                     onClick={() => showDrawer(label)}
-                                    className="w-fit px-6 py-2 md:w-auto gap-1"
+                                    className="w-fit sm:w-fit px-6 py-2 md:w-auto gap-1"
                                 >
                                     <span className="font-[Kanit]">{label}</span>
                                     {hasIcon && <DownOutlined className="ml-1" />}
@@ -100,7 +98,7 @@ const ProductListFilter = ({ products }) => {
                 afterOpenChange={onDrawerOpen}
                 styles={{ body: { padding: "3px" } }}
                 footer={
-                    <div className="p-4 flex justify-between gap-2">
+                    <div className="p-4 flex flex-col sm:flex-row justify-between gap-4 w-full px-0.5">
                         <Button
                             type="primary"
                             danger
@@ -109,7 +107,7 @@ const ProductListFilter = ({ products }) => {
                                 onClose();
                             }}
                             style={{ fontFamily: "Kanit" }}
-                            className="w-1/2 px-1"
+                            className="w-full sm:w-auto sm:min-w-[150px] px-4"
                         >
                             ล้างตัวกรองทั้งหมด
                         </Button>
@@ -119,11 +117,13 @@ const ProductListFilter = ({ products }) => {
                                 onClose();
                             }}
                             style={{ fontFamily: "Kanit" }}
-                            className="w-1/2 px-1"
+                            className="w-full sm:w-auto sm:min-w-[150px] px-4"
                         >
                             เสร็จสิ้น
                         </Button>
                     </div>
+
+
                 }
             >
                 <section className="flex flex-col items-center w-full px-1">
@@ -153,23 +153,6 @@ const ProductListFilter = ({ products }) => {
                         ))}
                     </div>
                 </section>
-                <Divider />
-                {/* <section className="flex flex-col items-center w-full">
-                    <Title
-                        level={5}
-                        ref={sectionRefs["ประเภทสินค้า"]}
-                        className="font-[Kanit] flex justify-center mt-4"
-                    >
-                        ประเภทสินค้า
-                    </Title>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <p>บลาาา</p>
-                    <Divider />
-                </section> */}
             </Drawer>
         </div>
     );

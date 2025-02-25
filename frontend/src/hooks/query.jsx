@@ -4,7 +4,6 @@ import conf from "../conf/main";
 import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from "@tanstack/react-query";
 import { authContext } from "../context/AuthContext";
 
-
 export function useCartItem() {
     const { userInfo } = useContext(authContext);
     return useSuspenseQuery({
@@ -20,6 +19,7 @@ export function useCartItem() {
                 isSelect: item.isSelect,
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
                 productId: item.product.id,
+                productDocumentId: item.product.documentId,
             }));
         },
     });

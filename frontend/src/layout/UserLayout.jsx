@@ -1,26 +1,28 @@
 import React, { useContext, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Button, ConfigProvider, Input, Drawer } from "antd";
+import { Button, ConfigProvider, Drawer, AutoComplete } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import CartQuantity from "../components/CartQuantity";
 import { authContext } from "../context/AuthContext";
+import useProducts from "../hooks/useProducts";
 
 const imageProfileMockUrl =
     "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg";
 
 const userNavigation = [
-    { name: "โปรไฟล์", to: "/profile" },
+    { name: "โปรไฟล์", to: "/customer/profile" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
 const userNavigationMenu = [
-    { name: "โปรไฟล์", to: "/profile" },
+    { name: "โปรไฟล์", to: "/customer/profile" },
     { name: "รถเข็น", to: "/customer/cart" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
 export default function userLayout() {
+    const { products } = useProducts();
     const { userInfo } = useContext(authContext);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -29,6 +31,9 @@ export default function userLayout() {
     };
     const onClose = () => {
         setOpen(false);
+    };
+    const onSelect = (value, option) => {
+        navigate(`/products/${option.productId}`);
     };
 
     return (
@@ -70,10 +75,23 @@ export default function userLayout() {
                                 </div>
                             </div>
                             <div className="lg:w-[30em] w-[20em] hidden md:block">
-                                <Input
+                                <AutoComplete
+                                    options={products.map((item) => {
+                                        return { value: item.name, productId: item.id };
+                                    })}
+                                    onSelect={onSelect}
+                                    filterOption={(inputValue, option) =>
+                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                    }
+                                    placeholder={<p className="ml-1">ค้นหารายการสินค้า</p>}
                                     allowClear
-                                    style={{ borderRadius: 100, background: "#F5F5F5" }}
                                     prefix={<SearchOutlined style={{ fontSize: 16, color: "#9AA1AE" }} />}
+                                    style={{
+                                        borderRadius: 10,
+                                        background: "#F5F5F5",
+                                        width: "100%",
+                                        fontFamily: "Kanit",
+                                    }}
                                 />
                             </div>
                             <div className="md:hidden block">
@@ -107,7 +125,7 @@ export default function userLayout() {
 
                                                 <MenuItems
                                                     transition
-                                                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                                                    className="absolute z-50 right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                                                 >
                                                     {userNavigation.map((item) => (
                                                         <MenuItem key={item.name}>

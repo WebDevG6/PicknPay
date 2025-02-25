@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
 import { useParams } from "react-router-dom";
@@ -8,8 +8,12 @@ import { useAddItem } from "../hooks/service";
 function Product() {
     const addItem = useAddItem();
     const { productId } = useParams();
-    const { data: productDetail, isLoading, error } = useProductDetail(productId);
+    const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
     const quantityRef = useRef(1);
+
+    useEffect(() => {
+        refetch();
+    }, [productId]);
 
     const [api, contextHolder] = notification.useNotification();
     const successNotification = () => {
@@ -17,6 +21,7 @@ function Product() {
             message: "เพิ่มสินค้าไปยังรถเข็นสำเร็จ",
             description: productDetail.name,
             duration: 3,
+            placement: "bottomLeft",
         });
     };
     const errorNotification = () => {
@@ -24,6 +29,7 @@ function Product() {
             message: "เพิ่มสินค้าไปยังรถเข็นไม่สำเร็จ",
             description: productDetail.name,
             duration: 3,
+            placement: "bottomLeft",
         });
     };
 
@@ -46,9 +52,9 @@ function Product() {
     };
 
     return (
-        <Spin spinning={isLoading}>
+        <div>
             {contextHolder}
-            <div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6">
+            <div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6 z-0">
                 <div className="col-span-5">
                     <ProductCarousel images={productDetail.picture} />
                 </div>
@@ -113,7 +119,7 @@ function Product() {
                     </div>
                 </div>
             </div>
-        </Spin>
+        </div>
     );
 }
 

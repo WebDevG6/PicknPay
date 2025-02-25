@@ -11,13 +11,16 @@ import Logout from "./pages/Logout";
 import Home from "./pages/Home";
 import AdminLayout from "./layout/AdminLayout";
 import Orders from "./pages/admin/Orders";
-import Products from "./pages/admin/Products";
 import Dashboard from "./pages/admin/Dashboard";
 import Customers from "./pages/admin/Customers";
 import CheckAuth from "./context/CheckAuth";
 import Cart from "./pages/Cart";
 import Product from "./pages/Product";
 import ProductList from "./pages/user/ProductList";
+import Profile from "./pages/user/Profile";
+import AddProduct from "./pages/admin/AddProducts";
+import ManangeProducts from "./pages/admin/ManangeProducts";
+
 
 function App() {
     return (
@@ -39,18 +42,25 @@ function App() {
                     <Route element={<RequiredAuth />}>
                         <Route element={<RequireCustomerRole />}>
                             <Route element={<UserLayout />}>
+                                <Route path="/customer/*" element={<Navigate to={"/customer/profile"} />} />
                                 <Route path="/customer/cart" element={<Cart />} />
+                                <Route path="/customer/profile" element={<Profile />} />
                             </Route>
                         </Route>
                         <Route element={<RequireAdminRole />}>
-                            <Route element={<AdminLayout />}>
-                                <Route path="/admin/*" element={<Navigate to={"/admin/dashboard"} />} />
-                                <Route path="/admin/orders" element={<Orders />} />
-                                <Route path="/admin/products" element={<Products />} />
-                                <Route path="/admin/customers" element={<Customers />} />
-                                <Route path="/admin/dashboard" element={<Dashboard />} />
+                            <Route path="admin" element={<AdminLayout />}>
+                                <Route index element={<Dashboard />} />
+                                <Route path="dashboard" element={<Dashboard />} />
+                                <Route path="orders" element={<Orders />} />
+                                <Route path="customers" element={<Customers />} />
+                                <Route path="products">
+                                    <Route index element={<ManangeProducts />} />
+                                    <Route path="manage" element={<ManangeProducts />} />
+                                    <Route path="add" element={<AddProduct />} />
+                                </Route>
                             </Route>
                         </Route>
+
                     </Route>
                 </Routes>
             </UserContextProvider>

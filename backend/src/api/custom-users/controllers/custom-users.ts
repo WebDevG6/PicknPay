@@ -1,17 +1,15 @@
-/**
- * product controller
- */
-
 import { factories } from "@strapi/strapi";
 
 export default factories.createCoreController(
-    "api::product.product",
+    "plugin::users-permissions.user",
     ({ strapi }) => ({
-        async countProducts(ctx) {
+        async count(ctx) {
             try {
                 const count = await strapi.db
-                    .query("api::product.product")
-                    .count();
+                    .query("plugin::users-permissions.user")
+                    .count({
+                        where: { role: { name: "Customer" } },
+                    });
                 return ctx.send({ total: count });
             } catch (error) {
                 ctx.throw(500, error);
