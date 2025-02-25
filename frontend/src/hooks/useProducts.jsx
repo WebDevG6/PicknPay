@@ -1,6 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import conf from "../conf/main";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import conf from "../conf/main";;
 import ax from "../conf/ax";
 import { message } from "antd";
@@ -16,7 +14,6 @@ const fetchProducts = async () => {
 };
 
 const useProducts = () => {
-    const queryClient = useQueryClient();
     const {
         data: categories = [],
         error: categoriesError,
@@ -25,7 +22,6 @@ const useProducts = () => {
         queryKey: ["categories"],
         queryFn: fetchCategories,
     });
-
 
     const {
         data: products = [],
@@ -36,6 +32,7 @@ const useProducts = () => {
         queryFn: fetchProducts,
     });
 
+    const queryClient = useQueryClient();
     const refetchProducts = () => {
         queryClient.invalidateQueries(["products"]);
     };
@@ -62,9 +59,6 @@ const useProducts = () => {
         },
         onSuccess: () => {
             refetchProducts()
-        },
-        onError: (error) => {
-            console.error("Error updating product:", error);
         },
     });
 

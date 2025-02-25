@@ -5,7 +5,7 @@ import { Layout, Menu, theme, Button, Drawer } from "antd";
 import {
     DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined,
     LogoutOutlined, ShoppingOutlined, PlusOutlined,
-    SettingOutlined, MenuOutlined, MenuFoldOutlined, MenuUnfoldOutlined
+    SettingOutlined, MenuOutlined,
 } from "@ant-design/icons";
 
 const { Sider, Content } = Layout;

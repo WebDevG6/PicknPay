@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import conf from "../conf/main";
 import ax from "../conf/ax";
 
@@ -28,20 +28,23 @@ const useDataAdmin = () => {
     //     queryFn: fetchOrdersCount,
     // });
 
-    const { data: totalProducts = 0, error: productsError, isLoading: productsLoading } = useQuery({
-        queryKey: ["productsCount"],
-        queryFn: fetchProductsCount,
-    });
+    const { data: totalProducts = 0, error: productsError, isLoading: productsLoading }
+        = useSuspenseQuery({
+            queryKey: ["productsCount"],
+            queryFn: fetchProductsCount,
+        });
 
-    const { data: totalCustomers = 0, error: cusError, isLoading: cusLoading } = useQuery({
-        queryKey: ["cusCount"],
-        queryFn: fetchCusCount,
-    });
+    const { data: totalCustomers = 0, error: cusError, isLoading: cusLoading }
+        = useSuspenseQuery({
+            queryKey: ["cusCount"],
+            queryFn: fetchCusCount,
+        });
 
-    const { data: customers = [], error: customersError, isLoading: customersLoading } = useQuery({
-        queryKey: ["customers"],
-        queryFn: fetchCustomers,
-    });
+    const { data: customers = [], error: customersError, isLoading: customersLoading }
+        = useSuspenseQuery({
+            queryKey: ["customers"],
+            queryFn: fetchCustomers,
+        });
 
     return {
         // totalOrders,
