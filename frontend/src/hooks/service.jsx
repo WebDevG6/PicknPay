@@ -56,3 +56,14 @@ export function useAddItem() {
         },
     });
 }
+
+export function useOrderUpdate() {
+    return useMutation({
+        mutationFn: async ({ orderId, status }) => {
+            const response = await ax.put(conf.orderEndpoint(orderId), {
+                data: { status_order: status },
+            });
+            return response.data.data;
+        },
+    });
+}

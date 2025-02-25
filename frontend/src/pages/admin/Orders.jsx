@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Space, Table, Input, Tag, Button, Modal, Select } from "antd";
+import { Space, Table, Input, Tag, Button, Modal, Select, message } from "antd";
 import {
     CheckCircleOutlined,
     CloseCircleOutlined,
@@ -10,11 +10,16 @@ import {
 } from "@ant-design/icons";
 import { useOrderQuery } from "../../hooks/queryAdmin";
 import dayjs from "dayjs";
+import { useOrderUpdate } from "../../hooks/service";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Orders() {
     const { data: orders, isLoading } = useOrderQuery();
+    const updateOrder = useOrderUpdate();
+    const queryClient = useQueryClient();
     const [searchedText, setSearchedText] = useState("");
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const statusOptions = [
         { value: "processing", label: "Payment Processing" },
@@ -24,14 +29,31 @@ function Orders() {
         { value: "delivered", label: "Paid and Delivered" },
     ];
 
+    const handleUpdateOrder = async () => {
+        if (!selectedOrder) return;
+
+        await updateOrder.mutateAsync(
+            { orderId: selectedOrder.documentId, status: selectedStatus },
+            {
+                onSuccess: () => {
+                    message.success("Order status updated successfully!");
+                    queryClient.invalidateQueries({ queryKey: ["orders"] });
+                    setIsModalOpen(false);
+                },
+            }
+        );
+    };
+
     const showOrderDetails = (order) => {
         setSelectedOrder(order);
+        setSelectedStatus(order.status_order);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedOrder(null);
+        setSelectedStatus("");
     };
 
     const orderColumns = [
@@ -113,7 +135,12 @@ function Orders() {
                 />
             </Space>
 
-            <Modal title={<p className="text-lg font-bold">Order Details</p>} open={isModalOpen} onCancel={closeModal}>
+            <Modal
+                title={<p className="text-lg font-bold">Order Details</p>}
+                open={isModalOpen}
+                onCancel={closeModal}
+                onOk={handleUpdateOrder}
+            >
                 {selectedOrder && (
                     <div className="flex flex-col gap-4">
                         <p className="w-full">
@@ -124,7 +151,12 @@ function Orders() {
                         </p>
                         <p className="w-full flex flex-col gap-2">
                             <strong>Status: </strong>
-                            <Select value={selectedOrder.status_order} options={statusOptions} className="w-full" />
+                            <Select
+                                value={selectedOrder.status_order}
+                                options={statusOptions}
+                                className="w-full"
+                                onChange={(value) => setSelectedStatus(value)}
+                            />
                         </p>
                         <p className="w-full">
                             <strong>Value:</strong> ฿{selectedOrder.value.toLocaleString("en-US")}
