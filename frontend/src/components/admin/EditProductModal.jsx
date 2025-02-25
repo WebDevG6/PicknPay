@@ -120,7 +120,7 @@ const EditProductModal = ({ visible }) => {
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="flex flex-col items-center">
-                        <h3 className="text-lg font-semibold mb-2">รูปสินค้า</h3>
+                        <h3 className="text-lg mb-2">รูปสินค้า</h3>
                         {displayPictures.length > 0 ? (
                             <Swiper
                                 modules={[Navigation, Pagination]}
