@@ -1,3 +1,5 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import conf from "../conf/main";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import conf from "../conf/main";;
 import ax from "../conf/ax";
@@ -15,12 +17,21 @@ const fetchProducts = async () => {
 
 const useProducts = () => {
     const queryClient = useQueryClient();
-    const { data: categories = [], error: categoriesError, isLoading: categoriesLoading } = useQuery({
+    const {
+        data: categories = [],
+        error: categoriesError,
+        isLoading: categoriesLoading,
+    } = useSuspenseQuery({
         queryKey: ["categories"],
         queryFn: fetchCategories,
     });
 
-    const { data: products = [], error: productsError, isLoading: productsLoading } = useQuery({
+
+    const {
+        data: products = [],
+        error: productsError,
+        isLoading: productsLoading,
+    } = useSuspenseQuery({
         queryKey: ["products"],
         queryFn: fetchProducts,
     });
