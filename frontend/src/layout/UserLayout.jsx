@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Button, ConfigProvider, Input, Drawer } from "antd";
+import { Button, ConfigProvider, Drawer, AutoComplete } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import CartQuantity from "../components/CartQuantity";
 import { authContext } from "../context/AuthContext";
+import useProducts from "../hooks/useProducts";
 
 const imageProfileMockUrl =
     "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg";
@@ -21,6 +22,7 @@ const userNavigationMenu = [
 ];
 
 export default function userLayout() {
+    const { products } = useProducts();
     const { userInfo } = useContext(authContext);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -29,6 +31,9 @@ export default function userLayout() {
     };
     const onClose = () => {
         setOpen(false);
+    };
+    const onSelect = (value, option) => {
+        navigate(`/products/${option.productId}`);
     };
 
     return (
@@ -70,10 +75,23 @@ export default function userLayout() {
                                 </div>
                             </div>
                             <div className="lg:w-[30em] w-[20em] hidden md:block">
-                                <Input
+                                <AutoComplete
+                                    options={products.map((item) => {
+                                        return { value: item.name, productId: item.id };
+                                    })}
+                                    onSelect={onSelect}
+                                    filterOption={(inputValue, option) =>
+                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                    }
+                                    placeholder="ค้นหารายการสินค้า"
                                     allowClear
-                                    style={{ borderRadius: 100, background: "#F5F5F5" }}
                                     prefix={<SearchOutlined style={{ fontSize: 16, color: "#9AA1AE" }} />}
+                                    style={{
+                                        borderRadius: 10,
+                                        background: "#F5F5F5",
+                                        width: "100%",
+                                        fontFamily: "Kanit",
+                                    }}
                                 />
                             </div>
                             <div className="md:hidden block">
