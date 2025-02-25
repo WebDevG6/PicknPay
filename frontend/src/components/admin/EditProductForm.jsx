@@ -161,18 +161,18 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 form.setFieldsValue(allValues);
             }}
         >
-            <Form.Item label="ชื่อสินค้า" name="name" rules={[{ required: true, message: "กรุณากรอกชื่อสินค้า" }]}>
+            <Form.Item label="ชื่อสินค้า" name="name" rules={[{ message: "กรุณากรอกชื่อสินค้า" }]}>
                 <Input maxLength={1000} />
             </Form.Item>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Form.Item label="ราคา" name="price" rules={[{ required: true, message: "กรุณากรอกราคา" }]}>
+                <Form.Item label="ราคา" name="price" rules={[{ message: "กรุณากรอกราคา" }]}>
                     <InputNumber min={0} max={1000000} className="w-full" />
                 </Form.Item>
-                <Form.Item label="จำนวนสต็อก" name="stock" rules={[{ required: true, message: "กรุณากรอกจำนวนสต็อก" }]}>
+                <Form.Item label="จำนวนสต็อก" name="stock" rules={[{ message: "กรุณากรอกจำนวนสต็อก" }]}>
                     <InputNumber min={0} max={10000} className="w-full" />
                 </Form.Item>
-                <Form.Item label="แบรนด์" name="brand" rules={[{ required: true, message: "กรุณาเลือกแบรนด์" }]}>
+                <Form.Item label="แบรนด์" name="brand" rules={[{ message: "กรุณาเลือกแบรนด์" }]}>
                     <Select
                         placeholder="เลือกแบรนด์สินค้า"
                         options={brands.map((b) => ({ value: b.id, label: b.name }))}
@@ -180,7 +180,7 @@ const EditProductForm = ({ form, product, onUpdate, onCancel }) => {
                 </Form.Item>
             </div>
 
-            <Form.Item label="หมวดหมู่" name="category" rules={[{ required: true, message: "กรุณาเลือกหมวดหมู่" }]}>
+            <Form.Item label="หมวดหมู่" name="category" rules={[{ message: "กรุณาเลือกหมวดหมู่" }]}>
                 <Select placeholder="เลือกหมวดหมู่">
                     {categories.map((cat) => (
                         <Select.Option key={cat.id} value={cat.id}>
