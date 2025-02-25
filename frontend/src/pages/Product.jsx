@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
 import { useParams } from "react-router-dom";
@@ -8,8 +8,12 @@ import { useAddItem } from "../hooks/service";
 function Product() {
     const addItem = useAddItem();
     const { productId } = useParams();
-    const { data: productDetail, isLoading, error } = useProductDetail(productId);
+    const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
     const quantityRef = useRef(1);
+
+    useEffect(() => {
+        refetch();
+    }, [productId]);
 
     const [api, contextHolder] = notification.useNotification();
     const successNotification = () => {
