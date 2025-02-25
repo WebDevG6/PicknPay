@@ -26,6 +26,25 @@
     "order_items": {
       "type": "json",
       "required": true
+    },
+    "stripeId": {
+      "type": "string",
+      "required": true
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    },
+    "value": {
+      "type": "float",
+      "required": false,
+      "min": 0,
+      "default": 0
+    },
+    "coupon": {
+      "type": "string"
     }
   }
 }
