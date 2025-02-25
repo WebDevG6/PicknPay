@@ -12,26 +12,39 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "order_id": {
-      "type": "string",
-      "unique": true,
-      "required": true
-    },
-    "cart": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::cart.cart",
-      "inversedBy": "order"
-    },
     "status_order": {
       "type": "enumeration",
       "enum": [
-        "To pay",
-        "To ship",
-        "To receive",
-        "Complete"
+        "processing",
+        "succeeded",
+        "payment_failed",
+        "shipping",
+        "delivered"
       ],
       "required": true
+    },
+    "order_items": {
+      "type": "json",
+      "required": true
+    },
+    "stripeId": {
+      "type": "string",
+      "required": true
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    },
+    "value": {
+      "type": "float",
+      "required": false,
+      "min": 0,
+      "default": 0
+    },
+    "coupon": {
+      "type": "string"
     }
   }
 }

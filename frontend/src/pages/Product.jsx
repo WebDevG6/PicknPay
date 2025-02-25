@@ -17,6 +17,7 @@ function Product() {
             message: "เพิ่มสินค้าไปยังรถเข็นสำเร็จ",
             description: productDetail.name,
             duration: 3,
+            placement: "bottomLeft",
         });
     };
     const errorNotification = () => {
@@ -24,6 +25,7 @@ function Product() {
             message: "เพิ่มสินค้าไปยังรถเข็นไม่สำเร็จ",
             description: productDetail.name,
             duration: 3,
+            placement: "bottomLeft",
         });
     };
 
@@ -48,7 +50,7 @@ function Product() {
     return (
         <div>
             {contextHolder}
-            <div div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6 z-0" >
+            <div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6 z-0">
                 <div className="col-span-5">
                     <ProductCarousel images={productDetail.picture} />
                 </div>
@@ -112,7 +114,7 @@ function Product() {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         </div>
     );
 }

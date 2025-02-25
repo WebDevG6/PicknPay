@@ -3,7 +3,6 @@ import { useContext } from "react";
 import conf from "../conf/main";
 import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { authContext } from "../context/AuthContext";
-import axios from "axios";
 
 export function useCartItem() {
     const { userInfo } = useContext(authContext);
@@ -20,6 +19,7 @@ export function useCartItem() {
                 isSelect: item.isSelect,
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
                 productId: item.product.id,
+                productDocumentId: item.product.documentId,
             }));
         },
     });

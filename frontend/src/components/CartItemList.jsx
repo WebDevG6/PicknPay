@@ -116,7 +116,7 @@ function CartItemList({ dataSource }) {
                                 <InputNumber
                                     min={1}
                                     max={99}
-                                    defaultValue={item.quantity}
+                                    value={item.quantity}
                                     style={{ width: "80px", textAlign: "center" }}
                                     onChange={(value) =>
                                         handleChangeQuantity({ value: value, itemId: item.documentId })
