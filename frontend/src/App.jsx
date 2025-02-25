@@ -20,7 +20,7 @@ import ProductList from "./pages/user/ProductList";
 import Profile from "./pages/user/Profile";
 import AddProduct from "./pages/admin/AddProducts";
 import ManangeProducts from "./pages/admin/ManangeProducts";
-
+import Coupon from "./pages/admin/Coupon";
 
 function App() {
     return (
@@ -53,6 +53,7 @@ function App() {
                                 <Route path="dashboard" element={<Dashboard />} />
                                 <Route path="orders" element={<Orders />} />
                                 <Route path="customers" element={<Customers />} />
+                                <Route path="coupon" element={<Coupon />} />
                                 <Route path="products">
                                     <Route index element={<ManangeProducts />} />
                                     <Route path="manage" element={<ManangeProducts />} />
@@ -60,7 +61,6 @@ function App() {
                                 </Route>
                             </Route>
                         </Route>
-
                     </Route>
                 </Routes>
             </UserContextProvider>
