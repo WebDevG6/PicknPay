@@ -33,7 +33,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
         try {
             const session = await stripe.checkout.sessions.create({
                 mode: "payment",
-                success_url: `${process.env.CLIENT_URL}?success=true`,
+                success_url: `${process.env.CLIENT_URL}/customer/order`,
                 cancel_url: `${process.env.CLIENT_URL}?canceled=true`,
                 line_items: line_items,
                 discounts: couponId ? [{ coupon: couponId }] : [],
