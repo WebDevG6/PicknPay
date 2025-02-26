@@ -62,6 +62,7 @@ function Orders() {
             dataIndex: "createdAt",
             key: "createdAt",
             sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+            defaultSortOrder: "descend",
             render: (value) => dayjs(value).format("DD/MM/YYYY HH:mm:ss"),
         },
         {
