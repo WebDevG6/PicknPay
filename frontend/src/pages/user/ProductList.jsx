@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
 import usePriceStore from "../../components/user/ProductList/usePriceStore";
 import useBrandStore from "../../components/user/ProductList/useBrandStore";
+import useCategoryStore from "../../components/user/ProductList/useCategoryStore";
 import ProductListCard from "../../components/user/ProductList/ProductListCard";
 import ProductListFilter from "../../components/user/ProductList/ProductListFilter";
 
@@ -14,30 +15,57 @@ const VALID_CATEGORIES = ["headphone", "mouse", "keyboard", "microphone", "compu
 
 const ProductList = () => {
     const { products, productsLoading } = useProducts();
-    const location = useLocation();
-    const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
-    const category = useMemo(() => params.get("category")?.trim().toLowerCase() || "", [params]);
-    const price = usePriceStore((state) => state.price);
+    const { categoryMenu } = useCategoryStore();
+
+    const { price } = usePriceStore();
     const { selectedBrand } = useBrandStore();
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
+    const location = useLocation();
+    const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const category = useMemo(() => params.get("category")?.trim().toLowerCase() || "", [params]);
+    const hasInvalidQuery = useMemo(() => {
+        return (
+            location.search === "?" ||
+            (params.has("category") && !category) ||
+            ([...params.keys()].some(key => key !== "category"))
+        );
+    }, [location.search, params, category]);
+    const isProductsPage = useMemo(() => location.pathname === "/products" && !hasInvalidQuery, [location.pathname, hasInvalidQuery]);
+
     useEffect(() => {
         if (productsLoading) return;
-        if (!params.has("category") || !category || !VALID_CATEGORIES.includes(category)) {
-            setFilteredProducts(null);
-            return;
+
+        let newFilteredProducts = [];
+
+        if (isProductsPage && !category) {
+            newFilteredProducts = products || [];
+        } else if (VALID_CATEGORIES.includes(category)) {
+            newFilteredProducts = products.filter(
+                (product) => product.category.name.trim().toLowerCase() === category
+            );
+        }
+        newFilteredProducts = newFilteredProducts.filter(
+            (product) => product.price >= price[0] && product.price <= price[1]
+        );
+
+        if (categoryMenu && VALID_CATEGORIES.includes(categoryMenu)) {
+            newFilteredProducts = newFilteredProducts.filter(
+                (product) => product.category.name.trim().toLowerCase() === categoryMenu
+            );
         }
 
-        const newFilteredProducts = (products || [])
-            .filter((product) => product.category.name.trim().toLowerCase() === category)
-            .filter((product) => product.price >= price[0] && product.price <= price[1])
-            .filter((product) =>
-                !selectedBrand.length || (product.brands && selectedBrand.includes(product.brands.brandname))
+        if (selectedBrand.length) {
+            newFilteredProducts = newFilteredProducts.filter(
+                (product) => product.brands && selectedBrand.includes(product.brands.brandname)
             );
+        }
 
         setFilteredProducts(newFilteredProducts);
-    }, [products, category, price, productsLoading, params, selectedBrand]);
+    }, [products, category, price, productsLoading, params, selectedBrand, categoryMenu]);
+
+
 
     const loadMoreProducts = () => setVisibleCount((prev) => prev + PAGE_SIZE);
 
@@ -50,7 +78,7 @@ const ProductList = () => {
                         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-80">
                             <Spin size="large" />
                         </div>
-                    ) : filteredProducts === null || filteredProducts.length === 0 ? (
+                    ) : filteredProducts.length === 0 ? (
                         <div className="top-0 left-0 w-full h-full flex-col mt-12 ">
                             <Empty
                                 description="ไม่มีสินค้าที่ตรงกับหมวดหมู่นี้"
@@ -60,14 +88,14 @@ const ProductList = () => {
                     ) : (
                         <List
                             className="w-full rounded-lg"
-                            grid={{ gutter: 24, xs: 2, sm: 2, md: 3, lg: 3, xl: 4 }}
+                            grid={{ gutter: 24, xs: 2, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
                             dataSource={filteredProducts.slice(0, visibleCount)}
                             renderItem={(product) => (
                                 <motion.div
                                     key={product.id}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0.2, scale: 0.95 }}
+                                    exit={{ opacity: 0.3, scale: 0.95 }}
                                     transition={{ duration: 0.5, ease: "easeOut" }}
                                     className="flex justify-center w-full"
                                 >
