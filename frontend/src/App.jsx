@@ -21,6 +21,7 @@ import Profile from "./pages/user/Profile";
 import AddProduct from "./pages/admin/AddProducts";
 import ManangeProducts from "./pages/admin/ManangeProducts";
 import Coupon from "./pages/admin/Coupon";
+import MyOrder from "./pages/MyOrder";
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
                             <Route element={<UserLayout />}>
                                 <Route path="/customer/*" element={<Navigate to={"/customer/profile"} />} />
                                 <Route path="/customer/cart" element={<Cart />} />
+                                <Route path="/customer/order" element={<MyOrder />} />
                                 <Route path="/customer/profile" element={<Profile />} />
                             </Route>
                         </Route>

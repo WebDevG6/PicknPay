@@ -34,7 +34,10 @@ function Cart() {
         try {
             const selectedItems = cartItems.filter((item) => item.isSelect);
             const stripe = await stripePromise;
-            const res = await ax.post(conf.orderEndpoint, { order_items: selectedItems, couponId: discount.couponId });
+            const res = await ax.post(conf.orderEndpoint(), {
+                order_items: selectedItems,
+                couponId: discount.couponId,
+            });
 
             await stripe.redirectToCheckout({
                 sessionId: res.data.stripeSession.id,

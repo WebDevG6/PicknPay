@@ -12,12 +12,14 @@ const imageProfileMockUrl =
 
 const userNavigation = [
     { name: "โปรไฟล์", to: "/customer/profile" },
+    { name: "รายการสินค้าของฉัน", to: "/customer/order" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
 const userNavigationMenu = [
     { name: "โปรไฟล์", to: "/customer/profile" },
     { name: "รถเข็น", to: "/customer/cart" },
+    { name: "รายการสินค้าของฉัน", to: "/customer/order" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
