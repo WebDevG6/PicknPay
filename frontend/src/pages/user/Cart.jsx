@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Divider, Button, Input, message, Form } from "antd";
-import CartItemList from "../components/CartItemList";
-import { useCartItem } from "../hooks/query";
+import CartItemList from "../../components/CartItemList";
+import { useCartItem } from "../../hooks/query";
 import { loadStripe } from "@stripe/stripe-js";
-import ax from "../conf/ax";
-import conf from "../conf/main";
+import ax from "../../conf/ax";
+import conf from "../../conf/main";
 
 function Cart() {
     const stripePromise = loadStripe(

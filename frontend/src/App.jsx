@@ -14,14 +14,15 @@ import Orders from "./pages/admin/Orders";
 import Dashboard from "./pages/admin/Dashboard";
 import Customers from "./pages/admin/Customers";
 import CheckAuth from "./context/CheckAuth";
-import Cart from "./pages/Cart";
+import Cart from "./pages/user/Cart";
 import Product from "./pages/Product";
 import ProductList from "./pages/user/ProductList";
 import Profile from "./pages/user/Profile";
 import AddProduct from "./pages/admin/AddProducts";
 import ManangeProducts from "./pages/admin/ManangeProducts";
 import Coupon from "./pages/admin/Coupon";
-import MyOrder from "./pages/MyOrder";
+import MyOrder from "./pages/user/MyOrder";
+import MyOrderDetail from "./pages/user/MyOrderDetail";
 
 function App() {
     return (
@@ -46,6 +47,7 @@ function App() {
                                 <Route path="/customer/*" element={<Navigate to={"/customer/profile"} />} />
                                 <Route path="/customer/cart" element={<Cart />} />
                                 <Route path="/customer/order" element={<MyOrder />} />
+                                <Route path="/customer/order/:orderId" element={<MyOrderDetail />} />
                                 <Route path="/customer/profile" element={<Profile />} />
                             </Route>
                         </Route>
