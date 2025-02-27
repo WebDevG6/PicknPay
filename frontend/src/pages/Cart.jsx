@@ -41,6 +41,7 @@ function Cart() {
             const res = await ax.post(conf.orderEndpoint(), {
                 order_items: selectedItems,
                 couponId: discount.couponId,
+                value: cartSelectedItem.summaryPrice,
             });
 
             await stripe.redirectToCheckout({
