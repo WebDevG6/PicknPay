@@ -5,6 +5,7 @@ import { CheckIcon } from "@heroicons/react/16/solid";
 import { InputNumber } from "antd";
 import { useUpdateCartItem, useDeleteCartItem } from "../hooks/query";
 import { authContext } from "../context/AuthContext";
+import { Tag } from "antd";
 import debounce from "lodash.debounce";
 
 function CartItemList({ dataSource }) {
@@ -82,15 +83,17 @@ function CartItemList({ dataSource }) {
                         <tr key={item.id} className="border-t-1 border-[#D9D9D9]">
                             <td className="w-4 p-4">
                                 <div className="flex items-center">
-                                    <Checkbox
-                                        checked={item.isSelect}
-                                        onChange={() =>
-                                            handleCheck({ itemId: item.documentId, itemIsSelect: item.isSelect })
-                                        }
-                                        className="transition group size-4.5 rounded-sm p-1 ring-2 ring-[#D9D9D9] data-[checked]:ring-[#466EE4] ring-inset data-[checked]:bg-[#466EE4] bg-[#F5F5F5] cursor-pointer"
-                                    >
-                                        <CheckIcon className="hidden size-4 fill-white group-data-[checked]:block translate-x-[-3.2px] translate-y-[-3px]" />
-                                    </Checkbox>
+                                    {item.productStock !== 0 && (
+                                        <Checkbox
+                                            checked={item.isSelect}
+                                            onChange={() =>
+                                                handleCheck({ itemId: item.documentId, itemIsSelect: item.isSelect })
+                                            }
+                                            className="transition group size-4.5 rounded-sm p-1 ring-2 ring-[#D9D9D9] data-[checked]:ring-[#466EE4] ring-inset data-[checked]:bg-[#466EE4] bg-[#F5F5F5] cursor-pointer"
+                                        >
+                                            <CheckIcon className="hidden size-4 fill-white group-data-[checked]:block translate-x-[-3.2px] translate-y-[-3px]" />
+                                        </Checkbox>
+                                    )}
                                 </div>
                             </td>
                             <th scope="row" className="px-6 py-4 font-light flex flex-row gap-4">
@@ -113,15 +116,21 @@ function CartItemList({ dataSource }) {
                                 ฿{(item.price * item.quantity).toLocaleString("en-US")}
                             </td>
                             <td className="px-6 py-4">
-                                <InputNumber
-                                    min={1}
-                                    max={99}
-                                    value={item.quantity}
-                                    style={{ width: "80px", textAlign: "center" }}
-                                    onChange={(value) =>
-                                        handleChangeQuantity({ value: value, itemId: item.documentId })
-                                    }
-                                />
+                                {item.productStock === 0 ? (
+                                    <Tag color="error">
+                                        <p className="text-base">สินค้าหมด</p>
+                                    </Tag>
+                                ) : (
+                                    <InputNumber
+                                        min={1}
+                                        max={99}
+                                        value={item.quantity}
+                                        style={{ width: "80px", textAlign: "center" }}
+                                        onChange={(value) =>
+                                            handleChangeQuantity({ value: value, itemId: item.documentId })
+                                        }
+                                    />
+                                )}
                             </td>
                             <td className="px-6 py-4">
                                 <button

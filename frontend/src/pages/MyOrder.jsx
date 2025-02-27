@@ -29,7 +29,11 @@ const MyOrder = () => {
                     itemLayout="horizontal"
                     dataSource={userInfo?.orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))}
                     renderItem={(item) => {
-                        const { color, icon, label } = statusConfig[item.status_order];
+                        const { color, icon, label } = statusConfig[item.status_order] || {
+                            color: "default",
+                            icon: null,
+                            label: "Not Found",
+                        };
                         return (
                             <List.Item>
                                 <Card
@@ -70,7 +74,7 @@ const MyOrder = () => {
                         )
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))}
                     renderItem={(item) => {
-                        const { color, icon, label } = statusConfig[item.status_order];
+                        const { color, icon, label } = statusConfig[item?.status_order];
                         return (
                             <List.Item>
                                 <Card

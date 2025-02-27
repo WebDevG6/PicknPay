@@ -20,6 +20,7 @@ export function useCartItem() {
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
                 productId: item.product.id,
                 productDocumentId: item.product.documentId,
+                productStock: item.product.stock,
             }));
         },
     });
