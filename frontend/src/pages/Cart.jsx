@@ -31,6 +31,10 @@ function Cart() {
     }, [cartItems, discount]);
 
     const handlePayment = async () => {
+        if (cartSelectedItem.quantity === 0) {
+            message.error("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
+            return;
+        }
         try {
             const selectedItems = cartItems.filter((item) => item.isSelect);
             const stripe = await stripePromise;
@@ -48,6 +52,10 @@ function Cart() {
     };
 
     const handleCoupon = async (values) => {
+        if (cartSelectedItem.quantity === 0) {
+            message.error("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
+            return;
+        }
         const couponCode = values.coupon?.trim();
         if (!couponCode) {
             message.error("กรุณากรอกโค้ดส่วนลด");
