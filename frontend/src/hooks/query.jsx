@@ -63,6 +63,15 @@ export function useProductDetail(productId) {
     });
 }
 
+export function useProductDetailGet() {
+    return useMutation({
+        mutationFn: async ({ productId }) => {
+            const response = await ax.get(conf.getProductDetail(productId));
+            return response.data.data[0];
+        }
+    });
+}
+
 export const useReviews = () => {
     return useSuspenseQuery({
         queryKey: ["reviews"],
@@ -81,3 +90,4 @@ export const useOrderDetail = () => {
         },
     });
 };
+

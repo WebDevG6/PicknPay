@@ -108,7 +108,7 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
-                            onClick={() => navigate(`/customer/cart?product=${productDetail?.documentId}&quantity=${quantityRef.current.value}`)}
+                            onClick={() => navigate(`/customer/cart?product=${productDetail?.id}&quantity=${quantityRef.current.value}`)}
                             disabled={productDetail?.stock === 0}
                             type="primary"
                             style={{

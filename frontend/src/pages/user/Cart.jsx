@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Divider, Button, Input, message, Form } from "antd";
 import CartItemList from "../../components/CartItemList";
-import { useCartItem } from "../../hooks/query";
+import { useCartItem, useProductDetailGet } from "../../hooks/query";
 import { loadStripe } from "@stripe/stripe-js";
 import ax from "../../conf/ax";
 import conf from "../../conf/main";
-import { useParams } from "react-router-dom";
-import { use } from "react";
+import { useLocation } from "react-router-dom";
 
 function Cart() {
     const stripePromise = loadStripe(
@@ -16,11 +15,28 @@ function Cart() {
     const [cartSelectedItem, setSelectItem] = useState([]);
     const [discount, setDiscount] = useState({ value: 0, type: null, couponId: null });
     const [form] = Form.useForm();
-    const { productDocumentId } = useParams();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const productId = queryParams.get('product');
+    const quantity = queryParams.get('quantity');
+    const productDetailGet = useProductDetailGet();
 
     useEffect(() => {
-        console.log(productDocumentId);
-    }, [productDocumentId]);
+        if (productId && quantity) {
+            productDetailGet.mutate(
+                { productId: productId },
+                {
+                    onSuccess: (data) => {
+                        console.log("Product data:", data);
+                    },
+                    onError: (error) => {
+                        console.error("Error fetching product:", error);
+                    }
+                }
+            );
+        }
+    }, [productId, quantity]);
+
 
     useEffect(() => {
         const selectedItems = cartItems.filter((item) => item.isSelect);
