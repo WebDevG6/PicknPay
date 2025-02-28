@@ -6,7 +6,7 @@ const ManageProducts = () => {
     const { editingProduct, setEditingProduct } = useEditProductStore();
 
     return (
-        <div className="p-2">
+        <div>
             <ProductTable onEdit={setEditingProduct} />
             <EditProductModal visible={!!editingProduct} />
         </div>

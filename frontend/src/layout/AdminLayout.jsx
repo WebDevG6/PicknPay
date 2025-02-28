@@ -141,15 +141,23 @@ function AdminLayout() {
                     mode="inline"
                     items={items}
                     onClick={handleMenuClick}
-                />
+                    inlineIndent={18} />
             </Sider>
             <Drawer
-                title="Admin Panel"
+                title={
+                    <div style={{
+                        width: "100%",
+                        textAlign: "center",
+                        fontSize: "22px"
+                    }}>
+                        Admin Panel
+                    </div>
+                }
                 placement="left"
                 closable={true}
                 onClose={() => setMobileVisible(false)}
                 open={mobileVisible}
-                width={200}
+                width={230}
                 destroyOnClose={true}
                 style={{
                     background: "#001529",
@@ -158,13 +166,24 @@ function AdminLayout() {
                 headerStyle={{
                     background: "#002140",
                     color: "white",
+
                 }}
-                closeIcon={<span style={{ color: "white", fontSize: "16px" }}>✖</span>}
+                closeIcon={
+                    <span style={{
+                        position: "absolute",
+                        left: "16px",
+                        color: "white",
+                        fontSize: "20px"
+                    }}>
+                        ✖
+                    </span>
+                }
             >
                 <Menu
                     theme="dark"
                     selectedKeys={[selectedMenu]}
                     mode="inline"
+                    inlineIndent={10}
                     items={items}
                     onClick={(menu) => {
                         handleMenuClick(menu);

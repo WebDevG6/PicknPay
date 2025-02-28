@@ -128,21 +128,21 @@ const ProductTable = ({ onEdit }) => {
     ], [onEdit]);
 
     return (
-        <div className="min-h-[500px] flex flex-col items-center justify-center rounded-xl w-full p-2 bg-white shadow-md">
+        <div className="min-h-[500px] flex flex-col items-center justify-center rounded-xl w-full bg-white shadow-md mt-2 p-[18px]">
             {productsLoading ? (
                 <div className="flex flex-col items-center justify-center h-screen">
                     <Spin size="large" />
                     <p className="mt-2 text-gray-500">กำลังโหลดสินค้า...</p>
                 </div>
             ) : (
-                <div className="w-full mt-2">
+                <div className="w-full">
                     <div className="grid grid-cols-1 gap-4 mb-4 w-full">
                         <Input
                             prefix={<SearchOutlined />}
-                            placeholder="ค้นหาสินค้า..."
+                            placeholder="ค้นหาสินค้า"
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
-                            className="w-full h-8 border border-gray-300 rounded-lg px-3"
+                            className="w-full h-8 rounded-lg px-3"
                         />
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4 w-full">
                             <div className="col-span-3 min-w-0 h-8 flex items-center bg-white border border-gray-300 rounded-lg px-3">
@@ -165,7 +165,7 @@ const ProductTable = ({ onEdit }) => {
                                 value={selectedCategory}
                                 onChange={setSelectedCategory}
                                 allowClear
-                                className="col-span-1 w-full h-10 border border-gray-300 rounded-lg"
+                                className="col-span-1 w-full h-10 rounded-lg"
                             >
                                 {products
                                     .map((product) => product.category)
@@ -182,7 +182,7 @@ const ProductTable = ({ onEdit }) => {
                                 value={selectedBrand}
                                 onChange={setSelectedBrand}
                                 allowClear
-                                className="col-span-1 w-full h-10 border border-gray-300 rounded-lg"
+                                className="col-span-1 w-full h-10 rounded-lg"
                             >
                                 {products
                                     .map((product) => product.brands)
@@ -197,7 +197,7 @@ const ProductTable = ({ onEdit }) => {
                             <Button
                                 danger
                                 onClick={resetFilters}
-                                className="col-span-1 w-full h-10 border border-gray-300 rounded-lg text-gray-600 bg-white hover:bg-gray-100 justify-self-end"
+                                className="col-span-1 w-full h-10 rounded-lg text-gray-600 bg-white hover:bg-gray-100 justify-self-end"
                             >
                                 ล้างตัวกรอง
                             </Button>

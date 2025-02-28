@@ -77,7 +77,7 @@ const Customers = () => {
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <Input
-                placeholder="ค้นหาลูกค้า..."
+                placeholder="ค้นหาลูกค้า"
                 style={{ width: "100%", marginBottom: 20 }}
                 onChange={(e) => setSearchedText(e.target.value.toLowerCase())}
                 allowClear
@@ -93,6 +93,7 @@ const Customers = () => {
                         bordered={true}
                         scroll={{ x: true }}
                         className="w-full flex-grow"
+                        size="small"
                         components={{
                             body: {
                                 wrapper: motion.tbody,
