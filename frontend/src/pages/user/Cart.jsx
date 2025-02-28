@@ -72,8 +72,7 @@ function Cart() {
                     couponId: couponCode,
                 });
                 message.success(
-                    `ใช้โค้ดสำเร็จ! ลดราคา ${
-                        response.data.amount_off ? `฿${response.data.amount_off}` : `${response.data.percent_off}%`
+                    `ใช้โค้ดสำเร็จ! ลดราคา ${response.data.amount_off ? `฿${response.data.amount_off}` : `${response.data.percent_off}%`
                     }`
                 );
             } else {
