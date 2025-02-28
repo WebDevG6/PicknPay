@@ -1,11 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Spin, Rate, Button, InputNumber, notification, Tag } from "antd";
 import { useAddItem } from "../hooks/service";
 
+
 function Product() {
+    const navigate = useNavigate();
     const addItem = useAddItem();
     const { productId } = useParams();
     const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
@@ -106,6 +108,7 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
+                            onClick={() => navigate(`/customer/cart/${productDetail?.documentId}`)}
                             disabled={productDetail?.stock === 0}
                             type="primary"
                             style={{
@@ -130,7 +133,7 @@ function Product() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
