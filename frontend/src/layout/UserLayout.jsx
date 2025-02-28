@@ -12,12 +12,14 @@ const imageProfileMockUrl =
 
 const userNavigation = [
     { name: "โปรไฟล์", to: "/customer/profile" },
+    { name: "รายการสินค้าของฉัน", to: "/customer/order" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
 const userNavigationMenu = [
     { name: "โปรไฟล์", to: "/customer/profile" },
     { name: "รถเข็น", to: "/customer/cart" },
+    { name: "รายการสินค้าของฉัน", to: "/customer/order" },
     { name: "ออกจากระบบ", to: "/logout" },
 ];
 
@@ -26,6 +28,7 @@ export default function userLayout() {
     const { userInfo } = useContext(authContext);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [openSuggest, setOpenSuggest] = useState(false);
     const showDrawer = () => {
         setOpen(true);
     };
@@ -81,8 +84,12 @@ export default function userLayout() {
                                     })}
                                     onSelect={onSelect}
                                     filterOption={(inputValue, option) =>
-                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                        option?.value.toUpperCase().includes(inputValue.toUpperCase())
                                     }
+                                    onSearch={(value) => {
+                                        setOpenSuggest(value.length > 0);
+                                    }}
+                                    open={openSuggest}
                                     placeholder={<p className="ml-1">ค้นหารายการสินค้า</p>}
                                     allowClear
                                     prefix={<SearchOutlined style={{ fontSize: 16, color: "#9AA1AE" }} />}

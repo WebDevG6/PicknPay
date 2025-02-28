@@ -33,7 +33,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
         try {
             const session = await stripe.checkout.sessions.create({
                 mode: "payment",
-                success_url: `${process.env.CLIENT_URL}?success=true`,
+                success_url: `${process.env.CLIENT_URL}/customer/order`,
                 cancel_url: `${process.env.CLIENT_URL}?canceled=true`,
                 line_items: line_items,
                 discounts: couponId ? [{ coupon: couponId }] : [],
@@ -65,6 +65,10 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                     stripeId: session.id,
                     customer: ctx.state.user.id,
                     status_order: "processing",
+                    value: line_items.reduce(
+                        (acc, item) => acc + (item.price_data.unit_amount / 100) * item.quantity,
+                        0
+                    ),
                 },
             });
             return { stripeSession: session };
@@ -95,6 +99,44 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                 valid: false,
                 message: "Invalid or expired coupon.",
             });
+        }
+    },
+    async getOrderDetail(ctx) {
+        const { orderDocumentId } = ctx.request.body;
+        if (!orderDocumentId) {
+            return ctx.badRequest("orderDocumentId is required.");
+        }
+
+        try {
+            const order = await strapi.service("api::order.order").findOne(orderDocumentId);
+            if (!order) {
+                return ctx.notFound("Order not found.");
+            }
+
+            const orderDetail = await Promise.all(
+                order.order_items.map(async (item) => {
+                    const product = await strapi.service("api::product.product").findOne(item.product_id, {
+                        populate: "picture",
+                    });
+                    return {
+                        ...item,
+                        productName: product.name,
+                        productPrice: product.price,
+                        productImageUrl: product.picture[0].formats.medium.url,
+                        productId: product.id,
+                    };
+                })
+            );
+
+            return ctx.send({
+                order: {
+                    ...order,
+                    order_items: orderDetail,
+                },
+            });
+        } catch (err) {
+            console.error(err);
+            return ctx.internalServerError("An error occurred while retrieving the order.");
         }
     },
 }));

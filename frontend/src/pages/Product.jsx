@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
 import { useParams } from "react-router-dom";
-import { Spin, Rate, Button, InputNumber, notification } from "antd";
+import { Spin, Rate, Button, InputNumber, notification, Tag } from "antd";
 import { useAddItem } from "../hooks/service";
 
 function Product() {
@@ -74,12 +74,22 @@ function Product() {
                     <p className="whitespace-pre-line font-[Kanit] text-gray-700 text-lg">
                         {productDetail?.description}
                     </p>
-                    <div className="flex flex-row items-center gap-4">
-                        <p className="font-[Kanit] text-xl">จำนวน</p>
-                        <InputNumber defaultValue={1} min={1} max={99} style={{ fontSize: 18 }} ref={quantityRef} />
-                    </div>
+                    {productDetail.stock !== 0 ? (
+                        <div className="flex flex-row items-center gap-4">
+                            <p className="font-[Kanit] text-xl">จำนวน</p>
+                            <InputNumber defaultValue={1} min={1} max={99} style={{ fontSize: 18 }} ref={quantityRef} />
+                        </div>
+                    ) : (
+                        <Tag
+                            color="error"
+                            style={{ width: "120px", textAlign: "center", padding: "10px", justifyContent: "center" }}
+                        >
+                            <p className="text-xl font-[Kanit]">สินค้าหมด</p>
+                        </Tag>
+                    )}
                     <div className="grid grid-cols-2 gap-4 lg:pr-48 pr-0">
                         <Button
+                            disabled={productDetail?.stock === 0}
                             onClick={handleAddItem}
                             style={{
                                 gridColumn: "span 1",
@@ -96,6 +106,7 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
+                            disabled={productDetail?.stock === 0}
                             type="primary"
                             style={{
                                 borderRadius: 6,

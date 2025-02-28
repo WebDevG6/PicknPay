@@ -1,11 +1,17 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Layout, Menu, theme, Button, Drawer } from "antd";
 import {
-    DashboardOutlined, ShoppingCartOutlined, AppstoreOutlined, UserOutlined,
-    LogoutOutlined, ShoppingOutlined, PlusOutlined,
-    SettingOutlined, MenuOutlined,
+    DashboardOutlined,
+    ShoppingCartOutlined,
+    AppstoreOutlined,
+    UserOutlined,
+    LogoutOutlined,
+    ShoppingOutlined,
+    PlusOutlined,
+    SettingOutlined,
+    MenuOutlined,
+    CreditCardOutlined,
 } from "@ant-design/icons";
 
 const { Sider, Content } = Layout;
@@ -27,14 +33,14 @@ function AdminLayout() {
     const [selectedMenu, setSelectedMenu] = useState();
     const [isMobile, setIsMobile] = useState(false);
 
-
     const layoutTitle = {
         1: { label: "Dashboard", path: "/admin/dashboard" },
         2: { label: "Orders", path: "/admin/orders" },
         3: { label: "Manage Products", path: "/admin/products/manage" },
         4: { label: "Add a product", path: "/admin/products/add" },
-        5: { label: "Customers", path: "/admin/customers" },
-        6: { label: "Logout", path: "/logout" },
+        5: { label: "Coupon", path: "/admin/coupon" },
+        6: { label: "Customers", path: "/admin/customers" },
+        7: { label: "Logout", path: "/logout" },
     };
 
     useEffect(() => {
@@ -65,8 +71,9 @@ function AdminLayout() {
                 getItem("Add Products", "4", <PlusOutlined />),
             ],
         },
-        getItem("Customers", "5", <UserOutlined />),
-        getItem("Logout", "6", <LogoutOutlined />),
+        getItem("Coupon", "5", <CreditCardOutlined />),
+        getItem("Customers", "6", <UserOutlined />),
+        getItem("Logout", "7", <LogoutOutlined />),
     ];
 
     return (
@@ -172,8 +179,6 @@ function AdminLayout() {
                     </span>
                 }
             >
-
-
                 <Menu
                     theme="dark"
                     selectedKeys={[selectedMenu]}
@@ -191,7 +196,9 @@ function AdminLayout() {
                 />
             </Drawer>
 
-            <Layout style={{ marginLeft: isMobile ? 0 : collapsed ? 80 : 200, transition: "margin-left 0.3s ease-in-out" }}>
+            <Layout
+                style={{ marginLeft: isMobile ? 0 : collapsed ? 80 : 200, transition: "margin-left 0.3s ease-in-out" }}
+            >
                 <header
                     style={{
                         padding: 12,
@@ -205,7 +212,6 @@ function AdminLayout() {
                         transition: "all 0.3s ease-in-out",
                     }}
                 >
-
                     {isMobile && (
                         <Button
                             icon={<MenuOutlined />}
@@ -233,7 +239,6 @@ function AdminLayout() {
                         {layoutTitle[selectedMenu]?.label}
                     </h1>
                 </header>
-
 
                 <Content
                     style={{

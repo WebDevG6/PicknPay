@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Divider, Button, Input, message, Form } from "antd";
-import CartItemList from "../components/CartItemList";
-import { useCartItem } from "../hooks/query";
+import CartItemList from "../../components/CartItemList";
+import { useCartItem } from "../../hooks/query";
 import { loadStripe } from "@stripe/stripe-js";
-import ax from "../conf/ax";
-import conf from "../conf/main";
+import ax from "../../conf/ax";
+import conf from "../../conf/main";
 
 function Cart() {
     const stripePromise = loadStripe(
@@ -31,10 +31,18 @@ function Cart() {
     }, [cartItems, discount]);
 
     const handlePayment = async () => {
+        if (cartSelectedItem.quantity === 0) {
+            message.error("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
+            return;
+        }
         try {
             const selectedItems = cartItems.filter((item) => item.isSelect);
             const stripe = await stripePromise;
-            const res = await ax.post(conf.orderEndpoint, { order_items: selectedItems, couponId: discount.couponId });
+            const res = await ax.post(conf.orderEndpoint(), {
+                order_items: selectedItems,
+                couponId: discount.couponId,
+                value: cartSelectedItem.summaryPrice,
+            });
 
             await stripe.redirectToCheckout({
                 sessionId: res.data.stripeSession.id,
@@ -45,6 +53,10 @@ function Cart() {
     };
 
     const handleCoupon = async (values) => {
+        if (cartSelectedItem.quantity === 0) {
+            message.error("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
+            return;
+        }
         const couponCode = values.coupon?.trim();
         if (!couponCode) {
             message.error("กรุณากรอกโค้ดส่วนลด");
@@ -77,7 +89,7 @@ function Cart() {
     };
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-2 font-[Kanit] items-baseline">
                 <p className="text-2xl font-semibold tracking-wide">รถเข็นของฉัน</p>
                 <p className="text-xl">(สินค้า {cartSelectedItem.quantity} ชิ้น)</p>
