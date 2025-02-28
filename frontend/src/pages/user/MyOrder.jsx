@@ -42,14 +42,14 @@ const OrderList = ({ orders }) => {
                             hoverable
                             title={
                                 <div className="flex justify-between">
-                                    <div className="flex flex-row gap-2">
+                                    <div className="flex flex-row gap-2 items-center">
                                         <Tag color={color} icon={icon}>
                                             {label}
                                         </Tag>
                                         <p>รายการคำสั่งซื้อ</p>
                                         <p className="font-normal"> #{item.documentId}</p>
                                     </div>
-                                    <p>฿{item.value.toLocaleString("en-US")}</p>
+                                    <p className="text-lg">฿{item.value.toLocaleString("en-US")}</p>
                                 </div>
                             }
                             className="w-full"

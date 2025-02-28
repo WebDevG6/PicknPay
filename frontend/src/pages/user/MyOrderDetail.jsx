@@ -11,6 +11,7 @@ import {
 import { Steps } from "antd";
 import conf from "../../conf/main";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 function MyOrderDetail() {
     const orderDetail = useOrderDetail();
@@ -27,6 +28,10 @@ function MyOrderDetail() {
                 <p className="text-2xl font-semibold tracking-wide font-[Kanit]">รายการคำสั่งซื้อ #{orderId}</p>
             </div>
             <div className="bg-white p-8 rounded-sm w-full flex flex-col gap-8">
+                <div className="flex flex-col gap-6">
+                    <p className="text-lg font-[Kanit] font-semibold">วันที่สั่งซื้อ</p>
+                    <p>{dayjs(orderDetail?.data?.order.createdAt).format("DD/MM/YYYY HH:mm:ss")}</p>
+                </div>
                 <div className="flex flex-col gap-6">
                     <p className="text-lg font-[Kanit] font-semibold">สถานะคำสั่งซื้อสินค้า</p>
                     <Steps
