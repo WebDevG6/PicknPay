@@ -28,6 +28,7 @@ export default function userLayout() {
     const { userInfo } = useContext(authContext);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [openSuggest, setOpenSuggest] = useState(false);
     const showDrawer = () => {
         setOpen(true);
     };
@@ -83,8 +84,12 @@ export default function userLayout() {
                                     })}
                                     onSelect={onSelect}
                                     filterOption={(inputValue, option) =>
-                                        option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                        option?.value.toUpperCase().includes(inputValue.toUpperCase())
                                     }
+                                    onSearch={(value) => {
+                                        setOpenSuggest(value.length > 0);
+                                    }}
+                                    open={openSuggest}
                                     placeholder={<p className="ml-1">ค้นหารายการสินค้า</p>}
                                     allowClear
                                     prefix={<SearchOutlined style={{ fontSize: 16, color: "#9AA1AE" }} />}
