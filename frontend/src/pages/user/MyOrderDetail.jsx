@@ -10,10 +10,12 @@ import {
 } from "@ant-design/icons";
 import { Steps } from "antd";
 import conf from "../../conf/main";
+import { useNavigate } from "react-router-dom";
 
 function MyOrderDetail() {
     const orderDetail = useOrderDetail();
     const { orderId } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         orderDetail.mutate({ orderId: orderId });
@@ -65,7 +67,7 @@ function MyOrderDetail() {
                 </div>
                 <div className="flex flex-col gap-6">
                     <p className="text-lg font-[Kanit] font-semibold">รายละเอียดคำสั่งซื้อ</p>
-                    <div>
+                    <div className="flex flex-col gap-4">
                         {orderDetail?.data?.order.order_items.map((item) => (
                             <div className="flex flex-row gap-4 justify-between items-center pr-6" key={item.productId}>
                                 <div className="flex flex-row gap-6 items-center ">
@@ -73,11 +75,17 @@ function MyOrderDetail() {
                                         src={conf.urlPrefix + item.productImageUrl}
                                         className="w-25 h-25 object-cover rounded-md"
                                     />
-                                    <div className="flex flex-col gap-1">
+                                    <div className="flex flex-col">
                                         <p className="text-lg">{item.productName}</p>
                                         <p className="text-sm text-gray-500">
                                             จำนวน: {item.quantity} ชิ้น <br />฿
                                             {Number(item.productPrice).toLocaleString("en-US")}
+                                        </p>
+                                        <p
+                                            onClick={() => navigate(`/products/${item.productId}`)}
+                                            className="text-xs text-gray-500 cursor-pointer hover:underline"
+                                        >
+                                            รายละเอียดเพิ่มเติม
                                         </p>
                                     </div>
                                 </div>
