@@ -18,6 +18,7 @@ const conf = {
     categoriesEndpoint: "/categories",
     reviewsEndpoint: "/reviews?populate=product.picture",
     orderEndpoint: (orderId = "") => `/orders/${orderId}`,
+    orderGetDetailEndpoint: "/order/getOrderDetail",
     validateCouponEndpoint: "validate-coupon",
 };
 

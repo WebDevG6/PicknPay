@@ -89,7 +89,7 @@ function Cart() {
     };
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-2 font-[Kanit] items-baseline">
                 <p className="text-2xl font-semibold tracking-wide">รถเข็นของฉัน</p>
                 <p className="text-xl">(สินค้า {cartSelectedItem.quantity} ชิ้น)</p>

@@ -101,9 +101,9 @@ const MyOrder = () => {
     ];
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
             <div>
-                <p className="text-2xl font-semibold tracking-wide font-[Kanit]">รายการสินค้าของฉัน</p>
+                <p className="text-2xl font-semibold tracking-wide font-Kanit]">รายการสินค้าของฉัน</p>
             </div>
             <div className="bg-white p-8 rounded-sm w-full">
                 <Tabs defaultActiveKey="1" items={items} />
