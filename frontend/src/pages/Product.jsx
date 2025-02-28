@@ -1,17 +1,36 @@
 import React, { useRef, useEffect } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
-import { useParams, useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
 import { Spin, Rate, Button, InputNumber, notification, Tag } from "antd";
 import { useAddItem } from "../hooks/service";
-
+import { useParams } from "react-router-dom";
+import ax from "../conf/ax";
+import conf from "../conf/main";
 
 function Product() {
-    const navigate = useNavigate();
-    const addItem = useAddItem();
+    const stripePromise = loadStripe(
+        "pk_test_51QrA19IqshdqteMviIRbdDZP1v9Xmuhq5toGui7qILPAkvoZyx2Kz4GQfzDzRVD2zl5pPzyDLeTYKYA04he3CTuF00eBRJw9RM"
+    );
     const { productId } = useParams();
+    const addItem = useAddItem();
     const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
     const quantityRef = useRef(1);
+    const handleBuyNow = async () => {
+        try {
+            const stripe = await stripePromise;
+            const res = await ax.post(conf.orderEndpoint(), {
+                order_items: [{ productDocumentId: productDetail.documentId, quantity: quantityRef.current.value }],
+                value: productDetail.price,
+            });
+
+            await stripe.redirectToCheckout({
+                sessionId: res.data.stripeSession.id,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     useEffect(() => {
         refetch();
@@ -108,7 +127,7 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
-                            onClick={() => navigate(`/customer/cart?product=${productDetail?.id}&quantity=${quantityRef.current.value}`)}
+                            onClick={handleBuyNow}
                             disabled={productDetail?.stock === 0}
                             type="primary"
                             style={{
@@ -133,7 +152,7 @@ function Product() {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 
