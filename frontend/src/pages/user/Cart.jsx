@@ -5,6 +5,8 @@ import { useCartItem } from "../../hooks/query";
 import { loadStripe } from "@stripe/stripe-js";
 import ax from "../../conf/ax";
 import conf from "../../conf/main";
+import { useParams } from "react-router-dom";
+import { use } from "react";
 
 function Cart() {
     const stripePromise = loadStripe(
@@ -14,6 +16,11 @@ function Cart() {
     const [cartSelectedItem, setSelectItem] = useState([]);
     const [discount, setDiscount] = useState({ value: 0, type: null, couponId: null });
     const [form] = Form.useForm();
+    const { productDocumentId } = useParams();
+
+    useEffect(() => {
+        console.log(productDocumentId);
+    }, [productDocumentId]);
 
     useEffect(() => {
         const selectedItems = cartItems.filter((item) => item.isSelect);
@@ -72,8 +79,7 @@ function Cart() {
                     couponId: couponCode,
                 });
                 message.success(
-                    `ใช้โค้ดสำเร็จ! ลดราคา ${
-                        response.data.amount_off ? `฿${response.data.amount_off}` : `${response.data.percent_off}%`
+                    `ใช้โค้ดสำเร็จ! ลดราคา ${response.data.amount_off ? `฿${response.data.amount_off}` : `${response.data.percent_off}%`
                     }`
                 );
             } else {

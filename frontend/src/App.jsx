@@ -45,7 +45,7 @@ function App() {
                         <Route element={<RequireCustomerRole />}>
                             <Route element={<UserLayout />}>
                                 <Route path="/customer/*" element={<Navigate to={"/customer/profile"} />} />
-                                <Route path="/customer/cart/:productDocumentId" element={<Cart />} />
+                                <Route path="/customer/cart" element={<Cart />} />
                                 <Route path="/customer/order" element={<MyOrder />} />
                                 <Route path="/customer/order/:orderId" element={<MyOrderDetail />} />
                                 <Route path="/customer/profile" element={<Profile />} />
