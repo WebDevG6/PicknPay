@@ -59,10 +59,10 @@ function Product() {
         <div className="flex flex-col gap-6">
             {contextHolder}
             <div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6 z-0">
-                <div className="col-span-5">
+                <div className="col-span-12 md:col-span-5">
                     <ProductCarousel images={productDetail.picture} />
                 </div>
-                <div className="col-span-7 flex flex-col gap-8">
+                <div className="col-span-12 md:col-span-7 flex flex-col gap-8">
                     <div className="flex flex-col gap-4">
                         <p className="md:text-3xl text-2xl font-semibold">{productDetail.name}</p>
                         <div className="flex flex-row items-center gap-4 font-medium">
