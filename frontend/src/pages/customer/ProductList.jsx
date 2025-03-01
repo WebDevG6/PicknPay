@@ -3,11 +3,11 @@ import { useLocation } from "react-router";
 import { List, Button, Layout, Empty, ConfigProvider } from "antd";
 import { motion } from "framer-motion";
 import useProducts from "@hooks/useProducts";
-import usePriceStore from "@components/user/ProductList/usePriceStore";
-import useBrandStore from "@components/user/ProductList/useBrandStore";
-import useCategoryStore from "@components/user/ProductList/useCategoryStore";
-import ProductListCard from "@components/user/ProductList/ProductListCard";
-import ProductListFilter from "@components/user/ProductList/ProductListFilter";
+import usePriceStore from "@components/customer/ProductList/usePriceStore";
+import useBrandStore from "@components/customer/ProductList/useBrandStore";
+import useCategoryStore from "@components/customer/ProductList/useCategoryStore";
+import ProductListCard from "@components/customer/ProductList/ProductListCard";
+import ProductListFilter from "@components/customer/ProductList/ProductListFilter";
 
 const { Content } = Layout;
 const PAGE_SIZE = 12;

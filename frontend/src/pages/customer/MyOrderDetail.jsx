@@ -11,7 +11,7 @@ import {
 import dayjs from "dayjs";
 import conf from "@conf/main";
 import { useOrderDetail } from "@hooks/query";
-import ReviewModal from "@components/user/ReviewModal";
+import ReviewModal from "@components/customer/ReviewModal";
 
 function MyOrderDetail() {
     const orderDetail = useOrderDetail();

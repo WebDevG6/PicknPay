@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { useParams } from "react-router";
-import ProductCarousel from "@components/ProductCarousel";
+import ProductCarousel from "@components/public/ProductCarousel";
 import { useProductDetail } from "@hooks/query";
 import { useAddItem } from "@hooks/service";
-import ProductReview from "@components/user/ProductReview";
+import ProductReview from "@components/public/ProductReview";
 import { Rate, Button, InputNumber, notification } from "antd";
 
 function Product() {

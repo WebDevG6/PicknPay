@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router";
 import { Button, ConfigProvider, Drawer, AutoComplete } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import CartQuantity from "@components/CartQuantity";
+import CartQuantity from "@components/customer/CartQuantity";
 import { authContext } from "@context/AuthContext";
 import useProducts from "@hooks/useProducts";
 
