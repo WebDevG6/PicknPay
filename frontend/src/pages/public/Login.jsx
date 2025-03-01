@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { Button, Form, Input, Alert, Checkbox } from "antd";
-import { useLogin, useRole } from "../hooks/auth";
+import { useLogin, useRole } from "@hooks/auth";
 
 function Login() {
     const navigate = useNavigate();

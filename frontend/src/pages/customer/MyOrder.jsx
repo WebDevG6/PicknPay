@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router";
+import { authContext } from "@context/AuthContext";
 import { Tabs, List, Card, Tag } from "antd";
-import { authContext } from "../../context/AuthContext";
 import {
     CheckCircleOutlined,
     CloseCircleOutlined,
@@ -9,7 +10,6 @@ import {
     WalletOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
 
 const statusConfig = {
     processing: { color: "processing", icon: <SyncOutlined />, label: "กำลังดำเนินการชำระเงิน" },

@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from "react";
-import ProductCarousel from "../components/ProductCarousel";
-import { useProductDetail } from "../hooks/query";
-import { useParams } from "react-router-dom";
-import { Spin, Rate, Button, InputNumber, notification } from "antd";
-import { useAddItem } from "../hooks/service";
-import ProductReview from "../components/user/ProductReview";
+import { useParams } from "react-router";
+import ProductCarousel from "@components/ProductCarousel";
+import { useProductDetail } from "@hooks/query";
+import { useAddItem } from "@hooks/service";
+import ProductReview from "@components/user/ProductReview";
+import { Rate, Button, InputNumber, notification } from "antd";
 
 function Product() {
     const addItem = useAddItem();
@@ -38,7 +38,7 @@ function Product() {
 
     const averageRating =
         productDetail?.reviews?.reduce((acc, review) => acc + Number(review.rating), 0) /
-        productDetail?.reviews?.length || 0;
+            productDetail?.reviews?.length || 0;
 
     const handleAddItem = async () => {
         const quantity = quantityRef.current.value;

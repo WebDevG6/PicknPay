@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import conf from "../conf/main";
-import ax from "../conf/ax";
+import conf from "@conf/main";
+import ax from "@conf/ax";
 import { message } from "antd";
 
 const fetchCategories = async () => {

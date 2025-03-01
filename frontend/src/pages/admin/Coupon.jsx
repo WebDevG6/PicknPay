@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Modal, Form, Input, Select, InputNumber, message, Button, Table, Tag, DatePicker } from "antd";
 import { PlusCircleOutlined, FilterOutlined, DeleteOutlined } from "@ant-design/icons";
-import { useCouponQuery } from "../../hooks/queryAdmin";
-import { useCouponCreate, useCouponDelete } from "../../hooks/serviceAdmin";
+import { useCouponQuery } from "@hooks/queryAdmin";
+import { useCouponCreate, useCouponDelete } from "@hooks/serviceAdmin";
 import dayjs from "dayjs";
 
 const Coupon = () => {

@@ -1,7 +1,7 @@
-import { Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { create } from 'zustand';
-import ax from "../../conf/ax";
+import { Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { create } from "zustand";
+import ax from "@conf/ax";
 
 const useEditProductStore = create((set) => ({
     loading: false,
@@ -32,11 +32,11 @@ const useEditProductStore = create((set) => ({
 
     confirmDeletePicture: (picture) => {
         Modal.confirm({
-            title: 'คุณแน่ใจหรือไม่?',
+            title: "คุณแน่ใจหรือไม่?",
             icon: <ExclamationCircleOutlined />,
-            content: 'การลบรูปนี้จะไม่สามารถกู้คืนได้',
-            okText: 'ใช่, ลบเลย',
-            cancelText: 'ยกเลิก',
+            content: "การลบรูปนี้จะไม่สามารถกู้คืนได้",
+            okText: "ใช่, ลบเลย",
+            cancelText: "ยกเลิก",
             onOk: () => {
                 set((state) => {
                     const updated = state.pictureList.filter((pic) => pic !== picture);
@@ -44,8 +44,7 @@ const useEditProductStore = create((set) => ({
                     return { pictureList: updated, selectedPicture: newSelectedPicture };
                 });
             },
-            onCancel: () => {
-            },
+            onCancel: () => {},
         });
     },
 

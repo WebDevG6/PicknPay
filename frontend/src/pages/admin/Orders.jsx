@@ -8,12 +8,12 @@ import {
     WalletOutlined,
     EditOutlined,
 } from "@ant-design/icons";
-import { useOrderQuery } from "../../hooks/queryAdmin";
-import dayjs from "dayjs";
-import { useOrderUpdate } from "../../hooks/service";
+import { useOrderQuery } from "@hooks/queryAdmin";
+import { useOrderUpdate } from "@hooks/service";
 import { useQueryClient } from "@tanstack/react-query";
-import { useOrderDetail } from "../../hooks/query";
-import conf from "../../conf/main";
+import { useOrderDetail } from "@hooks/query";
+import conf from "@conf/main";
+import dayjs from "dayjs";
 
 function Orders() {
     const { data: orders, isLoading } = useOrderQuery();

@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
+import { Outlet } from "react-router";
 import Cookies from "js-cookie";
-import conf from "../conf/main";
-import ax, { axData } from "../conf/ax";
-import { authContext } from "./AuthContext";
+import conf from "@conf/main";
+import ax, { axData } from "@conf/ax";
+import { authContext } from "@context/AuthContext";
 
 export default function CheckAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);

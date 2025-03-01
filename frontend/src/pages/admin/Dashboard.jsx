@@ -1,7 +1,6 @@
-import { Card, Row, Space, Statistic, Col, Table, Divider, theme } from "antd";
-import React from "react";
-import useDataAdmin from "../../hooks/useDataAdmin";
-import useProducts from "../../hooks/useProducts";
+import { Card, Row, Space, Statistic, Col, Table, Divider } from "antd";
+import useDataAdmin from "@hooks/useDataAdmin";
+import useProducts from "@hooks/useProducts";
 import { ShoppingOutlined, UserOutlined, DollarOutlined, ProductOutlined } from "@ant-design/icons";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
 import {

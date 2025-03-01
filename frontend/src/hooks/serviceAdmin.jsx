@@ -1,5 +1,5 @@
-import ax from "../conf/ax";
-import conf from "../conf/main";
+import ax from "@conf/ax";
+import conf from "@conf/main";
 import { useMutation } from "@tanstack/react-query";
 
 export function useCouponCreate() {

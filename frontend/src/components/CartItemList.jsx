@@ -1,11 +1,10 @@
-import React, { useCallback, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useContext } from "react";
+import { useNavigate } from "react-router";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
-import { InputNumber } from "antd";
-import { useUpdateCartItem, useDeleteCartItem } from "../hooks/query";
-import { authContext } from "../context/AuthContext";
-import { Tag } from "antd";
+import { InputNumber, Tag } from "antd";
+import { useUpdateCartItem, useDeleteCartItem } from "@hooks/query";
+import { authContext } from "@context/AuthContext";
 import debounce from "lodash.debounce";
 
 function CartItemList({ dataSource }) {

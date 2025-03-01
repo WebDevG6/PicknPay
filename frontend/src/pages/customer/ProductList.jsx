@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { List, Button, Layout, Spin, Empty, ConfigProvider } from "antd";
+import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router";
+import { List, Button, Layout, Empty, ConfigProvider } from "antd";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
-import useProducts from "../../hooks/useProducts";
-import usePriceStore from "../../components/user/ProductList/usePriceStore";
-import useBrandStore from "../../components/user/ProductList/useBrandStore";
-import useCategoryStore from "../../components/user/ProductList/useCategoryStore";
-import ProductListCard from "../../components/user/ProductList/ProductListCard";
-import ProductListFilter from "../../components/user/ProductList/ProductListFilter";
+import useProducts from "@hooks/useProducts";
+import usePriceStore from "@components/user/ProductList/usePriceStore";
+import useBrandStore from "@components/user/ProductList/useBrandStore";
+import useCategoryStore from "@components/user/ProductList/useCategoryStore";
+import ProductListCard from "@components/user/ProductList/ProductListCard";
+import ProductListFilter from "@components/user/ProductList/ProductListFilter";
 
 const { Content } = Layout;
 const PAGE_SIZE = 12;
@@ -29,10 +29,13 @@ const ProductList = () => {
         return (
             location.search === "?" ||
             (params.has("category") && !category) ||
-            ([...params.keys()].some(key => key !== "category"))
+            [...params.keys()].some((key) => key !== "category")
         );
     }, [location.search, params, category]);
-    const isProductsPage = useMemo(() => location.pathname === "/products" && !hasInvalidQuery, [location.pathname, hasInvalidQuery]);
+    const isProductsPage = useMemo(
+        () => location.pathname === "/products" && !hasInvalidQuery,
+        [location.pathname, hasInvalidQuery]
+    );
 
     useEffect(() => {
         if (productsLoading) return;
@@ -42,9 +45,7 @@ const ProductList = () => {
         if (isProductsPage && !category) {
             newFilteredProducts = products || [];
         } else if (VALID_CATEGORIES.includes(category)) {
-            newFilteredProducts = products.filter(
-                (product) => product.category.name.trim().toLowerCase() === category
-            );
+            newFilteredProducts = products.filter((product) => product.category.name.trim().toLowerCase() === category);
         }
         newFilteredProducts = newFilteredProducts.filter(
             (product) => product.price >= price[0] && product.price <= price[1]
@@ -64,8 +65,6 @@ const ProductList = () => {
 
         setFilteredProducts(newFilteredProducts);
     }, [products, category, price, productsLoading, params, selectedBrand, categoryMenu]);
-
-
 
     const loadMoreProducts = () => setVisibleCount((prev) => prev + PAGE_SIZE);
 

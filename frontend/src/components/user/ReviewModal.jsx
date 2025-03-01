@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { Modal, Form, Input, message, Rate } from "antd";
-import conf from "../../conf/main";
-import { authContext } from "../../context/AuthContext";
-import { useReviewCreate } from "../../hooks/service";
+import conf from "@conf/main";
+import { authContext } from "@context/AuthContext";
+import { useReviewCreate } from "@hooks/service";
 
 const { TextArea } = Input;
 

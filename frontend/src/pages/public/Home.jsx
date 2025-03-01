@@ -1,7 +1,7 @@
 import React from "react";
-import CarouselHome from "../components/CarouselHome";
-import RecommendedItem from "../components/RecommendedItem";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
+import CarouselHome from "@components/CarouselHome";
+import RecommendedItem from "@components/RecommendedItem";
 
 const categories = [
     {

@@ -1,7 +1,6 @@
-import React from "react";
-import useProducts from "../hooks/useProducts";
-import { Link } from "react-router-dom";
-import conf from "../conf/main";
+import { Link } from "react-router";
+import useProducts from "@hooks/useProducts";
+import conf from "@conf/main";
 import { Spin } from "antd";
 
 function RecommendedItem() {

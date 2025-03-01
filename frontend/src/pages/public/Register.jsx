@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useState } from "react";
 import { Button, Form, Input, Alert } from "antd";
-import RegisterBar from "../components/RegisterBar";
-import { useRegister, useProfile } from "../hooks/auth";
+import RegisterBar from "@components/RegisterBar";
+import { useRegister, useProfile } from "@hooks/auth";
+
 const { TextArea } = Input;
 
 function Register() {

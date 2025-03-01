@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo, useLayoutEffect } from "react";
+import { useState, useRef, useCallback, useMemo, useLayoutEffect } from "react";
 import { Button, Drawer, Flex, ConfigProvider, Divider, Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { SlidersHorizontal } from "lucide-react";
@@ -38,7 +38,10 @@ const ProductListFilter = ({ products }) => {
     const location = useLocation();
     const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
     const hasCategoryParam = useMemo(() => params.has("category"), [params]);
-    const isProductsPage = useMemo(() => location.pathname === "/products" && !hasCategoryParam, [location.pathname, hasCategoryParam]);
+    const isProductsPage = useMemo(
+        () => location.pathname === "/products" && !hasCategoryParam,
+        [location.pathname, hasCategoryParam]
+    );
     const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
     const availableCategories = useMemo(() => {
@@ -153,10 +156,18 @@ const ProductListFilter = ({ products }) => {
                             </Button>
 
                             {isProductsPage && (
-                                <FilterDropdown label={`หมวดหมู่ ${categoryMenu ? `: ${categoryMenu}` : ""}`} overlay={categoryDropdown} onOpenChange={setCategoryDropdownOpen} />
+                                <FilterDropdown
+                                    label={`หมวดหมู่ ${categoryMenu ? `: ${categoryMenu}` : ""}`}
+                                    overlay={categoryDropdown}
+                                    onOpenChange={setCategoryDropdownOpen}
+                                />
                             )}
 
-                            <FilterDropdown label="ช่วงราคา" overlay={priceDropdown} onOpenChange={handleDropdownVisibleChange} />
+                            <FilterDropdown
+                                label="ช่วงราคา"
+                                overlay={priceDropdown}
+                                onOpenChange={handleDropdownVisibleChange}
+                            />
                             <FilterDropdown label="แบรนด์" overlay={brandDropdown} />
 
                             <Button
@@ -181,10 +192,18 @@ const ProductListFilter = ({ products }) => {
                             </Button>
 
                             {isProductsPage && (
-                                <FilterDropdown label={`หมวดหมู่ ${categoryMenu ? `: ${categoryMenu}` : ""}`} overlay={categoryDropdown} onOpenChange={setCategoryDropdownOpen} />
+                                <FilterDropdown
+                                    label={`หมวดหมู่ ${categoryMenu ? `: ${categoryMenu}` : ""}`}
+                                    overlay={categoryDropdown}
+                                    onOpenChange={setCategoryDropdownOpen}
+                                />
                             )}
 
-                            <FilterDropdown label="ช่วงราคา" overlay={priceDropdown} onOpenChange={handleDropdownVisibleChange} />
+                            <FilterDropdown
+                                label="ช่วงราคา"
+                                overlay={priceDropdown}
+                                onOpenChange={handleDropdownVisibleChange}
+                            />
                             <FilterDropdown label="แบรนด์" overlay={brandDropdown} />
 
                             <Button
