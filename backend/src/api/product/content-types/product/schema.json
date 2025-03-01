@@ -59,6 +59,10 @@
       "relation": "manyToOne",
       "target": "api::brand.brand",
       "inversedBy": "products"
+    },
+    "discountAmount": {
+      "type": "decimal",
+      "default": 0
     }
   }
 }
