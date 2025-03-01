@@ -67,3 +67,18 @@ export function useOrderUpdate() {
         },
     });
 }
+
+export function useReviewCreate() {
+    return useMutation({
+        mutationFn: async ({ productId, comment, rating }) => {
+            const response = await ax.post(conf.reviewEndpoint, {
+                data: {
+                    comment: comment,
+                    product: Number(productId),
+                    rating: rating,
+                },
+            });
+            return response.data.data;
+        },
+    });
+}
