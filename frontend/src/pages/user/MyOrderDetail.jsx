@@ -12,6 +12,7 @@ import { Steps } from "antd";
 import conf from "../../conf/main";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import ReviewModal from "../../components/user/ReviewModal";
 
 function MyOrderDetail() {
     const orderDetail = useOrderDetail();
@@ -86,12 +87,17 @@ function MyOrderDetail() {
                                             จำนวน: {item.quantity} ชิ้น <br />฿
                                             {Number(item.productPrice).toLocaleString("en-US")}
                                         </p>
-                                        <p
-                                            onClick={() => navigate(`/products/${item.productId}`)}
-                                            className="text-xs text-gray-500 cursor-pointer hover:underline"
-                                        >
-                                            รายละเอียดเพิ่มเติม
-                                        </p>
+                                        <div className="flex flex-row gap-4">
+                                            <p
+                                                onClick={() => navigate(`/products/${item.productId}`)}
+                                                className="text-xs text-gray-500 cursor-pointer hover:underline"
+                                            >
+                                                รายละเอียดเพิ่มเติม
+                                            </p>
+                                            {orderDetail?.data?.order.status_order === "delivered" && (
+                                                <ReviewModal product={item} />
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 

@@ -23,6 +23,7 @@ const conf = {
     couponListEndpoint: "/coupons",
     couponCreateEndpoint: "/couponCreate",
     couponDeleteEndpoint: "/couponDelete",
+    reviewEndpoint: "/reviews",
 };
 
 export default conf;

@@ -54,13 +54,16 @@ const OrderList = ({ orders }) => {
                             }
                             className="w-full"
                         >
-                            <p>
-                                <b>วันที่สั่งซื้อ:</b> {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss")}
-                            </p>
-                            <p>
-                                <b>จำนวนสินค้า:</b>{" "}
-                                {item.order_items.reduce((sum, item) => sum + Number(item.quantity), 0)} ชิ้น
-                            </p>
+                            <div className="block gap-6">
+                                <div className="flex flex-row gap-1">
+                                    <p className="font-semibold">วันที่สั่งซื้อ:</p>
+                                    {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                                </div>
+                                <div className="flex flex-row gap-1">
+                                    <p className="font-semibold">จำนวนสินค้า:</p>
+                                    {item.order_items.reduce((sum, item) => sum + Number(item.quantity), 0)} ชิ้น
+                                </div>
+                            </div>
                         </Card>
                     </List.Item>
                 );
