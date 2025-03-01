@@ -22,6 +22,7 @@ const conf = {
     validateCouponEndpoint: "validate-coupon",
     couponListEndpoint: "/coupons",
     couponCreateEndpoint: "/couponCreate",
+    couponDeleteEndpoint: "/couponDelete",
 };
 
 export default conf;

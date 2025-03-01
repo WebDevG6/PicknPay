@@ -28,4 +28,17 @@ module.exports = {
             return { error: error.message };
         }
     },
+    async couponDelete(ctx) {
+        const { couponId } = ctx.request.body;
+        if (!couponId) {
+            return ctx.badRequest("couponId is required.");
+        }
+        try {
+            const deleted = await stripe.coupons.del(couponId);
+            return deleted;
+        } catch (error) {
+            ctx.response.status = 500;
+            return { error: error.message };
+        }
+    },
 };

@@ -10,3 +10,12 @@ export function useCouponCreate() {
         },
     });
 }
+
+export function useCouponDelete() {
+    return useMutation({
+        mutationFn: async ({ couponId }) => {
+            const response = await ax.post(conf.couponDeleteEndpoint, { couponId });
+            return response.data.data;
+        },
+    });
+}

@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from "react";
 import { Modal, Form, Input, Select, InputNumber, message, Button, Table, Tag, DatePicker } from "antd";
-import { PlusCircleOutlined, FilterOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, FilterOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useCouponQuery } from "../../hooks/queryAdmin";
-import { useCouponCreate } from "../../hooks/serviceAdmin";
+import { useCouponCreate, useCouponDelete } from "../../hooks/serviceAdmin";
 import dayjs from "dayjs";
 
 const Coupon = () => {
     const { data: coupons, isLoading, refetch } = useCouponQuery();
     const couponCreate = useCouponCreate();
+    const couponDelete = useCouponDelete();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filter, setFilter] = useState("all");
     const [form] = Form.useForm();
@@ -41,11 +42,25 @@ const Coupon = () => {
                     },
                 }
             );
+            setIsModalOpen(false);
         } catch (error) {
             message.error("เพิ่มคูปองล้มเหลว");
-        } finally {
-            setIsModalOpen(false);
         }
+    };
+
+    const handleDelete = (couponId) => {
+        couponDelete.mutate(
+            { couponId },
+            {
+                onSuccess: () => {
+                    message.success("ลบคูปองสำเร็จ");
+                    refetch();
+                },
+                onError: () => {
+                    message.error("ลบคูปองล้มเหลว");
+                },
+            }
+        );
     };
 
     const showModal = () => {
@@ -58,23 +73,27 @@ const Coupon = () => {
 
     const columns = [
         {
+            title: "Coupon",
+            dataIndex: "id",
+            key: "id",
+        },
+        {
+            title: "Discount",
+            render: (_, record) => {
+                if (record.percent_off !== null) {
+                    return `${record.percent_off}%`;
+                } else if (record.amount_off !== null) {
+                    return `${record.amount_off / 100} THB`;
+                }
+                return "-";
+            },
+        },
+        {
             title: "Status",
             dataIndex: "valid",
             key: "valid",
             render: (status) => <Tag color={status ? "success" : "error"}>{status ? "ใช้งานอยู่" : "หมดอายุ"}</Tag>,
         },
-        {
-            title: "Coupon",
-            dataIndex: "id",
-            key: "id",
-        },
-
-        {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
-        },
-
         {
             title: "Expires",
             dataIndex: "redeem_by",
@@ -91,6 +110,12 @@ const Coupon = () => {
             dataIndex: "max_redemptions",
             key: "max_redemptions",
             render: (max) => (max ? max : "-"),
+        },
+        {
+            title: "Action",
+            render: (_, record) => (
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} />
+            ),
         },
     ];
 
@@ -165,7 +190,7 @@ const Coupon = () => {
                             <InputNumber min={1} />
                         </Form.Item>
                         <Form.Item name="expired" label="วันหมดอายุ">
-                            <DatePicker showTime />
+                            <DatePicker showTime placeholder="" />
                         </Form.Item>
                     </Form>
                 </Modal>

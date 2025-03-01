@@ -10,5 +10,10 @@ module.exports = {
             path: "/couponCreate",
             handler: "coupon.couponCreate",
         },
+        {
+            method: "POST",
+            path: "/couponDelete",
+            handler: "coupon.couponDelete",
+        },
     ],
 };
