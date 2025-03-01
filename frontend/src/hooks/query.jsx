@@ -1,8 +1,8 @@
-import ax from "../conf/ax";
 import { useContext } from "react";
-import conf from "../conf/main";
+import ax from "@conf/ax";
+import conf from "@conf/main";
 import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
-import { authContext } from "../context/AuthContext";
+import { authContext } from "@context/AuthContext";
 
 export function useCartItem() {
     const { userInfo } = useContext(authContext);

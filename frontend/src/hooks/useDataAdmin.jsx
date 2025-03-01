@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import conf from "../conf/main";
-import ax from "../conf/ax";
+import conf from "@conf/main";
+import ax from "@conf/ax";
 
 // const fetchOrdersCount = async () => {
 //     const response = await ax.get(conf.apiUrlPrefix + "/orders/count");
@@ -28,23 +28,32 @@ const useDataAdmin = () => {
     //     queryFn: fetchOrdersCount,
     // });
 
-    const { data: totalProducts = 0, error: productsError, isLoading: productsLoading }
-        = useSuspenseQuery({
-            queryKey: ["productsCount"],
-            queryFn: fetchProductsCount,
-        });
+    const {
+        data: totalProducts = 0,
+        error: productsError,
+        isLoading: productsLoading,
+    } = useSuspenseQuery({
+        queryKey: ["productsCount"],
+        queryFn: fetchProductsCount,
+    });
 
-    const { data: totalCustomers = 0, error: cusError, isLoading: cusLoading }
-        = useSuspenseQuery({
-            queryKey: ["cusCount"],
-            queryFn: fetchCusCount,
-        });
+    const {
+        data: totalCustomers = 0,
+        error: cusError,
+        isLoading: cusLoading,
+    } = useSuspenseQuery({
+        queryKey: ["cusCount"],
+        queryFn: fetchCusCount,
+    });
 
-    const { data: customers = [], error: customersError, isLoading: customersLoading }
-        = useSuspenseQuery({
-            queryKey: ["customers"],
-            queryFn: fetchCustomers,
-        });
+    const {
+        data: customers = [],
+        error: customersError,
+        isLoading: customersLoading,
+    } = useSuspenseQuery({
+        queryKey: ["customers"],
+        queryFn: fetchCustomers,
+    });
 
     return {
         // totalOrders,

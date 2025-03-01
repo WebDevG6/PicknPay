@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { Table, Button, Modal, Image, Spin, Input, Select, Slider } from "antd";
 import { EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
-import useProducts from "../../hooks/useProducts";
-import conf from "../../conf/main";
+import useProducts from "@hooks/useProducts";
+import conf from "@conf/main";
 import { motion } from "framer-motion";
 
 const { Option } = Select;

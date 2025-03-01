@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { authContext } from "../context/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import { authContext } from "@context/AuthContext";
 
 const CartQuantity = () => {
     const { userInfo } = useContext(authContext);

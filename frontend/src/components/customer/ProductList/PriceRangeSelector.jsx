@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
 import { Input } from "antd";
@@ -33,7 +32,7 @@ const PriceRangeSelector = () => {
                 onInput={handleSliderChange}
                 style={{
                     "--range-slider-thumb-width": "8px",
-                    "--range-slider-thumb-height": "8px"
+                    "--range-slider-thumb-height": "8px",
                 }}
             />
             <div className="flex items-center gap-4">

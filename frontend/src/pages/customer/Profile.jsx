@@ -1,7 +1,7 @@
-import { Button, Form, Input, Spin, ConfigProvider, message } from "antd";
 import { useEffect, useState, useContext } from "react";
-import { authContext } from "../../context/AuthContext";
-import { useProfile } from "../../hooks/auth";
+import { Button, Form, Input, ConfigProvider, message } from "antd";
+import { authContext } from "@context/AuthContext";
+import { useProfile } from "@hooks/auth";
 
 function Profile() {
     const [messageApi, contextHolder] = message.useMessage();

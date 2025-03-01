@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useOrderDetail } from "../../hooks/query";
+import { useParams, useNavigate } from "react-router";
+import { Steps } from "antd";
 import {
     CheckCircleOutlined,
     CloseCircleOutlined,
@@ -8,11 +8,10 @@ import {
     TruckOutlined,
     WalletOutlined,
 } from "@ant-design/icons";
-import { Steps } from "antd";
-import conf from "../../conf/main";
-import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import ReviewModal from "../../components/user/ReviewModal";
+import conf from "@conf/main";
+import { useOrderDetail } from "@hooks/query";
+import ReviewModal from "@components/customer/ReviewModal";
 
 function MyOrderDetail() {
     const orderDetail = useOrderDetail();

@@ -7,7 +7,7 @@ const useFilterStore = create((set) => ({
     resetFilters: () => {
         useBrandStore.getState().selectedBrand.length && useBrandStore.setState({ selectedBrand: [] });
         usePriceStore.getState().setPrice([0, 100000]);
-        useCategoryStore.getState().setCategoryMenu(null)
+        useCategoryStore.getState().setCategoryMenu(null);
     },
 }));
 

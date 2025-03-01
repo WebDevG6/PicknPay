@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Button, ConfigProvider, Drawer, AutoComplete } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import CartQuantity from "../components/CartQuantity";
-import { authContext } from "../context/AuthContext";
-import useProducts from "../hooks/useProducts";
+import CartQuantity from "@components/customer/CartQuantity";
+import { authContext } from "@context/AuthContext";
+import useProducts from "@hooks/useProducts";
 
 const imageProfileMockUrl =
     "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg";

@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { Outlet, Navigate } from "react-router-dom";
-import { authContext } from "./AuthContext";
+import { useContext } from "react";
+import { Outlet, Navigate } from "react-router";
+import { authContext } from "@context/AuthContext";
 
 function RequireCustomerRole() {
     const { userInfo } = useContext(authContext);

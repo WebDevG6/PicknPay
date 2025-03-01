@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { Carousel, Image } from "antd";
-import conf from "../conf/main";
+import conf from "@conf/main";
 
 function ProductCarousel({ images }) {
     const [activeIndex, setActiveIndex] = useState(0);

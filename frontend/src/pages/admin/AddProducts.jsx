@@ -1,10 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { Form, Input, InputNumber, message, Select, Button } from "antd";
-import UploadProductImages from "../../components/admin/UploadProductImages";
-import CategoryButtons from "../../components/admin/CategoryButtons";
-import ax from "../../conf/ax";
-import useProducts from "../../hooks/useProducts";
-import useEditProductStore from "../../components/admin/useEditProductStore";
+import UploadProductImages from "@components/admin/UploadProductImages";
+import CategoryButtons from "@components/admin/CategoryButtons";
+import useEditProductStore from "@components/admin/useEditProductStore";
+import ax from "@conf/ax";
+import useProducts from "@hooks/useProducts";
 
 const AddProduct = () => {
     const { categories } = useProducts();

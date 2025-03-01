@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Space, Table, Input } from "antd";
-import useDataAdmin from "../../hooks/useDataAdmin";
+import useDataAdmin from "@hooks/useDataAdmin";
 import { motion } from "framer-motion";
 
 const Customers = () => {
@@ -18,7 +18,7 @@ const Customers = () => {
         });
     };
 
-    const dataSource = customers.map(customer => ({
+    const dataSource = customers.map((customer) => ({
         key: customer.id,
         firstname: customer.firstname || "-",
         lastname: customer.lastname || "-",
@@ -27,9 +27,7 @@ const Customers = () => {
     }));
 
     const filteredData = dataSource.filter((record) =>
-        Object.values(record).some(
-            (value) => String(value).toLowerCase().includes(searchedText)
-        )
+        Object.values(record).some((value) => String(value).toLowerCase().includes(searchedText))
     );
 
     const columns = [
@@ -83,7 +81,6 @@ const Customers = () => {
                 allowClear
             />
             <Space size={20} direction="vertical">
-
                 <div className="flex flex-col min-h-[500px] rounded-2xl">
                     <Table
                         columns={columns}
