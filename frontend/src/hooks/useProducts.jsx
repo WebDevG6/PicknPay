@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import conf from "../conf/main";;
+import conf from "../conf/main";
 import ax from "../conf/ax";
 import { message } from "antd";
 
@@ -43,7 +43,7 @@ const useProducts = () => {
         },
         onSuccess: () => {
             message.success("ลบสินค้าสำเร็จ!");
-            refetchProducts()
+            refetchProducts();
         },
         onError: (error) => {
             console.error("Error deleting product:", error);
@@ -58,10 +58,9 @@ const useProducts = () => {
             });
         },
         onSuccess: () => {
-            refetchProducts()
+            refetchProducts();
         },
     });
-
 
     return {
         categories,
