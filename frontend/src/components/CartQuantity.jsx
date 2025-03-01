@@ -6,6 +6,9 @@ const CartQuantity = () => {
     const [quantity, setQuantity] = useState(0);
 
     useEffect(() => {
+        if (!userInfo.cart_id) {
+            return;
+        }
         if (userInfo.cart_id.cart_items_id.length !== 0) {
             setQuantity(
                 userInfo.cart_id.cart_items_id

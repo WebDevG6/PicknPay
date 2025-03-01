@@ -36,7 +36,6 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                 success_url: `${process.env.CLIENT_URL}/customer/order`,
                 cancel_url: `${process.env.CLIENT_URL}?canceled=true`,
                 line_items: line_items,
-                discounts: couponId ? [{ coupon: couponId }] : [],
                 shipping_address_collection: { allowed_countries: ["TH"] },
                 locale: "th",
                 customer_email: ctx.state.user.email,
@@ -54,6 +53,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                     ),
                 },
                 expires_at: Math.floor(Date.now() / 1000) + 1800,
+                ...(couponId ? { discounts: [{ coupon: couponId }] } : { allow_promotion_codes: true }),
             });
 
             await strapi.service("api::order.order").create({

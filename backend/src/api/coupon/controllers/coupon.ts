@@ -22,6 +22,11 @@ module.exports = {
         }
         try {
             const coupon = await stripe.coupons.create({ ...couponDetail, name: couponDetail.id });
+            console.log(coupon);
+            await stripe.promotionCodes.create({
+                code: coupon.id,
+                coupon: coupon.id,
+            });
             return coupon;
         } catch (error) {
             ctx.response.status = 500;
