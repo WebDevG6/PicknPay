@@ -62,7 +62,10 @@ export default function userLayout() {
                             </div>
                             <div className="flex items-center gap-6">
                                 <div className="shrink-0">
-                                    <p className="text-3xl font-bold font-[Koulen] tracking-wider text-[#4169E2]">
+                                    <p
+                                        onClick={() => navigate("/")}
+                                        className="text-3xl font-bold font-[Koulen] tracking-wider text-[#4169E2] cursor-pointer logoText"
+                                    >
                                         PICK&PAY
                                     </p>
                                 </div>
@@ -70,7 +73,7 @@ export default function userLayout() {
                                     <Button
                                         style={{ padding: 8, borderRadius: 5 }}
                                         type="primary"
-                                        onClick={() => navigate("/")}
+                                        onClick={() => navigate("/products")}
                                     >
                                         <i className="fi fi-rr-apps text-xl translate-y-[2.8px]"></i>
                                         <span className="font-[Kanit]">สินค้าทั้งหมด</span>
