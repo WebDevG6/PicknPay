@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
             onClick={() => navigate(`/products/${product.id}`)}
             key={product.id}
             hoverable
-            className="border shadow-md hover:shadow-lg transition-transform transform hover:scale-103 rounded-lg overflow-hidden"
+            className="border border-black shadow-sm hover:shadow-md transition-transform transform hover:scale-102 ease-in-out rounded-lg overflow-hidden"
             cover={
                 <div className="relative w-full flex justify-center items-center bg-white p-4 h-36 sm:h-44 md:h-48 lg:h-52 xl:h-60">
                     {discountPercentage < 100 && (
@@ -27,11 +27,11 @@ const ProductCard = ({ product }) => {
                             ลด {discountPercentage}%
                         </div>
                     )}
-                    <div className="relative w-full h-full">
+                    <div className="w-full h-full overflow-hidden">
                         <img
                             alt={product.name}
                             src={imageUrl}
-                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-contain rounded-md"
+                            className="absolute inset-0 w-full h-full object-contain rounded-md transition-transform duration-600 ease-in-out hover:scale-118"
                         />
                     </div>
                 </div>
@@ -51,7 +51,7 @@ const ProductCard = ({ product }) => {
                         </span>
                     </>
                 ) : (
-                    <span className="text-base sm:text-lg md:text-lg font-bold text-black truncate">
+                    <span className="text-base sm:text-lg md:text-xl font-bold text-black truncate">
                         ฿{Number(product.price).toLocaleString()}
                     </span>
                 )}

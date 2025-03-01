@@ -12,7 +12,7 @@ const VALID_CATEGORIES = ["headphone", "mouse", "keyboard", "microphone", "compu
 
 const FilterDropdown = ({ label, overlay, onOpenChange }) => (
     <Dropdown overlay={overlay} trigger={["click"]} onOpenChange={onOpenChange}>
-        <Button type="primary" className="w-auto px-4 py-2 flex items-center gap-2 min-w-fit relative">
+        <Button type="primary" className="w-auto px-4 py-2 flex items-center gap-2 min-w-fit">
             <span className="font-[Kanit] whitespace-nowrap">{label}</span>
             <DownOutlined />
         </Button>
@@ -138,11 +138,11 @@ const ProductListFilter = ({ products }) => {
                             colorPrimaryHover: "#e0e0e0",
                             colorPrimaryActive: "#707070",
                         },
-                        components: { Button: { colorTextLightSolid: "#212432" } },
+                        components: { Button: { colorTextLightSolid: "#212432" }, Spin: { defaultIndicator: null } },
                     }}
                 >
-                    <Flex vertical gap="small" className="w-full min-w-0 overflow-hidden">
-                        <div className="hidden md:flex flex-wrap gap-2 justify-start w-full relative">
+                    <Flex vertical gap="small" className="w-full min-w-0 overflow-visible">
+                        <div className="hidden md:flex flex-wrap gap-2 justify-start w-full">
                             <Button
                                 type="primary"
                                 onClick={showDrawer}
@@ -170,7 +170,7 @@ const ProductListFilter = ({ products }) => {
                             </Button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 md:hidden w-full relative">
+                        <div className="grid grid-cols-2 gap-2 md:hidden w-full">
                             <Button
                                 type="primary"
                                 onClick={showDrawer}
