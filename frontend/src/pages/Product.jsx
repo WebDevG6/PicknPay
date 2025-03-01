@@ -41,7 +41,7 @@ function Product() {
 
     const averageRating =
         productDetail?.reviews?.reduce(
-            (acc, review) => acc + review.rating,
+            (acc, review) => acc + Number(review.rating),
             0
         ) / productDetail?.reviews?.length || 0;
 
@@ -75,7 +75,11 @@ function Product() {
                         <div className="flex flex-row items-center gap-4 font-medium">
                             <div className="flex flex-row gap-2">
                                 <p>{averageRating.toFixed(1)}</p>
-                                <Rate disabled value={averageRating} />
+                                <Rate
+                                    disabled
+                                    value={averageRating}
+                                    allowHalf
+                                />
                             </div>
                             <p>{productDetail?.reviews?.length} reviews</p>
                         </div>
