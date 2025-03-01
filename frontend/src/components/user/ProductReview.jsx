@@ -23,7 +23,7 @@ function ProductReview({ reviews }) {
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
                 <p className="font-semibold text-xl">รีวิวสินค้า</p>
-                <div className="flex flex-row items-center gap-4">
+                <div className="flex flex-row items-center gap-4 justify-between">
                     <div className="flex flex-col gap-6 w-[20%] items-center">
                         <p className="font-semibold text-5xl">
                             {averageReview.toFixed(1)}
@@ -40,6 +40,12 @@ function ProductReview({ reviews }) {
                                 />
                             </div>
                         ))}
+                    </div>
+                    <div className="flex flex-col gap-6 w-[20%] items-center">
+                        <p className="font-semibold text-5xl">
+                            {reviews?.length}
+                        </p>
+                        <p className="font-semibold text-xl">รีวิว</p>
                     </div>
                 </div>
             </div>
