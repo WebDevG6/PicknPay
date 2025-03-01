@@ -141,15 +141,18 @@ function AdminLayout() {
                     mode="inline"
                     items={items}
                     onClick={handleMenuClick}
-                    inlineIndent={18} />
+                    inlineIndent={18}
+                />
             </Sider>
             <Drawer
                 title={
-                    <div style={{
-                        width: "100%",
-                        textAlign: "center",
-                        fontSize: "22px"
-                    }}>
+                    <div
+                        style={{
+                            width: "100%",
+                            textAlign: "center",
+                            fontSize: "22px",
+                        }}
+                    >
                         Admin Panel
                     </div>
                 }
@@ -166,15 +169,16 @@ function AdminLayout() {
                 headerStyle={{
                     background: "#002140",
                     color: "white",
-
                 }}
                 closeIcon={
-                    <span style={{
-                        position: "absolute",
-                        left: "16px",
-                        color: "white",
-                        fontSize: "20px"
-                    }}>
+                    <span
+                        style={{
+                            position: "absolute",
+                            left: "16px",
+                            color: "white",
+                            fontSize: "20px",
+                        }}
+                    >
                         ✖
                     </span>
                 }
@@ -242,7 +246,7 @@ function AdminLayout() {
 
                 <Content
                     style={{
-                        padding: 6,
+                        padding: 20,
                         minHeight: 280,
                         background: colorBgContainer,
                         backgroundColor: "#f5f5f5",

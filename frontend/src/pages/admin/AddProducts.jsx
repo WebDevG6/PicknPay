@@ -6,7 +6,6 @@ import ax from "../../conf/ax";
 import useProducts from "../../hooks/useProducts";
 import useEditProductStore from "../../components/admin/useEditProductStore";
 
-
 const AddProduct = () => {
     const { categories } = useProducts();
     const { brands, fetchBrands } = useEditProductStore();
@@ -25,7 +24,6 @@ const AddProduct = () => {
         fetchBrands();
     }, []);
 
-
     const handleChange = (key, value) => {
         setFormData((prev) => ({ ...prev, [key]: value }));
     };
@@ -36,7 +34,6 @@ const AddProduct = () => {
 
     const uploadImages = async () => {
         if (formData.picture.length === 0) return [];
-
 
         const formDataUpload = new FormData();
         console.log("Uploading files:", formData.picture);
@@ -58,7 +55,6 @@ const AddProduct = () => {
         }
     };
 
-
     const [resetImages, setResetImages] = useState(false);
 
     const handleSubmit = async () => {
@@ -67,7 +63,13 @@ const AddProduct = () => {
             return;
         }
 
-        if (!formData.name || !formData.price || !formData.category || !formData.brand || formData.picture.length === 0) {
+        if (
+            !formData.name ||
+            !formData.price ||
+            !formData.category ||
+            !formData.brand ||
+            formData.picture.length === 0
+        ) {
             message.error("กรุณากรอกข้อมูลให้ครบถ้วน!");
             return;
         }
@@ -86,7 +88,7 @@ const AddProduct = () => {
         const uploadedImageIds = await uploadImages();
         if (uploadedImageIds.length === 0) {
             message.error("อัปโหลดรูปภาพล้มเหลว!");
-            console.log(error)
+            console.log(error);
             setIsSubmitting(false);
             return;
         }
@@ -122,7 +124,6 @@ const AddProduct = () => {
 
             setResetImages(true);
             setTimeout(() => setResetImages(false), 500);
-
         } catch (error) {
             console.error("API Error:", error.response?.data || error.message);
             message.error("เกิดข้อผิดพลาดในการเพิ่มสินค้า!");
@@ -131,16 +132,27 @@ const AddProduct = () => {
         }
     };
 
-
     return (
-        <div className="rounded-lg shadow-lg mx-8 my-4 p-8 bg-white">
+        <div className="rounded-lg mt-2 p-8 bg-white">
             <Form layout="vertical" requiredMark={false}>
                 <Form.Item name="name" label="ชื่อสินค้า" rules={[{ message: "กรุณากรอกชื่อสินค้า", required: true }]}>
-                    <Input placeholder="ระบุชื่อสินค้า" maxLength={1000} value={formData.name} onChange={(e) => handleChange("name", e.target.value)} />
+                    <Input
+                        placeholder="ระบุชื่อสินค้า"
+                        maxLength={1000}
+                        value={formData.name}
+                        onChange={(e) => handleChange("name", e.target.value)}
+                    />
                 </Form.Item>
 
                 <Form.Item name="price" label="ราคา" rules={[{ message: "กรุณากรอกราคา", required: true }]}>
-                    <InputNumber style={{ width: "100%" }} min={0} max={1000000} placeholder="กรอกราคาสินค้า (บาท)" value={formData.price} onChange={(value) => handleChange("price", value)} />
+                    <InputNumber
+                        style={{ width: "100%" }}
+                        min={0}
+                        max={1000000}
+                        placeholder="กรอกราคาสินค้า (บาท)"
+                        value={formData.price}
+                        onChange={(value) => handleChange("price", value)}
+                    />
                 </Form.Item>
 
                 <Form.Item name="brand" label="แบรนด์" rules={[{ message: "กรุณาเลือกแบรนด์", required: true }]}>
@@ -154,27 +166,45 @@ const AddProduct = () => {
                     />
                 </Form.Item>
 
-                <Form.Item name="stock" label="จำนวนคงเหลือ(สต็อก)" rules={[{ message: "กรุณากรอกจำนวนสินค้าคงเหลือ", required: true }]}>
-                    <InputNumber style={{ width: "100%" }} min={0} max={10000} placeholder="กรอกจำนวนสินค้าคงเหลือ" value={formData.stock} onChange={(value) => handleChange("stock", value)} />
+                <Form.Item
+                    name="stock"
+                    label="จำนวนคงเหลือ(สต็อก)"
+                    rules={[{ message: "กรุณากรอกจำนวนสินค้าคงเหลือ", required: true }]}
+                >
+                    <InputNumber
+                        style={{ width: "100%" }}
+                        min={0}
+                        max={10000}
+                        placeholder="กรอกจำนวนสินค้าคงเหลือ"
+                        value={formData.stock}
+                        onChange={(value) => handleChange("stock", value)}
+                    />
                 </Form.Item>
 
-                <Form.Item name="description" label="รายละเอียดสินค้า" rules={[{ message: "กรุณากรอกรายละเอียดสินค้า", required: true }]}>
-                    <Input.TextArea placeholder="ใส่รายละเอียดสินค้าให้ครบถ้วน" maxLength={10000} rows={4} value={formData.description} onChange={(e) => handleChange("description", e.target.value)} />
+                <Form.Item
+                    name="description"
+                    label="รายละเอียดสินค้า"
+                    rules={[{ message: "กรุณากรอกรายละเอียดสินค้า", required: true }]}
+                >
+                    <Input.TextArea
+                        placeholder="ใส่รายละเอียดสินค้าให้ครบถ้วน"
+                        maxLength={10000}
+                        rows={4}
+                        value={formData.description}
+                        onChange={(e) => handleChange("description", e.target.value)}
+                    />
                 </Form.Item>
 
                 <CategoryButtons handleCategorySelect={handleCategorySelect} selectedCategory={formData.category} />
 
                 <div className="my-10 bg-white">
-                    <UploadProductImages onImageUpload={(files) => handleChange("picture", files)} reset={resetImages} />
+                    <UploadProductImages
+                        onImageUpload={(files) => handleChange("picture", files)}
+                        reset={resetImages}
+                    />
                 </div>
 
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    loading={isSubmitting}
-                    block
-                    onClick={handleSubmit}
-                >
+                <Button type="primary" htmlType="submit" loading={isSubmitting} block onClick={handleSubmit}>
                     เพิ่มสินค้า
                 </Button>
             </Form>

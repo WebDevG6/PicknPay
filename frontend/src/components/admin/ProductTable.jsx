@@ -25,7 +25,7 @@ const ProductTable = ({ onEdit }) => {
     const handleDelete = () => {
         if (selectedProduct) {
             deleteProduct(selectedProduct.documentId);
-            refetchProducts()
+            refetchProducts();
         }
         setIsModalOpen(false);
     };
@@ -56,79 +56,82 @@ const ProductTable = ({ onEdit }) => {
         }),
     };
 
-    const memoizedColumns = useMemo(() => [
-        {
-            title: "Thumbnail",
-            dataIndex: "picture",
-            className: "items-center",
-            width: 100,
-            render: (pictures) =>
-                pictures?.length ? (
-                    <div className="flex justify-center items-center">
-                        <Image
-                            width={50}
-                            src={`${conf.urlPrefix}${pictures[0].url}`}
-                            placeholder={<Spin />}
-                            loading="lazy"
+    const memoizedColumns = useMemo(
+        () => [
+            {
+                title: "Thumbnail",
+                dataIndex: "picture",
+                className: "items-center",
+                width: 100,
+                render: (pictures) =>
+                    pictures?.length ? (
+                        <div className="flex justify-center items-center">
+                            <Image
+                                width={50}
+                                src={`${conf.urlPrefix}${pictures[0].url}`}
+                                placeholder={<Spin />}
+                                loading="lazy"
+                            />
+                        </div>
+                    ) : (
+                        <div className="text-center">No Image</div>
+                    ),
+            },
+            {
+                title: "Name",
+                dataIndex: "name",
+                width: 300,
+            },
+            {
+                title: "Price",
+                dataIndex: "price",
+                width: 100,
+                render: (price) => `฿${price.toLocaleString()}`,
+            },
+            {
+                title: "Category",
+                dataIndex: "category",
+                render: (category) => category?.name || "-",
+                width: 130,
+            },
+            {
+                title: "Brand",
+                dataIndex: "brands",
+                render: (brand) => brand?.brandname || "-",
+                width: 130,
+            },
+            {
+                title: "Stock",
+                dataIndex: "stock",
+                width: 100,
+            },
+            {
+                title: "Actions",
+                width: 100,
+                render: (_, record) => (
+                    <div className="flex gap-2">
+                        <Button
+                            icon={<EditOutlined />}
+                            onClick={() => onEdit(record)}
+                            className="border-gray-300 text-gray-600 rounded-md p-2 
+                        hover:border-gray-400 hover:bg-gray-100 transition-all duration-300"
+                        />
+                        <Button
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() => showDeleteModal(record)}
+                            className="border-red-300 text-red-600 rounded-md p-2 
+                        hover:border-red-400 hover:bg-red-100 transition-all duration-100"
                         />
                     </div>
-                ) : (
-                    <div className="text-center">No Image</div>
                 ),
-        },
-        {
-            title: "Name",
-            dataIndex: "name",
-            width: 300,
-        },
-        {
-            title: "Price",
-            dataIndex: "price",
-            width: 100,
-            render: (price) => `฿${price.toLocaleString()}`,
-        },
-        {
-            title: "Category",
-            dataIndex: "category",
-            render: (category) => category?.name || "-",
-            width: 130,
-        },
-        {
-            title: "Brand",
-            dataIndex: "brands",
-            render: (brand) => brand?.brandname || "-",
-            width: 130,
-        },
-        {
-            title: "Stock",
-            dataIndex: "stock",
-            width: 100,
-        },
-        {
-            title: "Actions",
-            width: 100,
-            render: (_, record) => (
-                <div className="flex gap-2">
-                    <Button
-                        icon={<EditOutlined />}
-                        onClick={() => onEdit(record)}
-                        className="border-gray-300 text-gray-600 rounded-md p-2 
-                        hover:border-gray-400 hover:bg-gray-100 transition-all duration-300"
-                    />
-                    <Button
-                        danger
-                        icon={<DeleteOutlined />}
-                        onClick={() => showDeleteModal(record)}
-                        className="border-red-300 text-red-600 rounded-md p-2 
-                        hover:border-red-400 hover:bg-red-100 transition-all duration-100"
-                    />
-                </div>
-            ),
-        },
-    ], [onEdit]);
+            },
+        ],
+        [onEdit]
+    );
 
     return (
-        <div className="min-h-[500px] flex flex-col items-center justify-center rounded-xl w-full bg-white shadow-md mt-2 p-[18px]">
+        <div className="min-h-[500px] flex flex-col items-center justify-center rounded-lg  w-full bg-white mt-2 p-[18px]">
             {productsLoading ? (
                 <div className="flex flex-col items-center justify-center h-screen">
                     <Spin size="large" />
@@ -204,7 +207,6 @@ const ProductTable = ({ onEdit }) => {
                         </div>
                     </div>
 
-
                     <div className="flex flex-col min-h-[500px] rounded-2xl">
                         <Table
                             columns={memoizedColumns}
@@ -238,8 +240,12 @@ const ProductTable = ({ onEdit }) => {
                 open={isModalOpen}
                 onCancel={() => setIsModalOpen(false)}
                 footer={[
-                    <Button key="cancel" onClick={() => setIsModalOpen(false)}>ยกเลิก</Button>,
-                    <Button key="delete" type="primary" danger onClick={handleDelete}>ยืนยันลบ</Button>,
+                    <Button key="cancel" onClick={() => setIsModalOpen(false)}>
+                        ยกเลิก
+                    </Button>,
+                    <Button key="delete" type="primary" danger onClick={handleDelete}>
+                        ยืนยันลบ
+                    </Button>,
                 ]}
             >
                 <p>คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้? </p>
