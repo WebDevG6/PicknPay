@@ -3,7 +3,12 @@ module.exports = {
         {
             method: "GET",
             path: "/coupons",
-            handler: "coupon.list",
+            handler: "coupon.couponList",
+        },
+        {
+            method: "POST",
+            path: "/promotions",
+            handler: "coupon.promotionList",
         },
     ],
 };

@@ -23,6 +23,7 @@ import ManangeProducts from "./pages/admin/ManangeProducts";
 import Coupon from "./pages/admin/Coupon";
 import MyOrder from "./pages/user/MyOrder";
 import MyOrderDetail from "./pages/user/MyOrderDetail";
+import Promotion from "./pages/admin/Promotion";
 
 function App() {
     return (
@@ -58,6 +59,7 @@ function App() {
                                 <Route path="orders" element={<Orders />} />
                                 <Route path="customers" element={<Customers />} />
                                 <Route path="coupon" element={<Coupon />} />
+                                <Route path="coupon/:couponId" element={<Promotion />} />
                                 <Route path="products">
                                     <Route index element={<ManangeProducts />} />
                                     <Route path="manage" element={<ManangeProducts />} />

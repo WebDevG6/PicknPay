@@ -21,3 +21,14 @@ export function useCouponQuery() {
         },
     });
 }
+
+export function usePromotionQuery(coupon) {
+    return useSuspenseQuery({
+        queryKey: ["promotions"],
+        queryFn: async () => {
+            const coupons = await ax.post(conf.promotionListEndpoint, { coupon: coupon });
+            return coupons;
+        },
+        enabled: !!coupon,
+    });
+}

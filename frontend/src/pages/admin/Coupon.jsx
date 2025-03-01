@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Table, Tag } from "antd";
 import { PlusCircleOutlined, FilterOutlined } from "@ant-design/icons";
 import { useCouponQuery } from "../../hooks/queryAdmin";
@@ -6,6 +7,7 @@ import dayjs from "dayjs";
 
 const Coupon = () => {
     const { data: coupons, isLoading } = useCouponQuery();
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -66,7 +68,7 @@ const Coupon = () => {
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: () => {
-                                console.log(record);
+                                navigate(`/admin/coupon/${record.id}`);
                             },
                             className: "cursor-pointer",
                         };
