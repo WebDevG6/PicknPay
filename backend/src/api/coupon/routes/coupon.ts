@@ -5,15 +5,5 @@ module.exports = {
             path: "/coupons",
             handler: "coupon.couponList",
         },
-        {
-            method: "POST",
-            path: "/promotions",
-            handler: "coupon.promotionList",
-        },
-        {
-            method: "POST",
-            path: "/getCouponDetail",
-            handler: "coupon.getCouponDetail",
-        },
     ],
 };

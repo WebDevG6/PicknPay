@@ -1,5 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useMemo } from "react";
 import { Button, Table, Tag } from "antd";
 import { PlusCircleOutlined, FilterOutlined } from "@ant-design/icons";
 import { useCouponQuery } from "../../hooks/queryAdmin";
@@ -7,7 +6,14 @@ import dayjs from "dayjs";
 
 const Coupon = () => {
     const { data: coupons, isLoading } = useCouponQuery();
-    const navigate = useNavigate();
+    const [filter, setFilter] = useState("all");
+
+    const filteredCoupons = useMemo(() => {
+        if (!coupons?.data) return [];
+        if (filter === "valid") return coupons.data.filter((coupon) => coupon.valid);
+        if (filter === "expired") return coupons.data.filter((coupon) => !coupon.valid);
+        return coupons.data;
+    }, [coupons, filter]);
 
     const columns = [
         {
@@ -54,30 +60,31 @@ const Coupon = () => {
                     <Button type="primary" icon={<PlusCircleOutlined />}>
                         เพิ่มคูปองใหม่
                     </Button>
-                    <Button variant="outlined" color="primary" icon={<FilterOutlined />}>
+                    <Button
+                        type={filter === "all" ? "primary" : "default"}
+                        icon={<FilterOutlined />}
+                        onClick={() => setFilter("all")}
+                    >
                         คูปองทั้งหมด
                     </Button>
-                    <Button variant="outlined" color="green" icon={<FilterOutlined />}>
+                    <Button
+                        icon={<FilterOutlined />}
+                        onClick={() => setFilter("valid")}
+                        variant={filter === "valid" ? "solid" : "outlined"}
+                        color="green"
+                    >
                         คูปองที่ใช้งานได้
                     </Button>
-                    <Button variant="outlined" danger icon={<FilterOutlined />}>
+                    <Button
+                        type={filter === "expired" ? "primary" : "default"}
+                        danger
+                        icon={<FilterOutlined />}
+                        onClick={() => setFilter("expired")}
+                    >
                         คูปองหมดอายุแล้ว
                     </Button>
                 </div>
-                <Table
-                    onRow={(record, rowIndex) => {
-                        return {
-                            onClick: () => {
-                                navigate(`/admin/coupon/${record.id}`);
-                            },
-                            className: "cursor-pointer",
-                        };
-                    }}
-                    loading={isLoading}
-                    dataSource={coupons.data}
-                    columns={columns}
-                    rowKey="id"
-                />
+                <Table loading={isLoading} dataSource={filteredCoupons} columns={columns} rowKey="id" />
             </div>
         </div>
     );

@@ -21,25 +21,3 @@ export function useCouponQuery() {
         },
     });
 }
-
-export function useCouponDetailQuery(coupon) {
-    return useSuspenseQuery({
-        queryKey: ["couponDetails"],
-        queryFn: async () => {
-            const coupons = await ax.post(conf.couponGetDetailEndpoint, { coupon: coupon });
-            return coupons.data;
-        },
-        enabled: !!coupon,
-    });
-}
-
-export function usePromotionQuery(coupon) {
-    return useSuspenseQuery({
-        queryKey: ["promotions"],
-        queryFn: async () => {
-            const coupons = await ax.post(conf.promotionListEndpoint, { coupon: coupon });
-            return coupons.data;
-        },
-        enabled: !!coupon,
-    });
-}
