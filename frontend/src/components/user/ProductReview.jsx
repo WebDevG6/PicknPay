@@ -6,7 +6,19 @@ function ProductReview({ reviews }) {
         reviews?.reduce((acc, review) => {
             return acc + Number(review.rating);
         }, 0) / reviews?.length || 0;
-    console.log(averageReview);
+    const ratingProgress = (rating) => {
+        const ratingCount = reviews?.filter(
+            (review) => Number(review.rating) === rating
+        ).length;
+        const percentage = (ratingCount / reviews?.length) * 100;
+        return percentage;
+    };
+    const arrayProgress = [5, 4, 3, 2, 1].map((rating) => {
+        return {
+            rating: rating,
+            percentage: ratingProgress(rating),
+        };
+    });
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
@@ -19,32 +31,21 @@ function ProductReview({ reviews }) {
                         <Rate disabled allowHalf value={averageReview} />
                     </div>
                     <div className="flex flex-col gap-1 w-[50%]">
-                        <div className="flex flex-row items-center gap-2 ">
-                            <p className="w-2.5">5</p>
-                            <Progress percent={30} showInfo={false} />
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="w-2.5">4</p>
-                            <Progress percent={30} showInfo={false} />
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="w-2.5">3</p>
-                            <Progress percent={30} showInfo={false} />
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="w-2.5">2</p>
-                            <Progress percent={30} showInfo={false} />
-                        </div>
-                        <div className="flex flex-row items-center gap-2 ">
-                            <p className="w-2.5">1</p>
-                            <Progress percent={30} showInfo={false} />
-                        </div>
+                        {arrayProgress.map((item) => (
+                            <div className="flex flex-row items-center gap-2">
+                                <p className="w-2.5">{item.rating}</p>
+                                <Progress
+                                    percent={item.percentage}
+                                    showInfo={false}
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
             <div className="flex flex-col gap-6">
                 <p className="font-semibold text-xl">รีวิวล่าสุด</p>
-                <Row gutter={16}>
+                <Row gutter={[16, 16]}>
                     {reviews?.map((item) => (
                         <Col span={8}>
                             <Card
