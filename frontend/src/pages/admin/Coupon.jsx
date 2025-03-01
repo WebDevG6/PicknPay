@@ -1,11 +1,50 @@
 import React from "react";
-import { Button, Table } from "antd";
+import { Button, Table, Tag } from "antd";
 import { PlusCircleOutlined, FilterOutlined } from "@ant-design/icons";
 import { useCouponQuery } from "../../hooks/queryAdmin";
+import dayjs from "dayjs";
 
 const Coupon = () => {
     const { data: coupons, isLoading } = useCouponQuery();
-    console.log(coupons);
+
+    const columns = [
+        {
+            title: "Status",
+            dataIndex: "valid",
+            key: "valid",
+            render: (status) => <Tag color={status ? "success" : "error"}>{status ? "ใช้งานอยู่" : "หมดอายุ"}</Tag>,
+        },
+        {
+            title: "Coupon",
+            dataIndex: "id",
+            key: "id",
+        },
+
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+
+        {
+            title: "Expires",
+            dataIndex: "redeem_by",
+            key: "redeem_by",
+            render: (day) => (day ? dayjs.unix(day).format("DD/MM/YYYY HH:mm:ss") : "-"),
+        },
+        {
+            title: "Redemptions",
+            dataIndex: "times_redeemed",
+            key: "times_redeemed",
+        },
+        {
+            title: "Max redemptions",
+            dataIndex: "max_redemptions",
+            key: "max_redemptions",
+            render: (max) => (max ? max : "-"),
+        },
+    ];
+
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <div className="flex flex-col gap-6">
@@ -23,7 +62,20 @@ const Coupon = () => {
                         คูปองหมดอายุแล้ว
                     </Button>
                 </div>
-                {/* <Table dataSource={dataSource} columns={columns} /> */}
+                <Table
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => {
+                                console.log(record);
+                            },
+                            className: "cursor-pointer",
+                        };
+                    }}
+                    loading={isLoading}
+                    dataSource={coupons.data}
+                    columns={columns}
+                    rowKey="id"
+                />
             </div>
         </div>
     );

@@ -40,7 +40,6 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                 shipping_address_collection: { allowed_countries: ["TH"] },
                 locale: "th",
                 customer_email: ctx.state.user.email,
-                allow_promotion_codes: true,
                 metadata: {
                     products: JSON.stringify(
                         order_items.map((product) => ({
