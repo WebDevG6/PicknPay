@@ -1,12 +1,17 @@
 import React, { useState, useMemo } from "react";
-import { Button, Table, Tag } from "antd";
+import { Modal, Form, Input, Select, InputNumber, message, Button, Table, Tag, DatePicker } from "antd";
 import { PlusCircleOutlined, FilterOutlined } from "@ant-design/icons";
 import { useCouponQuery } from "../../hooks/queryAdmin";
+import { useCouponCreate } from "../../hooks/serviceAdmin";
 import dayjs from "dayjs";
 
 const Coupon = () => {
-    const { data: coupons, isLoading } = useCouponQuery();
+    const { data: coupons, isLoading, refetch } = useCouponQuery();
+    const couponCreate = useCouponCreate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [filter, setFilter] = useState("all");
+    const [form] = Form.useForm();
+    message.config({ maxCount: 2 });
 
     const filteredCoupons = useMemo(() => {
         if (!coupons?.data) return [];
@@ -14,6 +19,42 @@ const Coupon = () => {
         if (filter === "expired") return coupons.data.filter((coupon) => !coupon.valid);
         return coupons.data;
     }, [coupons, filter]);
+
+    const handleOk = async () => {
+        try {
+            const couponForm = await form.validateFields();
+            console.log(couponForm);
+            const couponDetail = {
+                id: couponForm.id,
+                max_redemptions: couponForm.max,
+                redeem_by: couponForm.expired?.unix(),
+                ...(couponForm.type === "percent_off"
+                    ? { percent_off: couponForm.discountValue }
+                    : { amount_off: couponForm.discountValue, currency: "thb" }),
+            };
+            couponCreate.mutate(
+                { couponDetail },
+                {
+                    onSuccess: () => {
+                        message.success("เพิ่มคูปองสำเร็จ");
+                        refetch();
+                    },
+                }
+            );
+        } catch (error) {
+            message.error("เพิ่มคูปองล้มเหลว");
+        } finally {
+            setIsModalOpen(false);
+        }
+    };
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        form.resetFields();
+    };
 
     const columns = [
         {
@@ -57,7 +98,7 @@ const Coupon = () => {
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <div className="flex flex-col gap-6">
                 <div className="flex flex-row gap-4">
-                    <Button type="primary" icon={<PlusCircleOutlined />}>
+                    <Button type="primary" icon={<PlusCircleOutlined />} onClick={showModal}>
                         เพิ่มคูปองใหม่
                     </Button>
                     <Button
@@ -85,6 +126,49 @@ const Coupon = () => {
                     </Button>
                 </div>
                 <Table loading={isLoading} dataSource={filteredCoupons} columns={columns} rowKey="id" />
+                <Modal
+                    centered
+                    title="คูปอง"
+                    open={isModalOpen}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    destroyOnClose
+                    okText="เพิ่ม"
+                    cancelText="ยกเลิก"
+                >
+                    <Form
+                        style={{ marginTop: 20 }}
+                        labelCol={{
+                            span: 6,
+                        }}
+                        wrapperCol={{
+                            span: 18,
+                        }}
+                        form={form}
+                        requiredMark={false}
+                    >
+                        <Form.Item name="id" label="โค้ด" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="type" label="ประเภท" rules={[{ required: true }]}>
+                            <Select
+                                options={[
+                                    { label: "ส่วนลดเป็นเปอร์เซ็นต์", value: "percent_off" },
+                                    { label: "ส่วนลดเป็นจำนวนเงิน", value: "amount_off" },
+                                ]}
+                            />
+                        </Form.Item>
+                        <Form.Item name="discountValue" label="จำนวนส่วนลด" rules={[{ required: true }]}>
+                            <InputNumber />
+                        </Form.Item>
+                        <Form.Item name="max" label="จำนวนการใช้สูงสุด">
+                            <InputNumber min={1} />
+                        </Form.Item>
+                        <Form.Item name="expired" label="วันหมดอายุ">
+                            <DatePicker showTime />
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </div>
         </div>
     );

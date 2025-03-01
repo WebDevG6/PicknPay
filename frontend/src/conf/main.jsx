@@ -21,8 +21,7 @@ const conf = {
     orderGetDetailEndpoint: "/order/getOrderDetail",
     validateCouponEndpoint: "validate-coupon",
     couponListEndpoint: "/coupons",
-    couponGetDetailEndpoint: "/getCouponDetail",
-    promotionListEndpoint: "/promotions",
+    couponCreateEndpoint: "/couponCreate",
 };
 
 export default conf;

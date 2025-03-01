@@ -15,4 +15,17 @@ module.exports = {
             return { error: error.message };
         }
     },
+    async couponCreate(ctx) {
+        const { couponDetail } = ctx.request.body;
+        if (!couponDetail) {
+            return ctx.badRequest("couponDetail is required.");
+        }
+        try {
+            const coupon = await stripe.coupons.create({ ...couponDetail, name: couponDetail.id });
+            return coupon;
+        } catch (error) {
+            ctx.response.status = 500;
+            return { error: error.message };
+        }
+    },
 };
