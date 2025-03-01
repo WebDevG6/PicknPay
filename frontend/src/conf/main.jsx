@@ -20,6 +20,9 @@ const conf = {
     orderEndpoint: (orderId = "") => `/orders/${orderId}`,
     orderGetDetailEndpoint: "/order/getOrderDetail",
     validateCouponEndpoint: "validate-coupon",
+    couponListEndpoint: "/coupons",
+    couponCreateEndpoint: "/couponCreate",
+    couponDeleteEndpoint: "/couponDelete",
 };
 
 export default conf;

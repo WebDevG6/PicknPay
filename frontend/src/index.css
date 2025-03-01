@@ -27,6 +27,10 @@ body {
     font-family: "Kanit", sans-serif !important;
 }
 
+.logoText {
+    font-family: "Koulen", sans-serif !important;
+}
+
 .ant-form-item-label > label,
 .ant-input,
 .ant-input-number,

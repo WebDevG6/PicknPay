@@ -11,3 +11,13 @@ export function useOrderQuery() {
         },
     });
 }
+
+export function useCouponQuery() {
+    return useSuspenseQuery({
+        queryKey: ["coupons"],
+        queryFn: async () => {
+            const coupons = await ax.get(conf.couponListEndpoint);
+            return coupons;
+        },
+    });
+}

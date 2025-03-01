@@ -58,8 +58,8 @@ const OrderList = ({ orders }) => {
                                 <b>วันที่สั่งซื้อ:</b> {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss")}
                             </p>
                             <p>
-                                <b>จำนวนสินค้า:</b> {item.order_items.reduce((sum, item) => sum + item.quantity, 0)}{" "}
-                                ชิ้น
+                                <b>จำนวนสินค้า:</b>{" "}
+                                {item.order_items.reduce((sum, item) => sum + Number(item.quantity), 0)} ชิ้น
                             </p>
                         </Card>
                     </List.Item>
