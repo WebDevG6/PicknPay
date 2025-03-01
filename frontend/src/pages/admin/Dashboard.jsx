@@ -4,7 +4,17 @@ import useDataAdmin from "../../hooks/useDataAdmin";
 import useProducts from "../../hooks/useProducts";
 import { ShoppingOutlined, UserOutlined, DollarOutlined, ProductOutlined } from "@ant-design/icons";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from "chart.js";
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    BarElement,
+} from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 
@@ -12,29 +22,37 @@ const Dashboard = () => {
     const { totalProducts, totalCustomers } = useDataAdmin();
     return (
         <div className="w-full overflow-hidden ">
-            <Row gutter={[16, 16]} className="p-[8px] ">
+            <Row gutter={[16, 16]}>
                 <Col xs={24} md={12} className="flex items-center justify-center text-center">
                     <Row gutter={[16, 16]} className="flex flex-wrap h-full">
                         <DashboardCard
-                            icon={<ShoppingOutlined
-                                className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />}
+                            icon={
+                                <ShoppingOutlined className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />
+                            }
                             title={"Orders"}
-                            value={0} />
+                            value={0}
+                        />
                         <DashboardCard
-                            icon={<ProductOutlined
-                                className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />}
+                            icon={
+                                <ProductOutlined className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />
+                            }
                             title={"Products"}
-                            value={totalProducts} />
+                            value={totalProducts}
+                        />
                         <DashboardCard
-                            icon={<UserOutlined
-                                className="text-2xl !text-[purple] rounded-xl p-2  bg-cyan-600/20 h-full" />}
+                            icon={
+                                <UserOutlined className="text-2xl !text-[purple] rounded-xl p-2  bg-cyan-600/20 h-full" />
+                            }
                             title={"Customers"}
-                            value={totalCustomers} />
+                            value={totalCustomers}
+                        />
                         <DashboardCard
-                            icon={<DollarOutlined
-                                className="text-2xl !text-[orange] rounded-xl p-2  bg-yellow-400/20 h-full" />}
+                            icon={
+                                <DollarOutlined className="text-2xl !text-[orange] rounded-xl p-2  bg-yellow-400/20 h-full" />
+                            }
                             title={"Revenue"}
-                            value={0} />
+                            value={0}
+                        />
                     </Row>
                 </Col>
                 <Col xs={24} md={12} className="text-center rounded-lg ">
@@ -45,7 +63,7 @@ const Dashboard = () => {
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={12}>
-                            <div className="flex text-center bg-white rounded-lg p-[10px] shadow-md md:h-full lg:max-h-[243px]" >
+                            <div className="flex text-center bg-white rounded-lg p-[10px] shadow-md md:h-full lg:max-h-[243px]">
                                 <BarChart />
                             </div>
                         </Col>
@@ -73,10 +91,7 @@ const DashboardCard = ({ title, value, icon }) => {
     return (
         <Col xs={24} sm={12} className="flex justify-center">
             <Card className="flex flex-col items-center justify-center w-full max-w-md shadow-md rounded-lg p-4">
-                <Space
-                    direction="horizontal"
-                    className="flex items-start justify-start flex-wrap gap-6"
-                >
+                <Space direction="horizontal" className="flex items-start justify-start flex-wrap gap-6">
                     {icon}
                     <Statistic
                         className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl"
@@ -145,16 +160,16 @@ const PieChart = () => {
 const BarChart = () => {
     const { products, categories } = useProducts();
     const categoryCounts = categories.map((category) => {
-        const count = products.filter(product => product.category.id === category.id).length;
+        const count = products.filter((product) => product.category.id === category.id).length;
         return { name: category.name.trim(), count };
     });
 
     const data = {
-        labels: categoryCounts.map(c => c.name),
+        labels: categoryCounts.map((c) => c.name),
         datasets: [
             {
                 label: "Count categories",
-                data: categoryCounts.map(c => c.count),
+                data: categoryCounts.map((c) => c.count),
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
                 borderColor: "rgb(275, 592, 392)",
                 borderWidth: 1,
@@ -220,7 +235,7 @@ const CustomerTable = () => {
         },
     ];
 
-    const dataSource = customers.map(customer => ({
+    const dataSource = customers.map((customer) => ({
         key: customer.id,
         firstname: customer.firstname || "-",
         lastname: customer.lastname || "-",
@@ -239,6 +254,5 @@ const CustomerTable = () => {
         />
     );
 };
-
 
 export default Dashboard;

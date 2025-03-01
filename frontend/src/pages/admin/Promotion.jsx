@@ -44,7 +44,7 @@ function Promotion() {
     };
 
     return (
-        <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2 gap-12">
+        <div className="p-6 flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2 gap-12">
             <p className="text-2xl font-semibold">{couponId}</p>
             <div className="flex flex-col gap-4 text-lg">
                 <p className="text-xl font-semibold">รายละเอียด</p>
