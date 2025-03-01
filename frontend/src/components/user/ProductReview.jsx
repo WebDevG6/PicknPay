@@ -1,6 +1,7 @@
 import { Progress, Rate, Card, Col, Row } from "antd";
+import dayjs from "dayjs";
 
-function ProductReview() {
+function ProductReview({ reviews }) {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
@@ -37,33 +38,30 @@ function ProductReview() {
             <div className="flex flex-col gap-6">
                 <p className="font-semibold text-xl">รีวิวล่าสุด</p>
                 <Row gutter={16}>
-                    <Col span={8}>
-                        <Card
-                            title={
-                                <div className="flex flex-row justify-between items-center py-3">
-                                    <div className="flex flex-col gap-2">
-                                        <p>Card title</p>
-                                        <Rate
-                                            disabled
-                                            value={4}
-                                            style={{ fontSize: 15 }}
-                                        />
+                    {reviews?.map((item) => (
+                        <Col span={8}>
+                            <Card
+                                title={
+                                    <div className="flex flex-row justify-between items-center py-3">
+                                        <div className="flex flex-col gap-2">
+                                            <Rate
+                                                disabled
+                                                value={item.rating}
+                                                style={{ fontSize: 15 }}
+                                            />
+                                        </div>
+                                        <p className="font-normal text-sm">
+                                            {dayjs(item.createdAt).format(
+                                                "DD/MM/YYYY"
+                                            )}
+                                        </p>
                                     </div>
-                                    <p className="font-normal text-sm">
-                                        01/03/25
-                                    </p>
-                                </div>
-                            }
-                        >
-                            <p className="text-base">ตัวอย่างคอมเมนต์</p>
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card title="Card title">Card content</Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card title="Card title">Card content</Card>
-                    </Col>
+                                }
+                            >
+                                <p className="text-base">{item.comment}</p>
+                            </Card>
+                        </Col>
+                    ))}
                 </Row>
             </div>
         </div>

@@ -9,7 +9,12 @@ import ProductReview from "../components/user/ProductReview";
 function Product() {
     const addItem = useAddItem();
     const { productId } = useParams();
-    const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
+    const {
+        data: productDetail,
+        isLoading,
+        error,
+        refetch,
+    } = useProductDetail(productId);
     const quantityRef = useRef(1);
 
     useEffect(() => {
@@ -35,7 +40,10 @@ function Product() {
     };
 
     const averageRating =
-        productDetail?.reviews?.reduce((acc, review) => acc + review.rating, 0) / productDetail?.reviews?.length || 0;
+        productDetail?.reviews?.reduce(
+            (acc, review) => acc + review.rating,
+            0
+        ) / productDetail?.reviews?.length || 0;
 
     const handleAddItem = async () => {
         const quantity = quantityRef.current.value;
@@ -61,7 +69,9 @@ function Product() {
                 </div>
                 <div className="col-span-7 flex flex-col gap-8">
                     <div className="flex flex-col gap-4">
-                        <p className="md:text-3xl text-2xl font-semibold">{productDetail.name}</p>
+                        <p className="md:text-3xl text-2xl font-semibold">
+                            {productDetail.name}
+                        </p>
                         <div className="flex flex-row items-center gap-4 font-medium">
                             <div className="flex flex-row gap-2">
                                 <p>{averageRating.toFixed(1)}</p>
@@ -71,14 +81,21 @@ function Product() {
                         </div>
                     </div>
 
-
-                    <p className="text-2xl font-medium">฿ {Number(productDetail.price).toLocaleString("en-US")}</p>
+                    <p className="text-2xl font-medium">
+                        ฿ {Number(productDetail.price).toLocaleString("en-US")}
+                    </p>
                     <p className="whitespace-pre-line font-[Kanit] text-gray-700 text-lg">
                         {productDetail?.description}
                     </p>
                     <div className="flex flex-row items-center gap-4">
                         <p className="font-[Kanit] text-xl">จำนวน</p>
-                        <InputNumber defaultValue={1} min={1} max={99} style={{ fontSize: 18 }} ref={quantityRef} />
+                        <InputNumber
+                            defaultValue={1}
+                            min={1}
+                            max={99}
+                            style={{ fontSize: 18 }}
+                            ref={quantityRef}
+                        />
                     </div>
                     <div className="grid grid-cols-2 gap-4 lg:pr-48 pr-0">
                         <Button
@@ -113,16 +130,22 @@ function Product() {
                         </Button>
                     </div>
                     <div className="flex flex-row gap-6 items-center">
-                        <img src="http://localhost:1337/uploads/freeship_3471e12403.png" className="w-20 h-20" />
+                        <img
+                            src="http://localhost:1337/uploads/freeship_3471e12403.png"
+                            className="w-20 h-20"
+                        />
                         <div className="block font-[Kanit]">
                             <p className="font-semibold">Free shipping</p>
-                            <p className="font-light">จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ xxxx บาท</p>
+                            <p className="font-light">
+                                จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ xxxx
+                                บาท
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="bg-white rounded-md p-6 ">
-                <ProductReview />
+                <ProductReview reviews={productDetail?.reviews} />
             </div>
         </div>
     );
