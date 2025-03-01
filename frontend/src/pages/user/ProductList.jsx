@@ -70,16 +70,16 @@ const ProductList = () => {
     const loadMoreProducts = () => setVisibleCount((prev) => prev + PAGE_SIZE);
 
     return (
-        <div className="w-full z-0 min-h-[40vh] ">
+        <div className="w-full min-h-[40vh]">
             <Layout className="min-h-screen bg-gray-300">
                 <ProductListFilter products={products} />
                 <Content className="flex justify-center items-center w-full py-6">
                     {productsLoading ? (
                         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-80">
-                            <Spin size="large" />
+                            <p className="text-2xl font-semibold">กำลังโหลดข้อมูล...</p>
                         </div>
                     ) : filteredProducts.length === 0 ? (
-                        <div className="top-0 left-0 w-full h-full flex-col mt-12 ">
+                        <div className="top-0 left-0 w-full h-full flex-col mt-12 z-20">
                             <Empty
                                 description="ไม่มีสินค้าที่ตรงกับหมวดหมู่นี้"
                                 className="items-center justify-center"
