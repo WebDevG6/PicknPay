@@ -76,12 +76,13 @@ function Product() {
                             <div className="flex flex-row gap-2">
                                 <p>{averageRating.toFixed(1)}</p>
                                 <Rate
+                                    className="translate-y-[2.5px]"
                                     disabled
                                     value={averageRating}
                                     allowHalf
                                 />
                             </div>
-                            <p>{productDetail?.reviews?.length} reviews</p>
+                            <p>{productDetail?.reviews?.length} รีวิว</p>
                         </div>
                     </div>
 
