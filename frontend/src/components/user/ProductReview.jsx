@@ -58,6 +58,9 @@ function ProductReview({ reviews }) {
                                 title={
                                     <div className="flex flex-row justify-between items-center py-3">
                                         <div className="flex flex-col gap-2">
+                                            <p className="font-medium text-base">
+                                                {item.displayName}
+                                            </p>
                                             <Rate
                                                 disabled
                                                 value={item.rating}
