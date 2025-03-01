@@ -1,36 +1,21 @@
 import React, { useRef, useEffect } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import { useProductDetail } from "../hooks/query";
-import { loadStripe } from "@stripe/stripe-js";
-import { Spin, Rate, Button, InputNumber, notification, Tag } from "antd";
-import { useAddItem } from "../hooks/service";
 import { useParams } from "react-router-dom";
-import ax from "../conf/ax";
-import conf from "../conf/main";
+import { Spin, Rate, Button, InputNumber, notification } from "antd";
+import { useAddItem } from "../hooks/service";
+import ProductReview from "../components/user/ProductReview";
 
 function Product() {
-    const stripePromise = loadStripe(
-        "pk_test_51QrA19IqshdqteMviIRbdDZP1v9Xmuhq5toGui7qILPAkvoZyx2Kz4GQfzDzRVD2zl5pPzyDLeTYKYA04he3CTuF00eBRJw9RM"
-    );
-    const { productId } = useParams();
     const addItem = useAddItem();
-    const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
+    const { productId } = useParams();
+    const {
+        data: productDetail,
+        isLoading,
+        error,
+        refetch,
+    } = useProductDetail(productId);
     const quantityRef = useRef(1);
-    const handleBuyNow = async () => {
-        try {
-            const stripe = await stripePromise;
-            const res = await ax.post(conf.orderEndpoint(), {
-                order_items: [{ productDocumentId: productDetail.documentId, quantity: quantityRef.current.value }],
-                value: productDetail.price,
-            });
-
-            await stripe.redirectToCheckout({
-                sessionId: res.data.stripeSession.id,
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     useEffect(() => {
         refetch();
@@ -55,7 +40,10 @@ function Product() {
     };
 
     const averageRating =
-        productDetail?.reviews?.reduce((acc, review) => acc + review.rating, 0) / productDetail?.reviews?.length || 0;
+        productDetail?.reviews?.reduce(
+            (acc, review) => acc + Number(review.rating),
+            0
+        ) / productDetail?.reviews?.length || 0;
 
     const handleAddItem = async () => {
         const quantity = quantityRef.current.value;
@@ -73,7 +61,7 @@ function Product() {
     };
 
     return (
-        <div>
+        <div className="flex flex-col gap-6">
             {contextHolder}
             <div className="bg-white rounded-md grid grid-cols-12 gap-6 p-6 z-0">
                 <div className="col-span-5">
@@ -81,36 +69,41 @@ function Product() {
                 </div>
                 <div className="col-span-7 flex flex-col gap-8">
                     <div className="flex flex-col gap-4">
-                        <p className="md:text-3xl text-2xl font-semibold">{productDetail.name}</p>
+                        <p className="md:text-3xl text-2xl font-semibold">
+                            {productDetail.name}
+                        </p>
                         <div className="flex flex-row items-center gap-4 font-medium">
                             <div className="flex flex-row gap-2">
                                 <p>{averageRating.toFixed(1)}</p>
-                                <Rate disabled value={averageRating} />
+                                <Rate
+                                    className="translate-y-[2.5px]"
+                                    disabled
+                                    value={averageRating}
+                                    allowHalf
+                                />
                             </div>
-                            <p>{productDetail?.reviews?.length} reviews</p>
+                            <p>{productDetail?.reviews?.length} รีวิว</p>
                         </div>
                     </div>
 
-                    <p className="text-2xl font-medium">฿ {Number(productDetail.price).toLocaleString("en-US")}</p>
+                    <p className="text-2xl font-medium">
+                        ฿ {Number(productDetail.price).toLocaleString("en-US")}
+                    </p>
                     <p className="whitespace-pre-line font-[Kanit] text-gray-700 text-lg">
                         {productDetail?.description}
                     </p>
-                    {productDetail.stock !== 0 ? (
-                        <div className="flex flex-row items-center gap-4">
-                            <p className="font-[Kanit] text-xl">จำนวน</p>
-                            <InputNumber defaultValue={1} min={1} max={99} style={{ fontSize: 18 }} ref={quantityRef} />
-                        </div>
-                    ) : (
-                        <Tag
-                            color="error"
-                            style={{ width: "120px", textAlign: "center", padding: "10px", justifyContent: "center" }}
-                        >
-                            <p className="text-xl font-[Kanit]">สินค้าหมด</p>
-                        </Tag>
-                    )}
+                    <div className="flex flex-row items-center gap-4">
+                        <p className="font-[Kanit] text-xl">จำนวน</p>
+                        <InputNumber
+                            defaultValue={1}
+                            min={1}
+                            max={99}
+                            style={{ fontSize: 18 }}
+                            ref={quantityRef}
+                        />
+                    </div>
                     <div className="grid grid-cols-2 gap-4 lg:pr-48 pr-0">
                         <Button
-                            disabled={productDetail?.stock === 0}
                             onClick={handleAddItem}
                             style={{
                                 gridColumn: "span 1",
@@ -127,8 +120,6 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
-                            onClick={handleBuyNow}
-                            disabled={productDetail?.stock === 0}
                             type="primary"
                             style={{
                                 borderRadius: 6,
@@ -144,13 +135,22 @@ function Product() {
                         </Button>
                     </div>
                     <div className="flex flex-row gap-6 items-center">
-                        <img src="http://localhost:1337/uploads/freeship_3471e12403.png" className="w-20 h-20" />
+                        <img
+                            src="http://localhost:1337/uploads/freeship_3471e12403.png"
+                            className="w-20 h-20"
+                        />
                         <div className="block font-[Kanit]">
                             <p className="font-semibold">Free shipping</p>
-                            <p className="font-light">จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ xxxx บาท</p>
+                            <p className="font-light">
+                                จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ xxxx
+                                บาท
+                            </p>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="bg-white rounded-md p-6 ">
+                <ProductReview reviews={productDetail?.reviews} />
             </div>
         </div>
     );
