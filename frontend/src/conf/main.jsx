@@ -20,7 +20,8 @@ const conf = {
     orderEndpoint: (orderId = "") => `/orders/${orderId}`,
     orderGetDetailEndpoint: "/order/getOrderDetail",
     validateCouponEndpoint: "validate-coupon",
-    conponListEndpoint: "/coupons",
+    couponListEndpoint: "/coupons",
+    couponGetDetailEndpoint: "/getCouponDetail",
     promotionListEndpoint: "/promotions",
 };
 

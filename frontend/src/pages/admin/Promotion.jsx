@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table, Button } from "antd";
+import { usePromotionQuery, useCouponDetailQuery } from "../../hooks/queryAdmin";
+import dayjs from "dayjs";
 
 function Promotion() {
+    const { couponId } = useParams();
+    const { data: promotions } = usePromotionQuery(couponId);
+    const { data: couponDeatils } = useCouponDetailQuery(couponId);
+    console.log(promotions);
     const columns = [
         {
             title: "Promotion Code",
@@ -27,7 +33,6 @@ function Promotion() {
     }));
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const { couponId } = useParams();
 
     const onSelectChange = (newSelectedRowKeys) => {
         setSelectedRowKeys(newSelectedRowKeys);
@@ -45,14 +50,23 @@ function Promotion() {
                 <p className="text-xl font-semibold">รายละเอียด</p>
                 <div className="flex flex-row gap-48 text-base">
                     <div className="flex flex-col gap-2">
-                        <p>ID: test</p>
-                        <p>Name: test</p>
-                        <p>Created: test</p>
+                        <p>ID: {couponDeatils.id}</p>
+                        <p>Name: {couponDeatils.name}</p>
+                        <p>Created: {dayjs.unix(couponDeatils.created).format("DD/MM/YYYY HH:mm:ss")}</p>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <p>Valid: test</p>
-                        <p>Percentage discount: test</p>
-                        <p>Expires on: test</p>
+                        <p>Valid: {couponDeatils.valid ? "yes" : "no"}</p>
+                        {couponDeatils.percent_off ? (
+                            <p>Percentage discount: {couponDeatils.percent_off}%</p>
+                        ) : (
+                            <p>Amount discount: {couponDeatils.amount_off}</p>
+                        )}
+                        <p>
+                            Expires on:{" "}
+                            {couponDeatils.redeem_by
+                                ? dayjs.unix(couponDeatils.redeem_by).format("DD/MM/YYYY HH:mm:ss")
+                                : "-"}
+                        </p>
                     </div>
                 </div>
             </div>
