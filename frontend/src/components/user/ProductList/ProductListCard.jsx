@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { Card, Rate } from "antd";
 import conf from "../../../conf/main";
-import { useReviews } from "../../../hooks/query";
 
 const ProductCard = ({ product }) => {
     const productAmount = Number(product.price - product.discountAmount);
