@@ -30,7 +30,7 @@ const Coupon = () => {
                 redeem_by: couponForm.expired?.unix(),
                 ...(couponForm.type === "percent_off"
                     ? { percent_off: couponForm.discountValue }
-                    : { amount_off: couponForm.discountValue, currency: "thb" }),
+                    : { amount_off: couponForm.discountValue * 100, currency: "thb" }),
             };
             couponCreate.mutate(
                 { couponDetail },

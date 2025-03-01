@@ -19,14 +19,20 @@ function Cart() {
         const selectedItems = cartItems.filter((item) => item.isSelect);
         const totalQuantity = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
         const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const totalDiscount = discount.type === "amount" ? discount.value : (discount.value * totalPrice) / 100;
+
+        let totalDiscount = 0;
+        if (discount.type === "amount") {
+            totalDiscount = discount.value / 100 >= totalPrice ? totalPrice : discount.value / 100;
+        } else {
+            totalDiscount = (discount.value * totalPrice) / 100;
+        }
 
         setSelectItem({
             quantity: totalQuantity,
             price: totalPrice,
             discount: totalDiscount,
             deliveryCost: 0,
-            summaryPrice: totalPrice - totalDiscount,
+            summaryPrice: Math.max(0, totalPrice - totalDiscount),
         });
     }, [cartItems, discount]);
 
@@ -72,7 +78,8 @@ function Cart() {
                     couponId: couponCode,
                 });
                 message.success(
-                    `ใช้โค้ดสำเร็จ! ลดราคา ${response.data.amount_off ? `฿${response.data.amount_off}` : `${response.data.percent_off}%`
+                    `ใช้โค้ดสำเร็จ! ลดราคา ${
+                        response.data.amount_off ? `฿${response.data.amount_off}` : `${response.data.percent_off}%`
                     }`
                 );
             } else {
