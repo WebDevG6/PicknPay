@@ -3,7 +3,7 @@
  */
 
 import { factories } from "@strapi/strapi";
-const stripe = require("stripe")(process.env.STRIPE_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 type order_items = {
     documentId: string;
