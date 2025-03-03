@@ -69,6 +69,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                                 product_id: item.productDocumentId,
                                 quantity: item.quantity,
                                 thumbnail: product.picture[0]?.url,
+                                price: product.price - product.discountAmount,
                             };
                         })
                     ),

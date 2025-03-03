@@ -83,8 +83,8 @@ function MyOrderDetail() {
                                     <div className="flex flex-col">
                                         <p className="text-lg">{item.productName}</p>
                                         <p className="text-sm text-gray-500">
-                                            จำนวน: {item.quantity} ชิ้น <br />฿
-                                            {Number(item.productPrice).toLocaleString("en-US")}
+                                            จำนวน: {Number(item.quantity)} ชิ้น <br />฿
+                                            {Number(item.price).toLocaleString("en-US")}
                                         </p>
                                         <div className="flex flex-row gap-4">
                                             <p
@@ -101,7 +101,7 @@ function MyOrderDetail() {
                                 </div>
 
                                 <p className="text-xl">
-                                    ฿{(item.productPrice * item.quantity).toLocaleString("en-US")}
+                                    ฿{(Number(item.price) * Number(item.quantity)).toLocaleString("en-US")}
                                 </p>
                             </div>
                         ))}
@@ -112,7 +112,7 @@ function MyOrderDetail() {
                             <p>
                                 ยอดรวมสินค้า (
                                 {orderDetail?.data?.order.order_items.reduce(
-                                    (acc, item) => acc + item.quantity,
+                                    (acc, item) => acc + Number(item.quantity),
                                     0
                                 )}{" "}
                                 ชิ้น)
@@ -120,7 +120,7 @@ function MyOrderDetail() {
                             <p className="text-xl">
                                 ฿
                                 {orderDetail?.data?.order.order_items
-                                    .reduce((acc, item) => acc + item.productPrice * item.quantity, 0)
+                                    .reduce((acc, item) => acc + Number(item.price) * Number(item.quantity), 0)
                                     .toLocaleString("en-US")}
                             </p>
                         </div>
@@ -130,7 +130,7 @@ function MyOrderDetail() {
                                 ฿
                                 {(
                                     orderDetail?.data?.order.order_items.reduce(
-                                        (acc, item) => acc + item.productPrice * item.quantity,
+                                        (acc, item) => acc + Number(item.price) * Number(item.quantity),
                                         0
                                     ) - orderDetail?.data?.order.value
                                 ).toLocaleString("en-US")}
