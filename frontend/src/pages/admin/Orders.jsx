@@ -186,6 +186,21 @@ function Orders() {
                             <strong>Value:</strong> ฿{selectedOrder.value.toLocaleString("en-US")}
                         </p>
                         <p className="w-full">
+                            <strong>Shipping fee:</strong> ฿
+                            {selectedOrder.deliveryCost ? selectedOrder.deliveryCost?.toLocaleString("en-US") : 0}
+                        </p>
+                        <p className="w-full">
+                            <strong>Discount Amount:</strong> ฿
+                            {(
+                                selectedOrder.order_items.reduce(
+                                    (acc, item) => acc + Number(item.price) * Number(item.quantity),
+                                    0
+                                ) -
+                                selectedOrder.value +
+                                selectedOrder.deliveryCost
+                            ).toLocaleString("en-US")}
+                        </p>
+                        <p className="w-full">
                             <strong>Coupon:</strong> {selectedOrder.coupon ? selectedOrder.coupon : "No coupon used"}
                         </p>
                         <Collapse

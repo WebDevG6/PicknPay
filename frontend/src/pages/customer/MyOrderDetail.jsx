@@ -132,13 +132,20 @@ function MyOrderDetail() {
                                     orderDetail?.data?.order.order_items.reduce(
                                         (acc, item) => acc + Number(item.price) * Number(item.quantity),
                                         0
-                                    ) - orderDetail?.data?.order.value
+                                    ) -
+                                    orderDetail?.data?.order.value +
+                                    orderDetail?.data?.order.deliveryCost
                                 ).toLocaleString("en-US")}
                             </p>
                         </div>
                         <div className="flex flex-row justify-between font-light">
                             <p>ค่าจัดส่ง</p>
-                            <p className=" text-xl">฿{"0".toLocaleString("en-US")}</p>
+                            <p className=" text-xl">
+                                ฿
+                                {orderDetail?.data?.order.deliveryCost
+                                    ? orderDetail?.data?.order.deliveryCost.toLocaleString("en-US")
+                                    : 0}
+                            </p>
                         </div>
                         <div className="flex flex-row justify-between font-semibold">
                             <p>ยอดสุทธิ</p>

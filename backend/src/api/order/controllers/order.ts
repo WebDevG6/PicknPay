@@ -106,7 +106,6 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                                 quantity: item.quantity,
                                 thumbnail: product.picture[0]?.url,
                                 price: product.price - product.discountAmount,
-                                deliveryCost: value < 600 ? 100 : 0,
                             };
                         })
                     ),
@@ -117,6 +116,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                         (acc, item) => acc + (item.price_data.unit_amount / 100) * item.quantity,
                         0
                     ),
+                    deliveryCost: value < 600 ? 100 : 0,
                 },
             });
             return { stripeSession: session };
