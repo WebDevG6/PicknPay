@@ -30,12 +30,15 @@ function Cart() {
             totalDiscount = (discount.value * totalPrice) / 100;
         }
 
+        const deliveryCost =
+            Math.max(0, totalPrice - totalDiscount) > 0 && Math.max(0, totalPrice - totalDiscount) < 600 ? 100 : 0;
+
         setSelectItem({
             quantity: totalQuantity,
             price: totalPrice,
             discount: totalDiscount,
-            deliveryCost: 0,
-            summaryPrice: Math.max(0, totalPrice - totalDiscount),
+            deliveryCost: deliveryCost,
+            summaryPrice: Math.max(0, totalPrice - totalDiscount) + deliveryCost,
         });
     }, [cartItems, discount]);
 
