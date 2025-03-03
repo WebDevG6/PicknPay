@@ -24,7 +24,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                             name: item.name,
                             images: item.imageUrl,
                         },
-                        unit_amount: item.price * 100,
+                        unit_amount: (item.price - item.discountAmount) * 100,
                     },
                     quantity: product.quantity,
                 };
@@ -34,7 +34,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
             const session = await stripe.checkout.sessions.create({
                 mode: "payment",
                 success_url: `${process.env.CLIENT_URL}/customer/order`,
-                cancel_url: `${process.env.CLIENT_URL}?canceled=true`,
+                cancel_url: `${process.env.CLIENT_URL}/customer/cart`,
                 line_items: line_items,
                 shipping_address_collection: { allowed_countries: ["TH"] },
                 locale: "th",
@@ -87,7 +87,6 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
 
         try {
             const stripeCoupon = await stripe.coupons.retrieve(coupon);
-            console.log(stripeCoupon);
             return ctx.send({
                 valid: stripeCoupon.valid,
                 id: stripeCoupon.id,

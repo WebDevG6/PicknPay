@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Divider, Button, Input, message, Form } from "antd";
-import CartItemList from "@components/public/CartItemList";
+import CartItemList from "@components/customer/CartItemList";
 import { useCartItem } from "@hooks/query";
 import { loadStripe } from "@stripe/stripe-js";
 import ax from "@conf/ax";
@@ -18,7 +18,10 @@ function Cart() {
     useEffect(() => {
         const selectedItems = cartItems.filter((item) => item.isSelect);
         const totalQuantity = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const totalPrice = selectedItems.reduce(
+            (sum, item) => sum + (item.price - item.productDiscountAmount) * item.quantity,
+            0
+        );
 
         let totalDiscount = 0;
         if (discount.type === "amount") {

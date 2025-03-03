@@ -1,11 +1,10 @@
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Checkbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { InputNumber, Tag } from "antd";
 import { useUpdateCartItem, useDeleteCartItem } from "@hooks/query";
 import { authContext } from "@context/AuthContext";
-import debounce from "lodash.debounce";
 
 function CartItemList({ dataSource }) {
     const { updateUserInfo } = useContext(authContext);
@@ -39,24 +38,17 @@ function CartItemList({ dataSource }) {
         }));
     };
 
-    const debouncedHandleChangeQuantity = useCallback(
-        debounce(async ({ value, itemId }) => {
-            await updateCartItem.mutateAsync({ itemId: itemId, data: { quantity: value } });
-            updateUserInfo((prev) => ({
-                ...prev,
-                cart_id: {
-                    ...prev.cart_id,
-                    cart_items_id: prev.cart_id.cart_items_id.map((item) =>
-                        item.documentId === itemId ? { ...item, quantity: value } : item
-                    ),
-                },
-            }));
-        }, 300),
-        []
-    );
-
-    const handleChangeQuantity = ({ value, itemId }) => {
-        debouncedHandleChangeQuantity({ value, itemId });
+    const handleChangeQuantity = async ({ value, itemId }) => {
+        await updateCartItem.mutateAsync({ itemId: itemId, data: { quantity: value } });
+        updateUserInfo((prev) => ({
+            ...prev,
+            cart_id: {
+                ...prev.cart_id,
+                cart_items_id: prev.cart_id.cart_items_id.map((item) =>
+                    item.documentId === itemId ? { ...item, quantity: value } : item
+                ),
+            },
+        }));
     };
 
     return (
@@ -97,10 +89,23 @@ function CartItemList({ dataSource }) {
                             </td>
                             <th scope="row" className="px-6 py-4 font-light flex flex-row gap-4">
                                 <img src={item.imageUrl} className="w-28 h-28 object-cover rounded-sm" />
-                                <div className="flex flex-col justify-between text-left py-2">
+                                <div className="flex flex-col justify-between text-left py-2 gap-1.5">
                                     <div className="flex flex-col gap-1">
-                                        <p className="text-xl">{item.productName}</p>
-                                        <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>
+                                        <p className="text-lg">{item.productName}</p>
+                                        {Number(item.productDiscountAmount) !== 0 ? (
+                                            <div className="flex flex-row gap-1 items-center">
+                                                <div className=" bg-red-500 text-white px-3 py-1 rounded-md font-semibold text-xs">
+                                                    ลด {((item.productDiscountAmount / item.price) * 100).toFixed(0)}%
+                                                </div>
+                                                <p className="text-sm font-semibold">
+                                                    ฿{(item.price - item.productDiscountAmount).toLocaleString("en-US")}
+                                                </p>
+
+                                                <p className="line-through text-xs">฿{item.price.toLocaleString()}</p>
+                                            </div>
+                                        ) : (
+                                            <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>
+                                        )}
                                     </div>
                                     <p
                                         onClick={() => navigate(`/products/${item.productId}`)}
@@ -112,7 +117,7 @@ function CartItemList({ dataSource }) {
                             </th>
 
                             <td className="px-6 py-4 text-xl">
-                                ฿{(item.price * item.quantity).toLocaleString("en-US")}
+                                ฿{((item.price - item.productDiscountAmount) * item.quantity).toLocaleString("en-US")}
                             </td>
                             <td className="px-6 py-4">
                                 {item.productStock === 0 ? (
@@ -122,7 +127,7 @@ function CartItemList({ dataSource }) {
                                 ) : (
                                     <InputNumber
                                         min={1}
-                                        max={99}
+                                        max={item.productStock}
                                         value={item.quantity}
                                         style={{ width: "80px", textAlign: "center" }}
                                         onChange={(value) =>
