@@ -1,4 +1,5 @@
-const urlPrefix = "http://localhost:1337";
+const urlPrefix =
+    import.meta.env.VITE_STATUS === "prod" ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL;
 
 const conf = {
     urlPrefix: urlPrefix,
