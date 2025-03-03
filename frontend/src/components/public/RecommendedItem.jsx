@@ -31,7 +31,7 @@ function RecommendedItem() {
                                     <p className="text-sm font-semibold text-black line-clamp-2">{product.name}</p>
                                     {Number(product.discountAmount) !== 0 ? (
                                         <div className="flex flex-row gap-1 items-center">
-                                            <div className=" bg-red-500 text-white px-3 py-1 rounded-md font-semibold text-xs">
+                                            <div className=" bg-red-500 text-white px-2.5 py-1 rounded-md font-semibold text-xs">
                                                 ลด {((product.discountAmount / product.price) * 100).toFixed(0)}%
                                             </div>
                                             <p className="text-base text-black font-semibold">
