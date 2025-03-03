@@ -25,6 +25,8 @@ const conf = {
     couponCreateEndpoint: "/couponCreate",
     couponDeleteEndpoint: "/couponDelete",
     reviewEndpoint: "/reviews",
+    productCountEndpoint: "/products/count",
+    customerCountEndpoint: "/users/count-customers",
 };
 
 export default conf;

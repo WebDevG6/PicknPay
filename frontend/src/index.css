@@ -91,3 +91,7 @@ body {
 .slick-dots li button:hover {
     background-color: #4169e2 !important;
 }
+
+.ant-card-body {
+    width: 100%;
+}
