@@ -77,6 +77,14 @@ function Orders() {
             render: (value) => dayjs(value).format("DD/MM/YYYY HH:mm:ss"),
         },
         {
+            title: "Thumbnail",
+            dataIndex: "order_items",
+            key: "order_items",
+            render: (value) => (
+                <img className="w-16 h-16 rounded-lg object-cover" src={conf.urlPrefix + value[0].thumbnail} />
+            ),
+        },
+        {
             title: "Status",
             dataIndex: "status_order",
             key: "status_order",
@@ -137,7 +145,7 @@ function Orders() {
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <Input
-                placeholder="Search here"
+                placeholder="ค้นหา order"
                 style={{ width: "100%", marginBottom: 20 }}
                 onChange={(e) => setSearchedText(e.target.value)}
             />
@@ -202,14 +210,14 @@ function Orders() {
                                                         <div className="flex flex-col">
                                                             <p className="text-md">{item.productName}</p>
                                                             <p className="text-xs text-gray-500">
-                                                                ฿{Number(item.productPrice).toLocaleString("en-US")}{" "}
-                                                                จำนวน: {item.quantity} ชิ้น
+                                                                ฿{Number(item.price).toLocaleString("en-US")} จำนวน:{" "}
+                                                                {item.quantity} ชิ้น
                                                             </p>
                                                         </div>
                                                     </div>
 
                                                     <p className="text-md">
-                                                        ฿{(item.productPrice * item.quantity).toLocaleString("en-US")}
+                                                        ฿{(item.price * item.quantity).toLocaleString("en-US")}
                                                     </p>
                                                 </div>
                                             ))}
