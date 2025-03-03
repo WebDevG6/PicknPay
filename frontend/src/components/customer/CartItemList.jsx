@@ -92,7 +92,7 @@ function CartItemList({ dataSource }) {
                                 <div className="flex flex-col justify-between text-left py-2 gap-1.5">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-lg">{item.productName}</p>
-                                        {Number(item.productDiscountAmount) !== 0 ? (
+                                        {item.productDiscountAmount ? (
                                             <div className="flex flex-row gap-1 items-center">
                                                 <div className=" bg-red-500 text-white px-3 py-1 rounded-md font-semibold text-xs">
                                                     ลด {((item.productDiscountAmount / item.price) * 100).toFixed(0)}%
@@ -101,7 +101,9 @@ function CartItemList({ dataSource }) {
                                                     ฿{(item.price - item.productDiscountAmount).toLocaleString("en-US")}
                                                 </p>
 
-                                                <p className="line-through text-xs">฿{item.price.toLocaleString()}</p>
+                                                <p className="line-through text-xs text-gray-500">
+                                                    ฿{item.price.toLocaleString()}
+                                                </p>
                                             </div>
                                         ) : (
                                             <p className="text-sm">฿{item.price.toLocaleString("en-US")}</p>

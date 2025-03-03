@@ -74,14 +74,16 @@ function Product() {
                         </div>
                     </div>
 
-                    {Number(productDetail.discountAmount) !== 0 ? (
+                    {productDetail.discountAmount ? (
                         <div className="flex flex-row gap-2 items-center">
                             <div className=" bg-red-500 text-white px-3 py-1 rounded-md font-semibold text-sm">
                                 ลด {discountPercentage}%
                             </div>
                             <p className="text-2xl font-semibold">฿{productAmount.toLocaleString()}</p>
 
-                            <p className="line-through">฿{Number(productDetail.price).toLocaleString()}</p>
+                            <p className="line-through text-gray-500">
+                                ฿{Number(productDetail.price).toLocaleString()}
+                            </p>
                         </div>
                     ) : (
                         <p className="text-2xl font-semibold">฿{Number(productDetail.price).toLocaleString("en-US")}</p>

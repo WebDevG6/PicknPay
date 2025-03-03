@@ -29,9 +29,22 @@ function RecommendedItem() {
                             <div className="bg-white px-4 py-3 rounded-md shadow-md flex justify-between items-stretch cursor-pointer transition-transform hover:scale-105 h-24">
                                 <div className="flex flex-col flex-grow w-2/3 overflow-hidden pr-4 justify-center h-full">
                                     <p className="text-sm font-semibold text-black line-clamp-2">{product.name}</p>
-                                    <p className="text-base text-black">
-                                        ฿ {Number(product.price).toLocaleString("en-US")}
-                                    </p>
+                                    {Number(product.discountAmount) !== 0 ? (
+                                        <div className="flex flex-row gap-1 items-center">
+                                            <div className=" bg-red-500 text-white px-3 py-1 rounded-md font-semibold text-xs">
+                                                ลด {((product.discountAmount / product.price) * 100).toFixed(0)}%
+                                            </div>
+                                            <p className="text-base text-black font-semibold">
+                                                ฿{(product.price - product.discountAmount).toLocaleString("en-US")}
+                                            </p>
+
+                                            <p className="line-through text-gray-500 text-xs">
+                                                ฿{product.price.toLocaleString()}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <p className="text-base text-black">฿{product.price.toLocaleString("en-US")}</p>
+                                    )}
                                 </div>
                                 <div className="w-20 h-20 flex-shrink-0 flex items-center justify-center">
                                     <img
