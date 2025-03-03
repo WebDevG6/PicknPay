@@ -5,10 +5,16 @@ import { useProductDetail } from "@hooks/query";
 import { useAddItem } from "@hooks/service";
 import ProductReview from "@components/public/ProductReview";
 import { Rate, Button, InputNumber, notification } from "antd";
+import { loadStripe } from "@stripe/stripe-js";
+import ax from "@conf/ax";
+import conf from "@conf/main";
 
 function Product() {
     const addItem = useAddItem();
     const { productId } = useParams();
+    const stripePromise = loadStripe(
+        "pk_test_51QrA19IqshdqteMviIRbdDZP1v9Xmuhq5toGui7qILPAkvoZyx2Kz4GQfzDzRVD2zl5pPzyDLeTYKYA04he3CTuF00eBRJw9RM"
+    );
     const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
     const productAmount = Number(productDetail.price - productDetail.discountAmount);
     const discountPercentage = ((productDetail.discountAmount / productDetail.price) * 100).toFixed(0);
@@ -17,6 +23,22 @@ function Product() {
     useEffect(() => {
         refetch();
     }, [productId]);
+
+    const handleBuyNow = async () => {
+        try {
+            const stripe = await stripePromise;
+            const res = await ax.post(conf.orderEndpoint(), {
+                order_items: [{ productDocumentId: productDetail.documentId, quantity: quantityRef.current.value }],
+                value: productDetail.price,
+            });
+
+            await stripe.redirectToCheckout({
+                sessionId: res.data.stripeSession.id,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     const [api, contextHolder] = notification.useNotification();
     const successNotification = () => {
@@ -113,6 +135,7 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
+                            onClick={handleBuyNow}
                             type="primary"
                             style={{
                                 borderRadius: 6,

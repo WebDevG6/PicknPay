@@ -58,10 +58,20 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
 
             await strapi.service("api::order.order").create({
                 data: {
-                    order_items: order_items.map((item) => ({
-                        product_id: item.productDocumentId,
-                        quantity: item.quantity,
-                    })),
+                    order_items: await Promise.all(
+                        order_items.map(async (item) => {
+                            const product = await strapi
+                                .service("api::product.product")
+                                .findOne(item.productDocumentId, {
+                                    populate: "*",
+                                });
+                            return {
+                                product_id: item.productDocumentId,
+                                quantity: item.quantity,
+                                thumbnail: product.picture[0]?.url,
+                            };
+                        })
+                    ),
                     stripeId: session.id,
                     customer: ctx.state.user.id,
                     status_order: "processing",
