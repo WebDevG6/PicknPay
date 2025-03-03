@@ -5,7 +5,7 @@ import conf from "@conf/main";
 
 const ProductCard = ({ product }) => {
     const productAmount = Number(product.price - product.discountAmount);
-    const discountPercentage = ((productAmount / product.price) * 100).toFixed(0);
+    const discountPercentage = ((product.discountAmount / product.price) * 100).toFixed(0);
     const imageUrl = `${conf.urlPrefix}${product.picture[0].url}`;
     const navigate = useNavigate();
 
@@ -22,11 +22,11 @@ const ProductCard = ({ product }) => {
             className="border border-black shadow-sm hover:shadow-md transition-transform transform hover:scale-102 ease-in-out rounded-lg overflow-hidden"
             cover={
                 <div className="relative w-full flex justify-center items-center bg-white p-4 h-36 sm:h-44 md:h-48 lg:h-52 xl:h-60">
-                    {discountPercentage < 100 && (
+                    {product.discountAmount ? (
                         <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-md text-xs sm:text-sm font-semiblod shadow-md z-40">
                             ลด {discountPercentage}%
                         </div>
-                    )}
+                    ) : null}
                     <div className="w-full h-full overflow-hidden">
                         <img
                             alt={product.name}
@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
                 {product.name}
             </h1>
             <div className="text-left mt-2">
-                {discountPercentage < 100 ? (
+                {product.discountAmount ? (
                     <>
                         <span className="text-base sm:text-lg md:text-lg font-bold text-black mr-2 truncate">
                             ฿{productAmount.toLocaleString()}

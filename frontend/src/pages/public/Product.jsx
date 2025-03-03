@@ -11,7 +11,7 @@ function Product() {
     const { productId } = useParams();
     const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
     const productAmount = Number(productDetail.price - productDetail.discountAmount);
-    const discountPercentage = ((productAmount / productDetail.price) * 100).toFixed(0);
+    const discountPercentage = ((productDetail.discountAmount / productDetail.price) * 100).toFixed(0);
     const quantityRef = useRef(1);
 
     useEffect(() => {
