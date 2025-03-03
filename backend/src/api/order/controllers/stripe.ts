@@ -71,7 +71,7 @@ async function handleCheckoutSessionCompleted(eventData, products, cartItems) {
             data: {
                 status_order: "successed",
                 value: eventData.amount_total / 100,
-                coupon: eventData.discounts[0].coupon,
+                coupon: eventData.discounts[0] ? eventData.discounts[0].coupon : null,
             },
         });
 

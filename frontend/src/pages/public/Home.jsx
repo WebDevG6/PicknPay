@@ -25,7 +25,7 @@ const categories = [
         path: "/products/?category=microphone",
     },
     {
-        name: "จอคอม",
+        name: "คอมพิวเตอร์",
         image: "https://i02.appmifile.com/456_item_th/18/03/2024/115d7e9c8cfc2f2d02c6b7064313ffcf!400x400!85.png",
         path: "/products/?category=computer",
     },

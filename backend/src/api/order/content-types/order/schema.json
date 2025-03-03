@@ -45,6 +45,11 @@
     },
     "coupon": {
       "type": "string"
+    },
+    "deliveryCost": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
     }
   }
 }

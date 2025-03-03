@@ -9,6 +9,7 @@ import {
     TruckOutlined,
     WalletOutlined,
 } from "@ant-design/icons";
+import conf from "@conf/main";
 import dayjs from "dayjs";
 
 const statusConfig = {
@@ -54,15 +55,25 @@ const OrderList = ({ orders }) => {
                             }
                             className="w-full"
                         >
-                            <div className="block gap-6">
-                                <div className="flex flex-row gap-1">
-                                    <p className="font-semibold">วันที่สั่งซื้อ:</p>
-                                    {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                            <div className="flex flex-row gap-6 justify-between">
+                                <div>
+                                    <div className="flex flex-row gap-1">
+                                        <p className="font-semibold">วันที่สั่งซื้อ:</p>
+                                        {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                                    </div>
+                                    <div className="flex flex-row gap-1">
+                                        <p className="font-semibold">จำนวนสินค้า:</p>
+                                        {item.order_items.reduce((sum, item) => sum + Number(item.quantity), 0)} ชิ้น
+                                    </div>
                                 </div>
-                                <div className="flex flex-row gap-1">
-                                    <p className="font-semibold">จำนวนสินค้า:</p>
-                                    {item.order_items.reduce((sum, item) => sum + Number(item.quantity), 0)} ชิ้น
-                                </div>
+                                {item.order_items[0].thumbnail && (
+                                    <div>
+                                        <img
+                                            className="w-23 h-23 object-cover"
+                                            src={`${conf.urlPrefix}${item.order_items[0].thumbnail}`}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </Card>
                     </List.Item>

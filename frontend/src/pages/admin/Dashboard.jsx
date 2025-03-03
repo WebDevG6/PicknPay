@@ -1,8 +1,10 @@
-import { Card, Row, Space, Statistic, Col, Table, Divider } from "antd";
+import { Card, Row, Col, Table, Divider } from "antd";
 import useDataAdmin from "@hooks/useDataAdmin";
 import useProducts from "@hooks/useProducts";
+import { useMemo } from "react";
 import { ShoppingOutlined, UserOutlined, DollarOutlined, ProductOutlined } from "@ant-design/icons";
-import { Line, Doughnut, Bar } from "react-chartjs-2";
+import { Line, Pie, Bar } from "react-chartjs-2";
+import dayjs from "dayjs";
 import {
     Chart as ChartJS,
     ArcElement,
@@ -18,7 +20,8 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 
 const Dashboard = () => {
-    const { totalProducts, totalCustomers } = useDataAdmin();
+    const { products, categories } = useProducts();
+    const { totalProducts, totalCustomers, orderSummary } = useDataAdmin();
     return (
         <div className="w-full overflow-hidden ">
             <Row gutter={[16, 16]}>
@@ -29,7 +32,7 @@ const Dashboard = () => {
                                 <ShoppingOutlined className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />
                             }
                             title={"Orders"}
-                            value={0}
+                            value={orderSummary.summary.lenOrder}
                         />
                         <DashboardCard
                             icon={
@@ -50,7 +53,7 @@ const Dashboard = () => {
                                 <DollarOutlined className="text-2xl !text-[orange] rounded-xl p-2  bg-yellow-400/20 h-full" />
                             }
                             title={"Revenue"}
-                            value={0}
+                            value={<p>฿{orderSummary.summary.totalValue.toLocaleString("en-US")}</p>}
                         />
                     </Row>
                 </Col>
@@ -58,12 +61,16 @@ const Dashboard = () => {
                     <Row gutter={[16, 16]} className="h-full">
                         <Col xs={24} sm={24} md={12}>
                             <div className="flex text-center bg-white rounded-lg p-[10px] shadow-md md:h-full lg:max-h-[243px]">
-                                <PieChart />
+                                <PieChart
+                                    products={products}
+                                    categories={categories}
+                                    orders={orderSummary.raw_orders}
+                                />
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={12}>
                             <div className="flex text-center bg-white rounded-lg p-[10px] shadow-md md:h-full lg:max-h-[243px]">
-                                <BarChart />
+                                <BarChart products={products} categories={categories} />
                             </div>
                         </Col>
                     </Row>
@@ -72,7 +79,7 @@ const Dashboard = () => {
             <Row gutter={[16, 16]} className="p-[8px]">
                 <Col xs={24} sm={24} md={16}>
                     <div className="text-center bg-white rounded-lg p-2 shadow-md">
-                        <LineChart />
+                        <LineChart orders={orderSummary.orders} />
                     </div>
                 </Col>
                 <Col xs={24} sm={24} md={8}>
@@ -88,30 +95,41 @@ const Dashboard = () => {
 
 const DashboardCard = ({ title, value, icon }) => {
     return (
-        <Col xs={24} sm={12} className="flex justify-center">
-            <Card className="flex flex-col items-center justify-center w-full max-w-md shadow-md rounded-lg p-4">
-                <Space direction="horizontal" className="flex items-start justify-start flex-wrap gap-6">
+        <Col xs={24} sm={12}>
+            <Card className="items-center justify-center w-full max-w-md shadow-md rounded-lg p-4">
+                <div className="w-full flex flex-row items-center justify-between flex-wrap gap-6">
                     {icon}
-                    <Statistic
-                        className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl"
-                        title={title}
-                        value={value}
-                    />
-                </Space>
+                    <div>
+                        <p className="text-lg font-semibold">{title}</p>
+                        <p className="text-lg">{value}</p>
+                    </div>
+                </div>
             </Card>
         </Col>
     );
 };
 
-const LineChart = () => {
-    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+const LineChart = ({ orders }) => {
+    const aggregatedData = useMemo(() => {
+        const summary = {};
+        orders.forEach(({ date, value }) => {
+            const formattedDate = dayjs(date).format("YYYY-MM-DD");
+            summary[formattedDate] = (summary[formattedDate] || 0) + value;
+        });
+
+        const sortedDates = Object.keys(summary).sort();
+        return {
+            labels: sortedDates,
+            values: sortedDates.map((date) => summary[date]),
+        };
+    }, [orders]);
 
     const data = {
-        labels: labels,
+        labels: aggregatedData.labels,
         datasets: [
             {
-                label: "Sales for 2020 (M)",
-                data: [65, 59, 80, 81, 56, 55, 40],
+                label: "Daily Sales",
+                data: aggregatedData.values,
                 fill: true,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                 borderColor: "rgb(75, 192, 192)",
@@ -119,26 +137,51 @@ const LineChart = () => {
             },
         ],
     };
+
     const options = {
         responsive: true,
         maintainAspectRatio: false,
     };
 
     return (
-        <div className="w-full h-auto max-w-full min-h-[300px]">
+        <div className="w-full h-auto max-w-full min-h-[300px] overflow-hidden">
             <Line data={data} options={options} />
         </div>
     );
 };
 
-const PieChart = () => {
+const PieChart = ({ products, categories, orders }) => {
+    const categorySales = {};
+
+    orders.forEach((order) => {
+        order.order_items.forEach((item) => {
+            const product = products.find((p) => p.documentId === item.product_id);
+            if (product) {
+                const categoryName = product.category.name;
+                if (categoryName) {
+                    categorySales[categoryName] = (categorySales[categoryName] || 0) + item.price * item.quantity;
+                }
+            }
+        });
+    });
+
+    const labels = Object.keys(categorySales);
+    const salesData = Object.values(categorySales);
+
     const data = {
-        labels: ["Red", "Blue", "Yellow"],
+        labels: labels,
         datasets: [
             {
-                label: "My First Dataset",
-                data: [300, 50, 100],
-                backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"],
+                label: "Sales by Category",
+                data: salesData,
+                backgroundColor: [
+                    "rgb(255, 99, 132)",
+                    "rgb(54, 162, 235)",
+                    "rgb(255, 205, 86)",
+                    "rgb(75, 192, 192)",
+                    "rgb(153, 102, 255)",
+                    "rgb(255, 159, 64)",
+                ],
                 hoverOffset: 4,
             },
         ],
@@ -146,18 +189,31 @@ const PieChart = () => {
 
     const options = {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: {
+                position: "right",
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        let value = salesData[tooltipItem.dataIndex];
+                        return `${labels[tooltipItem.dataIndex]}: ฿${value.toFixed(2)}`;
+                    },
+                },
+            },
+        },
     };
 
     return (
-        <div className="w-full max-w-[400px] h-full justify-center mx-auto">
-            <Doughnut data={data} options={options} />
+        <div className="w-full max-w-[400px] justify-center mx-auto overflow-hidden">
+            <p className="font-bold">Sales by Category (THB)</p>
+            <Pie data={data} options={options} />
         </div>
     );
 };
 
-const BarChart = () => {
-    const { products, categories } = useProducts();
+const BarChart = ({ products, categories }) => {
     const categoryCounts = categories.map((category) => {
         const count = products.filter((product) => product.category.id === category.id).length;
         return { name: category.name.trim(), count };

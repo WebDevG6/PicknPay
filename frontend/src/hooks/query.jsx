@@ -21,6 +21,8 @@ export function useCartItem() {
                 productId: item.product.id,
                 productDocumentId: item.product.documentId,
                 productStock: item.product.stock,
+                productDiscountAmount: item.product.discountAmount,
+                createdAt: item.createdAt,
             }));
         },
     });

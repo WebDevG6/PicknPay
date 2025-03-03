@@ -5,18 +5,40 @@ import { useProductDetail } from "@hooks/query";
 import { useAddItem } from "@hooks/service";
 import ProductReview from "@components/public/ProductReview";
 import { Rate, Button, InputNumber, notification } from "antd";
+import { loadStripe } from "@stripe/stripe-js";
+import ax from "@conf/ax";
+import conf from "@conf/main";
 
 function Product() {
     const addItem = useAddItem();
     const { productId } = useParams();
+    const stripePromise = loadStripe(
+        "pk_test_51QrA19IqshdqteMviIRbdDZP1v9Xmuhq5toGui7qILPAkvoZyx2Kz4GQfzDzRVD2zl5pPzyDLeTYKYA04he3CTuF00eBRJw9RM"
+    );
     const { data: productDetail, isLoading, error, refetch } = useProductDetail(productId);
     const productAmount = Number(productDetail.price - productDetail.discountAmount);
-    const discountPercentage = ((productAmount / productDetail.price) * 100).toFixed(0);
+    const discountPercentage = ((productDetail.discountAmount / productDetail.price) * 100).toFixed(0);
     const quantityRef = useRef(1);
 
     useEffect(() => {
         refetch();
     }, [productId]);
+
+    const handleBuyNow = async () => {
+        try {
+            const stripe = await stripePromise;
+            const res = await ax.post(conf.orderEndpoint(), {
+                order_items: [{ productDocumentId: productDetail.documentId, quantity: quantityRef.current.value }],
+                value: productDetail.price,
+            });
+
+            await stripe.redirectToCheckout({
+                sessionId: res.data.stripeSession.id,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     const [api, contextHolder] = notification.useNotification();
     const successNotification = () => {
@@ -74,14 +96,16 @@ function Product() {
                         </div>
                     </div>
 
-                    {Number(productDetail.discountAmount) !== 0 ? (
+                    {productDetail.discountAmount ? (
                         <div className="flex flex-row gap-2 items-center">
                             <div className=" bg-red-500 text-white px-3 py-1 rounded-md font-semibold text-sm">
                                 ลด {discountPercentage}%
                             </div>
                             <p className="text-2xl font-semibold">฿{productAmount.toLocaleString()}</p>
 
-                            <p className="line-through">฿{Number(productDetail.price).toLocaleString()}</p>
+                            <p className="line-through text-gray-500">
+                                ฿{Number(productDetail.price).toLocaleString()}
+                            </p>
                         </div>
                     ) : (
                         <p className="text-2xl font-semibold">฿{Number(productDetail.price).toLocaleString("en-US")}</p>
@@ -111,6 +135,7 @@ function Product() {
                             เพิ่มไปยังรถเข็น
                         </Button>
                         <Button
+                            onClick={handleBuyNow}
                             type="primary"
                             style={{
                                 borderRadius: 6,
@@ -129,7 +154,7 @@ function Product() {
                         <img src="http://localhost:1337/uploads/freeship_3471e12403.png" className="w-20 h-20" />
                         <div className="block font-[Kanit]">
                             <p className="font-semibold">Free shipping</p>
-                            <p className="font-light">จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ xxxx บาท</p>
+                            <p className="font-light">จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ 600 บาท</p>
                         </div>
                     </div>
                 </div>

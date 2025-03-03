@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Divider, Button, Input, message, Form } from "antd";
-import CartItemList from "@components/public/CartItemList";
+import CartItemList from "@components/customer/CartItemList";
 import { useCartItem } from "@hooks/query";
 import { loadStripe } from "@stripe/stripe-js";
 import ax from "@conf/ax";
@@ -18,7 +18,10 @@ function Cart() {
     useEffect(() => {
         const selectedItems = cartItems.filter((item) => item.isSelect);
         const totalQuantity = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const totalPrice = selectedItems.reduce(
+            (sum, item) => sum + (item.price - item.productDiscountAmount) * item.quantity,
+            0
+        );
 
         let totalDiscount = 0;
         if (discount.type === "amount") {
@@ -27,12 +30,15 @@ function Cart() {
             totalDiscount = (discount.value * totalPrice) / 100;
         }
 
+        const deliveryCost =
+            Math.max(0, totalPrice - totalDiscount) > 0 && Math.max(0, totalPrice - totalDiscount) < 600 ? 100 : 0;
+
         setSelectItem({
             quantity: totalQuantity,
             price: totalPrice,
             discount: totalDiscount,
-            deliveryCost: 0,
-            summaryPrice: Math.max(0, totalPrice - totalDiscount),
+            deliveryCost: deliveryCost,
+            summaryPrice: Math.max(0, totalPrice - totalDiscount) + deliveryCost,
         });
     }, [cartItems, discount]);
 
@@ -104,7 +110,7 @@ function Cart() {
                 <div className="bg-white lg:w-[70%] w-full rounded-sm p-4">
                     <CartItemList dataSource={cartItems} />
                 </div>
-                <div className="bg-white lg:w-[30%] w-full rounded-sm p-4 font-[Kanit]">
+                <div className="bg-white lg:w-[30%] w-full h-fit rounded-sm p-4 font-[Kanit]">
                     <div className="flex flex-col gap-4">
                         <p className="font-semibold tracking-wide">ใช้โค้ดส่วนลด</p>
                         <Form form={form} onFinish={handleCoupon}>
