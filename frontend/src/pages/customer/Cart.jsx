@@ -107,7 +107,7 @@ function Cart() {
                 <div className="bg-white lg:w-[70%] w-full rounded-sm p-4">
                     <CartItemList dataSource={cartItems} />
                 </div>
-                <div className="bg-white lg:w-[30%] w-full rounded-sm p-4 font-[Kanit]">
+                <div className="bg-white lg:w-[30%] w-full h-fit rounded-sm p-4 font-[Kanit]">
                     <div className="flex flex-col gap-4">
                         <p className="font-semibold tracking-wide">ใช้โค้ดส่วนลด</p>
                         <Form form={form} onFinish={handleCoupon}>
