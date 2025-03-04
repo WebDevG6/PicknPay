@@ -26,15 +26,15 @@ function Login() {
         <div className="flex flex-col gap-6 min-w-[0] p-5 sm:p-0 sm:min-w-[350px]">
             <div className=" flex flex-col gap-3">
                 <p className="text-4xl font-semibold">
-                    Welcome Back<a className="text-[#4169E2]">!</a>
+                    ยินดีต้อนรับกลับ<a className="text-[#4169E2]">!</a>
                 </p>
                 <p className="text-xs text-gray-500">
-                    Don't have an account?{" "}
+                    ยังไม่มีบัญชีใช่ไหม?{" "}
                     <a
                         onClick={() => navigate("/register")}
                         className="text-[#4169E2] hover:text-blue-400 cursor-pointer transition-colors duration-200"
                     >
-                        Register
+                        สมัครสมาชิก
                     </a>
                 </p>
             </div>
@@ -49,26 +49,29 @@ function Login() {
                 {login.isError && (
                     <Form.Item style={{ width: "100%" }}>
                         <Alert
-                            message={login.error.response?.data?.error?.message || "Login failed. Please try again."}
+                            message={
+                                login.error.response?.data?.error?.message ||
+                                "การเข้าสู่ระบบล้มเหลว กรุณาลองใหม่อีกครั้ง."
+                            }
                             type="error"
                         />
                     </Form.Item>
                 )}
                 <Form.Item
                     name="identifier"
-                    label="Email"
+                    label="อีเมล"
                     rules={[{ required: true, type: "email" }]}
                     style={{ width: "100%" }}
                 >
                     <Input />
                 </Form.Item>
 
-                <Form.Item name="password" label="Password" rules={[{ required: true }]} style={{ width: "100%" }}>
+                <Form.Item name="password" label="รหัสผ่าน" rules={[{ required: true }]} style={{ width: "100%" }}>
                     <Input.Password />
                 </Form.Item>
 
                 <Form.Item name="remember" valuePropName="checked" label={null} style={{ width: "100%" }}>
-                    <Checkbox style={{ userSelect: "none" }}>Remember me</Checkbox>
+                    <Checkbox style={{ userSelect: "none" }}>จดจำฉันไว้</Checkbox>
                 </Form.Item>
 
                 <Form.Item style={{ width: "100%" }}>
@@ -78,7 +81,7 @@ function Login() {
                         htmlType="submit"
                         loading={login.isPending}
                     >
-                        Login
+                        เข้าสู่ระบบ
                     </Button>
                 </Form.Item>
             </Form>
