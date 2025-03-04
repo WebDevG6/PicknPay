@@ -34,13 +34,13 @@ function AdminLayout() {
     const [isMobile, setIsMobile] = useState(false);
 
     const layoutTitle = {
-        1: { label: "Dashboard", path: "/admin/dashboard" },
-        2: { label: "Orders", path: "/admin/orders" },
-        3: { label: "Manage Products", path: "/admin/products/manage" },
-        4: { label: "Add a product", path: "/admin/products/add" },
-        5: { label: "Coupon", path: "/admin/coupon" },
-        6: { label: "Customers", path: "/admin/customers" },
-        7: { label: "Logout", path: "/logout" },
+        1: { label: "แดชบอร์ด", path: "/admin/dashboard" },
+        2: { label: "คำสั่งซื้อ", path: "/admin/orders" },
+        3: { label: "จัดการสินค้า", path: "/admin/products/manage" },
+        4: { label: "เพิ่มสินค้า", path: "/admin/products/add" },
+        5: { label: "คูปอง", path: "/admin/coupon" },
+        6: { label: "ลูกค้า", path: "/admin/customers" },
+        7: { label: "ออกจากระบบ", path: "/logout" },
     };
 
     useEffect(() => {
@@ -60,20 +60,20 @@ function AdminLayout() {
     };
 
     const items = [
-        getItem("Dashboard", "1", <DashboardOutlined />),
-        getItem("Orders", "2", <ShoppingCartOutlined />),
+        getItem("แดชบอร์ด", "1", <DashboardOutlined />),
+        getItem("คำสั่งซื้อ", "2", <ShoppingCartOutlined />),
         {
             key: "products",
             icon: <AppstoreOutlined />,
-            label: "Products",
+            label: "สินค้า",
             children: [
-                getItem("Manage Products", "3", <SettingOutlined />),
-                getItem("Add Products", "4", <PlusOutlined />),
+                getItem("จัดการสินค้า", "3", <SettingOutlined />),
+                getItem("เพิ่มสินค้า", "4", <PlusOutlined />),
             ],
         },
-        getItem("Coupon", "5", <CreditCardOutlined />),
-        getItem("Customers", "6", <UserOutlined />),
-        getItem("Logout", "7", <LogoutOutlined />),
+        getItem("คูปอง", "5", <CreditCardOutlined />),
+        getItem("ลูกค้า", "6", <UserOutlined />),
+        getItem("ออกจากระบบ", "7", <LogoutOutlined />),
     ];
 
     return (
