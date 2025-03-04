@@ -32,7 +32,7 @@ const Customers = () => {
 
     const columns = [
         {
-            title: "First Name",
+            title: "ชื่อ",
             dataIndex: "firstname",
             key: "firstname",
             sorter: (a, b) => a.firstname.localeCompare(b.firstname),
@@ -42,7 +42,7 @@ const Customers = () => {
             }),
         },
         {
-            title: "Last Name",
+            title: "นามสกุล",
             dataIndex: "lastname",
             key: "lastname",
             sorter: (a, b) => a.lastname.localeCompare(b.lastname),
@@ -52,12 +52,12 @@ const Customers = () => {
             }),
         },
         {
-            title: "Email",
+            title: "อีเมล",
             dataIndex: "email",
             key: "email",
         },
         {
-            title: "Address",
+            title: "ที่อยู่",
             dataIndex: "address",
             key: "address",
         },

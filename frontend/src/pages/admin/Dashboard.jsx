@@ -31,29 +31,29 @@ const Dashboard = () => {
                             icon={
                                 <ShoppingOutlined className="text-2xl !text-[green] rounded-xl p-2 bg-green-600/20 h-full" />
                             }
-                            title={"Orders"}
+                            title={"คำสั่งซื้อ"}
                             value={orderSummary.summary.lenOrder}
                         />
                         <DashboardCard
                             icon={
                                 <ProductOutlined className="text-2xl !text-[blue] rounded-xl p-2  bg-blue-600/20 h-full" />
                             }
-                            title={"Products"}
+                            title={"ผลิตภัณฑ์"}
                             value={totalProducts}
                         />
                         <DashboardCard
                             icon={
                                 <UserOutlined className="text-2xl !text-[purple] rounded-xl p-2  bg-cyan-600/20 h-full" />
                             }
-                            title={"Customers"}
+                            title={"ลูกค้า"}
                             value={totalCustomers}
                         />
                         <DashboardCard
                             icon={
                                 <DollarOutlined className="text-2xl !text-[orange] rounded-xl p-2  bg-yellow-400/20 h-full" />
                             }
-                            title={"Revenue"}
-                            value={<p>฿{orderSummary.summary.totalValue.toLocaleString("en-US")}</p>}
+                            title={"รายได้"}
+                            value={<p>฿{orderSummary.summary.totalValue.toLocaleString("th-TH")}</p>}
                         />
                     </Row>
                 </Col>
@@ -84,7 +84,7 @@ const Dashboard = () => {
                 </Col>
                 <Col xs={24} sm={24} md={8}>
                     <div className="text-center bg-white rounded-lg p-2 shadow-md min-h-[315px]">
-                        <Divider>Customer List</Divider>
+                        <Divider>รายชื่อลูกค้า</Divider>
                         <CustomerTable />
                     </div>
                 </Col>
@@ -128,7 +128,7 @@ const LineChart = ({ orders }) => {
         labels: aggregatedData.labels,
         datasets: [
             {
-                label: "Daily Sales",
+                label: "ยอดขายรายวัน",
                 data: aggregatedData.values,
                 fill: true,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -172,7 +172,7 @@ const PieChart = ({ products, categories, orders }) => {
         labels: labels,
         datasets: [
             {
-                label: "Sales by Category",
+                label: "ยอดขายตามหมวดหมู่",
                 data: salesData,
                 backgroundColor: [
                     "rgb(255, 99, 132)",
@@ -207,7 +207,7 @@ const PieChart = ({ products, categories, orders }) => {
 
     return (
         <div className="w-full max-w-[400px] justify-center mx-auto overflow-hidden">
-            <p className="font-bold">Sales by Category (THB)</p>
+            <p className="font-bold">ยอดขายตามหมวดหมู่ (THB)</p>
             <Pie data={data} options={options} />
         </div>
     );
@@ -223,7 +223,7 @@ const BarChart = ({ products, categories }) => {
         labels: categoryCounts.map((c) => c.name),
         datasets: [
             {
-                label: "Count categories",
+                label: "จำนวนหมวดหมู่",
                 data: categoryCounts.map((c) => c.count),
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
                 borderColor: "rgb(275, 592, 392)",
@@ -256,33 +256,33 @@ const CustomerTable = () => {
     const { customers } = useDataAdmin();
     const { productsLoading, productsError } = useProducts();
 
-    if (productsLoading) return <p>Loading...</p>;
-    if (productsError) return <p>Error loading products</p>;
+    if (productsLoading) return <p>กำลังโหลด...</p>;
+    if (productsError) return <p>เกิดข้อผิดพลาดในการโหลดผลิตภัณฑ์</p>;
 
     const columns = [
         {
-            title: "First Name",
+            title: "ชื่อ",
             dataIndex: "firstname",
             key: "firstname",
             ellipsis: true,
             width: 150,
         },
         {
-            title: "Last Name",
+            title: "นามสกุล",
             dataIndex: "lastname",
             key: "lastname",
             ellipsis: true,
             width: 150,
         },
         {
-            title: "Email",
+            title: "อีเมล",
             dataIndex: "email",
             key: "email",
             ellipsis: true,
             width: 200,
         },
         {
-            title: "Address",
+            title: "ที่อยู่",
             dataIndex: "address",
             key: "address",
             ellipsis: true,
@@ -295,7 +295,7 @@ const CustomerTable = () => {
         firstname: customer.firstname || "-",
         lastname: customer.lastname || "-",
         email: customer.email || "-",
-        address: customer.address || "No Address Provided",
+        address: customer.address || "ไม่มีที่อยู่",
     }));
 
     return (
