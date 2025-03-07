@@ -22,7 +22,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                         currency: "thb",
                         product_data: {
                             name: item.name,
-                            images: item.imageUrl,
+                            images: [product.imageUrl],
                         },
                         unit_amount: (item.price - item.discountAmount) * 100,
                     },
