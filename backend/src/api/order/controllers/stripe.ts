@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 
-const STRIPE_SECRET_KEY = process.env.STRIPE_KEY;
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_KEY = process.env.STRIPE_WEBHOOK_KEY;
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 const updatedProducts = new Set();
@@ -69,9 +69,9 @@ async function handleCheckoutSessionCompleted(eventData, products, cartItems) {
         await strapi.db.query("api::order.order").update({
             where: { stripeId },
             data: {
-                status_order: "succeeded",
+                status_order: "successed",
                 value: eventData.amount_total / 100,
-                coupon: eventData.discounts[0].coupon,
+                coupon: eventData.discounts[0] ? eventData.discounts[0].coupon : null,
             },
         });
 

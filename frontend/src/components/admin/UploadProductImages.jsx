@@ -81,11 +81,7 @@ const UploadProductImages = ({ onImageUpload, reset }) => {
                 )}
             </Upload>
 
-            <Modal
-                open={previewVisible}
-                footer={null}
-                onCancel={() => setPreviewVisible(false)}
-            >
+            <Modal open={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
                 <img alt="Preview" style={{ width: "100%" }} src={previewImage} />
             </Modal>
         </div>

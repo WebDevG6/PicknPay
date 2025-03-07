@@ -1,26 +1,36 @@
 import { Routes, BrowserRouter, Route, Navigate } from "react-router";
-import { UserContextProvider } from "./context/AuthContext";
-import UserLayout from "./layout/UserLayout";
-import RequiredAuth from "./context/RequireAuth";
-import RequireCustomerRole from "./context/RequireCustomerRole";
-import RequireAdminRole from "./context/RequireAdminRole";
-import AuthLayout from "./layout/AuthLayout";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Logout from "./pages/Logout";
-import Home from "./pages/Home";
-import AdminLayout from "./layout/AdminLayout";
-import Orders from "./pages/admin/Orders";
-import Dashboard from "./pages/admin/Dashboard";
-import Customers from "./pages/admin/Customers";
-import CheckAuth from "./context/CheckAuth";
-import Cart from "./pages/Cart";
-import Product from "./pages/Product";
-import ProductList from "./pages/user/ProductList";
-import Profile from "./pages/user/Profile";
-import AddProduct from "./pages/admin/AddProducts";
-import ManangeProducts from "./pages/admin/ManangeProducts";
+import { UserContextProvider } from "@context/AuthContext";
+import RequiredAuth from "@context/RequireAuth";
+import RequireCustomerRole from "@context/RequireCustomerRole";
+import RequireAdminRole from "@context/RequireAdminRole";
+import CheckAuth from "@context/CheckAuth";
 
+// Layouts
+import AuthLayout from "@layouts/AuthLayout";
+import UserLayout from "@layouts/UserLayout";
+import AdminLayout from "@layouts/AdminLayout";
+
+// Public Pages
+import Login from "@pages/public/Login";
+import Register from "@pages/public/Register";
+import Logout from "@pages/public/Logout";
+import Product from "@pages/public/Product";
+import Home from "@pages/public/Home";
+
+// Admin Pages
+import Dashboard from "@pages/admin/Dashboard";
+import Customers from "@pages/admin/Customers";
+import Orders from "@pages/admin/Orders";
+import ManangeProducts from "@pages/admin/ManangeProducts";
+import AddProduct from "@pages/admin/AddProducts";
+import Coupon from "@pages/admin/Coupon";
+
+// Customer Pages
+import Profile from "@pages/customer/Profile";
+import Cart from "@pages/customer/Cart";
+import ProductList from "@pages/customer/ProductList";
+import MyOrder from "@pages/customer/MyOrder";
+import MyOrderDetail from "@pages/customer/MyOrderDetail";
 
 function App() {
     return (
@@ -44,6 +54,8 @@ function App() {
                             <Route element={<UserLayout />}>
                                 <Route path="/customer/*" element={<Navigate to={"/customer/profile"} />} />
                                 <Route path="/customer/cart" element={<Cart />} />
+                                <Route path="/customer/order" element={<MyOrder />} />
+                                <Route path="/customer/order/:orderId" element={<MyOrderDetail />} />
                                 <Route path="/customer/profile" element={<Profile />} />
                             </Route>
                         </Route>
@@ -53,6 +65,7 @@ function App() {
                                 <Route path="dashboard" element={<Dashboard />} />
                                 <Route path="orders" element={<Orders />} />
                                 <Route path="customers" element={<Customers />} />
+                                <Route path="coupon" element={<Coupon />} />
                                 <Route path="products">
                                     <Route index element={<ManangeProducts />} />
                                     <Route path="manage" element={<ManangeProducts />} />
@@ -60,7 +73,6 @@ function App() {
                                 </Route>
                             </Route>
                         </Route>
-
                     </Route>
                 </Routes>
             </UserContextProvider>

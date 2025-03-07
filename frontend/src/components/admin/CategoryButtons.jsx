@@ -21,7 +21,11 @@ const CategoryButtons = ({ handleCategorySelect, selectedCategory }) => {
                         key={cat}
                         onClick={() => handleCategorySelect(cat)}
                         className={`flex flex-col items-center justify-center gap-[1px] border px-1 py-4 sm:px-2 sm:py-1 rounded transition-all w-full
-                ${selectedCategory === cat ? "bg-blue-500 text-white border-blue-500" : "bg-white text-gray-600 border-gray-300"}
+                ${
+                    selectedCategory === cat
+                        ? "bg-blue-500 text-white border-blue-500"
+                        : "bg-white text-gray-600 border-gray-300"
+                }
                 hover:bg-blue-600 hover:text-white hover:border-blue-600`}
                     >
                         <span className="flex-shrink-0 text-[8px] sm:text-[12px] mt-2">{categoryIcons[cat]}</span>

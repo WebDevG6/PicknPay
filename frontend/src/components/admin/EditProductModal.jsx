@@ -6,9 +6,9 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import ax from "../../conf/ax";
-import conf from "../../conf/main";
-import useProducts from "../../hooks/useProducts";
+import ax from "@conf/ax";
+import conf from "@conf/main";
+import useProducts from "@hooks/useProducts";
 import useEditProductStore from "./useEditProductStore";
 import EditProductForm from "./EditProductForm";
 
@@ -34,8 +34,6 @@ const EditProductModal = ({ visible }) => {
 
     const [fileList, setFileList] = useState([]);
 
-
-
     useEffect(() => {
         if (visible && editingProduct) {
             const fetchProductData = async () => {
@@ -53,7 +51,7 @@ const EditProductModal = ({ visible }) => {
                         stock: productData.stock,
                         description: productData.description,
                         category: productData.category?.id || null,
-                        brand: productData.brands?.brandname || '',
+                        brand: productData.brands?.brandname || "",
                     });
                 } catch (error) {
                     console.error("Failed to fetch product data:", error);
@@ -67,13 +65,15 @@ const EditProductModal = ({ visible }) => {
     const displayPictures = useMemo(() => pictureList, [pictureList]);
 
     useEffect(() => {
-        setFileList(displayPictures.map((pic, index) => ({
-            uid: pic.uid || `file-${index}`,
-            name: `image-${index}`,
-            status: "done",
-            url: pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl,
-            originFileObj: pic.originFileObj || null,
-        })));
+        setFileList(
+            displayPictures.map((pic, index) => ({
+                uid: pic.uid || `file-${index}`,
+                name: `image-${index}`,
+                status: "done",
+                url: pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl,
+                originFileObj: pic.originFileObj || null,
+            }))
+        );
     }, [displayPictures]);
 
     const handleCancel = () => {
@@ -92,17 +92,14 @@ const EditProductModal = ({ visible }) => {
             okType: "danger",
             cancelText: "ยกเลิก",
             onOk() {
-                const newList = pictureList.filter(pic =>
-                    (pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl) !== file.url
+                const newList = pictureList.filter(
+                    (pic) => (pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl) !== file.url
                 );
 
                 setPictureList(newList);
             },
         });
     };
-
-
-
 
     return (
         <Modal
@@ -120,7 +117,7 @@ const EditProductModal = ({ visible }) => {
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="flex flex-col items-center">
-                        <h3 className="text-lg font-semibold mb-2">รูปสินค้า</h3>
+                        <h3 className="text-lg mb-2">รูปสินค้า</h3>
                         {displayPictures.length > 0 ? (
                             <Swiper
                                 modules={[Navigation, Pagination]}
@@ -130,9 +127,7 @@ const EditProductModal = ({ visible }) => {
                                 className="w-full max-w-lg"
                             >
                                 {displayPictures.map((pic, index) => {
-                                    const imgSrc = pic.url
-                                        ? `${conf.urlPrefix}${pic.url}`
-                                        : pic.previewUrl;
+                                    const imgSrc = pic.url ? `${conf.urlPrefix}${pic.url}` : pic.previewUrl;
                                     return (
                                         <SwiperSlide
                                             key={index}
@@ -154,10 +149,13 @@ const EditProductModal = ({ visible }) => {
                         <Upload
                             listType="picture-card"
                             fileList={fileList}
-
-                            showUploadList={{ showPreviewIcon: false, removeIcon: <DeleteOutlined style={{ color: "red" }} />, motion: false, showDownloadIcon: true }}
+                            showUploadList={{
+                                showPreviewIcon: false,
+                                removeIcon: <DeleteOutlined style={{ color: "red" }} />,
+                                motion: false,
+                                showDownloadIcon: true,
+                            }}
                             onRemove={showDeleteConfirm}
-
                             beforeUpload={(file) => {
                                 if (pictureList.length >= MAX_IMAGES) {
                                     message.error(`สามารถอัปโหลดได้สูงสุด ${MAX_IMAGES} รูป`);
@@ -176,7 +174,6 @@ const EditProductModal = ({ visible }) => {
                             }}
                         />
 
-
                         {displayPictures.length < MAX_IMAGES && (
                             <Button
                                 icon={<UploadOutlined />}
@@ -190,23 +187,20 @@ const EditProductModal = ({ visible }) => {
                     </div>
 
                     <div className="w-full">
-                        <EditProductForm form={form} product={editingProduct} onUpdate={handleCancel} onCancel={handleCancel} />
+                        <EditProductForm
+                            form={form}
+                            product={editingProduct}
+                            onUpdate={handleCancel}
+                            onCancel={handleCancel}
+                        />
                     </div>
                 </div>
             )}
-            <Modal
-                open={previewVisible}
-                footer={null}
-                onCancel={() => setPreviewVisible(false)}
-            >
-                <Image
-                    style={{ width: "100%" }}
-                    src={previewImageRef.current}
-                />
+            <Modal open={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
+                <Image style={{ width: "100%" }} src={previewImageRef.current} />
             </Modal>
         </Modal>
     );
 };
 
 export default EditProductModal;
-

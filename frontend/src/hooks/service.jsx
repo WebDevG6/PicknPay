@@ -1,9 +1,9 @@
-import ax from "../conf/ax";
 import { useContext } from "react";
-import conf from "../conf/main";
 import { useMutation } from "@tanstack/react-query";
-import { authContext } from "../context/AuthContext";
-import { useUpdateCartItem } from "../hooks/query";
+import { authContext } from "@context/AuthContext";
+import { useUpdateCartItem } from "@hooks/query";
+import ax from "@conf/ax";
+import conf from "@conf/main";
 
 export function useAddItem() {
     const { userInfo, updateUserInfo } = useContext(authContext);
@@ -53,6 +53,32 @@ export function useAddItem() {
                     },
                 }));
             }
+        },
+    });
+}
+
+export function useOrderUpdate() {
+    return useMutation({
+        mutationFn: async ({ orderId, status }) => {
+            const response = await ax.put(conf.orderEndpoint(orderId), {
+                data: { status_order: status },
+            });
+            return response.data.data;
+        },
+    });
+}
+
+export function useReviewCreate() {
+    return useMutation({
+        mutationFn: async ({ productId, comment, rating }) => {
+            const response = await ax.post(conf.reviewEndpoint, {
+                data: {
+                    comment: comment,
+                    product: Number(productId),
+                    rating: rating,
+                },
+            });
+            return response.data.data;
         },
     });
 }

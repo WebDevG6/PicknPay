@@ -1,6 +1,6 @@
-import ax, { axData } from "../conf/ax";
-import conf from "../conf/main";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import ax, { axData } from "@conf/ax";
+import conf from "@conf/main";
 import Cookies from "js-cookie";
 
 export function useRole() {

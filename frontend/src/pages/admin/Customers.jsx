@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Space, Table, Input } from "antd";
-import useDataAdmin from "../../hooks/useDataAdmin";
+import useDataAdmin from "@hooks/useDataAdmin";
 import { motion } from "framer-motion";
 
 const Customers = () => {
@@ -18,7 +18,7 @@ const Customers = () => {
         });
     };
 
-    const dataSource = customers.map(customer => ({
+    const dataSource = customers.map((customer) => ({
         key: customer.id,
         firstname: customer.firstname || "-",
         lastname: customer.lastname || "-",
@@ -27,14 +27,12 @@ const Customers = () => {
     }));
 
     const filteredData = dataSource.filter((record) =>
-        Object.values(record).some(
-            (value) => String(value).toLowerCase().includes(searchedText)
-        )
+        Object.values(record).some((value) => String(value).toLowerCase().includes(searchedText))
     );
 
     const columns = [
         {
-            title: "First Name",
+            title: "ชื่อ",
             dataIndex: "firstname",
             key: "firstname",
             sorter: (a, b) => a.firstname.localeCompare(b.firstname),
@@ -44,7 +42,7 @@ const Customers = () => {
             }),
         },
         {
-            title: "Last Name",
+            title: "นามสกุล",
             dataIndex: "lastname",
             key: "lastname",
             sorter: (a, b) => a.lastname.localeCompare(b.lastname),
@@ -54,12 +52,12 @@ const Customers = () => {
             }),
         },
         {
-            title: "Email",
+            title: "อีเมล",
             dataIndex: "email",
             key: "email",
         },
         {
-            title: "Address",
+            title: "ที่อยู่",
             dataIndex: "address",
             key: "address",
         },
@@ -77,13 +75,12 @@ const Customers = () => {
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <Input
-                placeholder="ค้นหาลูกค้า..."
+                placeholder="ค้นหาลูกค้า"
                 style={{ width: "100%", marginBottom: 20 }}
                 onChange={(e) => setSearchedText(e.target.value.toLowerCase())}
                 allowClear
             />
             <Space size={20} direction="vertical">
-
                 <div className="flex flex-col min-h-[500px] rounded-2xl">
                     <Table
                         columns={columns}
@@ -93,6 +90,7 @@ const Customers = () => {
                         bordered={true}
                         scroll={{ x: true }}
                         className="w-full flex-grow"
+                        size="small"
                         components={{
                             body: {
                                 wrapper: motion.tbody,

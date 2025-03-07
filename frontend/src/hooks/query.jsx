@@ -1,8 +1,8 @@
-import ax from "../conf/ax";
 import { useContext } from "react";
-import conf from "../conf/main";
-import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from "@tanstack/react-query";
-import { authContext } from "../context/AuthContext";
+import ax from "@conf/ax";
+import conf from "@conf/main";
+import { useMutation, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { authContext } from "@context/AuthContext";
 
 export function useCartItem() {
     const { userInfo } = useContext(authContext);
@@ -20,6 +20,9 @@ export function useCartItem() {
                 imageUrl: conf.urlPrefix + item?.product?.picture[0]?.url,
                 productId: item.product.id,
                 productDocumentId: item.product.documentId,
+                productStock: item.product.stock,
+                productDiscountAmount: item.product.discountAmount,
+                createdAt: item.createdAt,
             }));
         },
     });
@@ -68,6 +71,15 @@ export const useReviews = () => {
         queryFn: async () => {
             const response = await ax.get(conf.reviewsEndpoint);
             return response.data.data;
+        },
+    });
+};
+
+export const useOrderDetail = () => {
+    return useMutation({
+        mutationFn: async ({ orderId }) => {
+            const response = await ax.post(conf.orderGetDetailEndpoint, { orderDocumentId: orderId });
+            return response.data;
         },
     });
 };
