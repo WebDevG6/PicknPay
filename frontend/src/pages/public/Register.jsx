@@ -42,15 +42,15 @@ function Register() {
         <div className="flex flex-col gap-6 min-w-[0] p-5 sm:p-0 sm:min-w-[350px]">
             <div className=" flex flex-col gap-3">
                 <p className="text-4xl font-semibold">
-                    Create new account<a className="text-[#4169E2]">.</a>
+                    สร้างบัญชีใหม่<a className="text-[#4169E2]">.</a>
                 </p>
                 <p className="text-xs text-gray-500">
-                    Already have an account?{" "}
+                    มีบัญชีแล้วใช่ไหม?{" "}
                     <a
                         onClick={() => navigate("/login")}
                         className="text-[#4169E2] hover:text-blue-400 cursor-pointer transition-colors duration-200"
                     >
-                        Log In
+                        เข้าสู่ระบบ
                     </a>
                 </p>
             </div>
@@ -67,7 +67,8 @@ function Register() {
                     <Form.Item style={{ width: "100%" }}>
                         <Alert
                             message={
-                                register.error.response?.data?.error?.message || "Register failed. Please try again."
+                                register.error.response?.data?.error?.message ||
+                                "การลงทะเบียนล้มเหลว กรุณาลองใหม่อีกครั้ง."
                             }
                             type="error"
                         />
@@ -77,16 +78,16 @@ function Register() {
                 {checkStep === 0 ? (
                     <>
                         <div className="flex sm:flex-row flex-col sm:gap-4 gap-0 w-[100%]">
-                            <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
+                            <Form.Item name="firstName" label="ชื่อ" rules={[{ required: true }]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}>
+                            <Form.Item name="lastName" label="นามสกุล" rules={[{ required: true }]}>
                                 <Input />
                             </Form.Item>
                         </div>
                         <Form.Item
                             name="email"
-                            label="Email"
+                            label="อีเมล"
                             rules={[{ required: true, type: "email" }]}
                             style={{ width: "100%" }}
                         >
@@ -95,7 +96,7 @@ function Register() {
 
                         <Form.Item
                             name="password"
-                            label="Password"
+                            label="รหัสผ่าน"
                             rules={[{ required: true, min: 8 }]}
                             style={{ width: "100%" }}
                         >
@@ -103,7 +104,7 @@ function Register() {
                         </Form.Item>
                     </>
                 ) : (
-                    <Form.Item style={{ width: "100%" }} name="address" label="Address">
+                    <Form.Item style={{ width: "100%" }} name="address" label="ที่อยู่">
                         <TextArea autoSize={{ minRows: 3, maxRows: 9 }} />
                     </Form.Item>
                 )}
@@ -118,7 +119,7 @@ function Register() {
                                     setCheckStep(0);
                                 }}
                             >
-                                Back
+                                ย้อนกลับ
                             </Button>
                         )}
                         <Button
@@ -136,7 +137,7 @@ function Register() {
                             }}
                             loading={register.isPending}
                         >
-                            {checkStep === 0 ? "Continue" : "Register"}
+                            {checkStep === 0 ? "ดำเนินการต่อ" : "ลงทะเบียน"}
                         </Button>
                     </div>
                 </Form.Item>

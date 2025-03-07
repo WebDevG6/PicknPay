@@ -70,15 +70,14 @@ const Coupon = () => {
         setIsModalOpen(false);
         form.resetFields();
     };
-
     const columns = [
         {
-            title: "Coupon",
+            title: "รหัสคูปอง",
             dataIndex: "id",
             key: "id",
         },
         {
-            title: "Discount",
+            title: "ส่วนลด",
             render: (_, record) => {
                 if (record.percent_off !== null) {
                     return `${record.percent_off}%`;
@@ -89,30 +88,30 @@ const Coupon = () => {
             },
         },
         {
-            title: "Status",
+            title: "สถานะ",
             dataIndex: "valid",
             key: "valid",
             render: (status) => <Tag color={status ? "success" : "error"}>{status ? "ใช้งานอยู่" : "หมดอายุ"}</Tag>,
         },
         {
-            title: "Expires",
+            title: "วันหมดอายุ",
             dataIndex: "redeem_by",
             key: "redeem_by",
             render: (day) => (day ? dayjs.unix(day).format("DD/MM/YYYY HH:mm:ss") : "-"),
         },
         {
-            title: "Redemptions",
+            title: "จำนวนการใช้",
             dataIndex: "times_redeemed",
             key: "times_redeemed",
         },
         {
-            title: "Max redemptions",
+            title: "จำนวนการใช้สูงสุด",
             dataIndex: "max_redemptions",
             key: "max_redemptions",
             render: (max) => (max ? max : "-"),
         },
         {
-            title: "Action",
+            title: "",
             render: (_, record) => (
                 <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} />
             ),

@@ -151,7 +151,7 @@ function Product() {
                         </Button>
                     </div>
                     <div className="flex flex-row gap-6 items-center">
-                        <img src="http://localhost:1337/uploads/freeship_3471e12403.png" className="w-20 h-20" />
+                        <img src="https://w06-admin.pupasoft.com/uploads/freeship_3471e12403.png" className="w-20 h-20" />
                         <div className="block font-[Kanit]">
                             <p className="font-semibold">Free shipping</p>
                             <p className="font-light">จัดส่งแบบมาตรฐาน ฟรี! เมื่อซื้อสินค้าครบ 600 บาท</p>

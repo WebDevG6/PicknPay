@@ -26,11 +26,11 @@ function Orders() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCollapse, setIsCollapse] = useState(false);
     const statusOptions = [
-        { value: "processing", label: "Payment Processing" },
-        { value: "successed", label: "Payment Successed" },
-        { value: "payment_failed", label: "Payment Failed" },
-        { value: "shipping", label: "Shipping" },
-        { value: "delivered", label: "Paid and Delivered" },
+        { value: "processing", label: "กำลังดำเนินการชำระเงิน" },
+        { value: "successed", label: "ชำระเงินสำเร็จ" },
+        { value: "payment_failed", label: "ชำระเงินล้มเหลว" },
+        { value: "shipping", label: "กำลังจัดส่ง" },
+        { value: "delivered", label: "ชำระเงินและจัดส่งแล้ว" },
     ];
 
     const handleUpdateOrder = async () => {
@@ -40,7 +40,7 @@ function Orders() {
             { orderId: selectedOrder.documentId, status: selectedStatus },
             {
                 onSuccess: () => {
-                    message.success("Order status updated successfully!");
+                    message.success("อัปเดตสถานะคำสั่งซื้อเรียบร้อย!");
                     queryClient.invalidateQueries({ queryKey: ["orders"] });
                     setIsModalOpen(false);
                 },
@@ -69,7 +69,7 @@ function Orders() {
 
     const orderColumns = [
         {
-            title: "Date Time",
+            title: "วันที่และเวลา",
             dataIndex: "createdAt",
             key: "createdAt",
             sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
@@ -77,7 +77,7 @@ function Orders() {
             render: (value) => dayjs(value).format("DD/MM/YYYY HH:mm:ss"),
         },
         {
-            title: "Thumbnail",
+            title: "รูปภาพสินค้า",
             dataIndex: "order_items",
             key: "order_items",
             render: (value) => (
@@ -85,16 +85,16 @@ function Orders() {
             ),
         },
         {
-            title: "Status",
+            title: "สถานะ",
             dataIndex: "status_order",
             key: "status_order",
             render(value) {
                 const statusConfig = {
-                    processing: { color: "processing", icon: <SyncOutlined />, label: "Payment Processing" },
-                    successed: { color: "gold", icon: <WalletOutlined />, label: "Payment Successed" },
-                    payment_failed: { color: "error", icon: <CloseCircleOutlined />, label: "Payment Failed" },
-                    shipping: { color: "geekblue", icon: <TruckOutlined />, label: "Shipping" },
-                    delivered: { color: "success", icon: <CheckCircleOutlined />, label: "Paid and Delivered" },
+                    processing: { color: "processing", icon: <SyncOutlined />, label: "กำลังดำเนินการชำระเงิน" },
+                    successed: { color: "gold", icon: <WalletOutlined />, label: "ชำระเงินสำเร็จ" },
+                    payment_failed: { color: "error", icon: <CloseCircleOutlined />, label: "ชำระเงินล้มเหลว" },
+                    shipping: { color: "geekblue", icon: <TruckOutlined />, label: "กำลังจัดส่ง" },
+                    delivered: { color: "success", icon: <CheckCircleOutlined />, label: "ชำระเงินและจัดส่งแล้ว" },
                 };
 
                 const { color, icon, label } = statusConfig[value];
@@ -107,7 +107,7 @@ function Orders() {
             sorter: (a, b) => a.status_order.localeCompare(b.status_order),
         },
         {
-            title: "Order ID",
+            title: "รหัสคำสั่งซื้อ",
             dataIndex: "documentId",
             key: "documentId",
             filteredValue: searchedText ? [searchedText] : null,
@@ -115,19 +115,19 @@ function Orders() {
             sorter: (a, b) => a.documentId.localeCompare(b.documentId),
         },
         {
-            title: "Value",
+            title: "มูลค่า",
             dataIndex: "value",
             key: "value",
             render: (value) => `฿${value.toLocaleString("en-US")}`,
             sorter: (a, b) => a.value - b.value,
         },
         {
-            title: "Customer",
+            title: "ลูกค้า",
             key: "customer",
             dataIndex: [["customer"], ["username"]],
         },
         {
-            title: "Action",
+            title: "",
             key: "action",
             render: (_, record) => (
                 <div className="flex gap-2">
@@ -141,11 +141,10 @@ function Orders() {
             ),
         },
     ];
-
     return (
         <div className="p-[18px] flex flex-col rounded-lg bg-white overflow-x-auto max-w-full mt-2">
             <Input
-                placeholder="ค้นหา order"
+                placeholder="ค้นหาคำสั่งซื้อ"
                 style={{ width: "100%", marginBottom: 20 }}
                 onChange={(e) => setSearchedText(e.target.value)}
             />
@@ -153,14 +152,16 @@ function Orders() {
                 <Table
                     loading={isLoading}
                     columns={orderColumns}
-                    dataSource={orders?.map((order) => ({ ...order, key: order.id }))}
+                    dataSource={orders
+                        ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                        .map((order) => ({ ...order, key: order.id }))}
                     pagination={{ pageSize: 10 }}
                     scroll={{ x: "max-content" }}
                 />
             </Space>
 
             <Modal
-                title={<p className="text-lg font-bold">Order #{selectedOrder?.documentId}</p>}
+                title={<p className="text-lg font-bold">คำสั่งซื้อ #{selectedOrder?.documentId}</p>}
                 open={isModalOpen}
                 onCancel={closeModal}
                 onOk={handleUpdateOrder}
@@ -168,29 +169,33 @@ function Orders() {
                 {selectedOrder && (
                     <div className="flex flex-col gap-4">
                         <p className="w-full">
-                            <strong>Date Time:</strong> {dayjs(selectedOrder.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                            <strong>วันที่และเวลา:</strong>{" "}
+                            {dayjs(selectedOrder.createdAt).format("DD/MM/YYYY HH:mm:ss")}
                         </p>
                         <p className="w-full">
                             <strong>Stripe ID: </strong> {selectedOrder.stripeId}
                         </p>
                         <p className="w-full flex flex-col gap-2">
-                            <strong>Status: </strong>
+                            <strong>สถานะ: </strong>
                             <Select
-                                value={selectedOrder.status_order}
+                                value={selectedStatus}
                                 options={statusOptions}
                                 className="w-full"
-                                onChange={(value) => setSelectedStatus(value)}
+                                onChange={(value) => {
+                                    console.log(value);
+                                    return setSelectedStatus(value);
+                                }}
                             />
                         </p>
                         <p className="w-full">
-                            <strong>Value:</strong> ฿{selectedOrder.value.toLocaleString("en-US")}
+                            <strong>มูลค่า:</strong> ฿{selectedOrder.value.toLocaleString("en-US")}
                         </p>
                         <p className="w-full">
-                            <strong>Shipping fee:</strong> ฿
+                            <strong>ค่าจัดส่ง:</strong> ฿
                             {selectedOrder.deliveryCost ? selectedOrder.deliveryCost?.toLocaleString("en-US") : 0}
                         </p>
                         <p className="w-full">
-                            <strong>Discount Amount:</strong> ฿
+                            <strong>จำนวนส่วนลด:</strong> ฿
                             {(
                                 selectedOrder.order_items.reduce(
                                     (acc, item) => acc + Number(item.price) * Number(item.quantity),
@@ -201,7 +206,7 @@ function Orders() {
                             ).toLocaleString("en-US")}
                         </p>
                         <p className="w-full">
-                            <strong>Coupon:</strong> {selectedOrder.coupon ? selectedOrder.coupon : "No coupon used"}
+                            <strong>คูปอง:</strong> {selectedOrder.coupon ? selectedOrder.coupon : "ไม่ได้ใช้คูปอง"}
                         </p>
                         <Collapse
                             onChange={() => setIsCollapse((prev) => !prev)}

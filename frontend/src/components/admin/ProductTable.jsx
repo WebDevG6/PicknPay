@@ -210,7 +210,7 @@ const ProductTable = ({ onEdit }) => {
                     <div className="flex flex-col min-h-[500px] rounded-2xl">
                         <Table
                             columns={memoizedColumns}
-                            dataSource={filteredProducts}
+                            dataSource={filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))}
                             rowKey="id"
                             pagination={{ pageSize: 10 }}
                             size="small"

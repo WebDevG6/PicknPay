@@ -3,7 +3,7 @@
  */
 
 import { factories } from "@strapi/strapi";
-const stripe = require("stripe")(process.env.STRIPE_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 type order_items = {
     documentId: string;
@@ -22,7 +22,7 @@ export default factories.createCoreController("api::order.order", ({ strapi }) =
                         currency: "thb",
                         product_data: {
                             name: item.name,
-                            images: item.imageUrl,
+                            images: [product.imageUrl],
                         },
                         unit_amount: (item.price - item.discountAmount) * 100,
                     },
