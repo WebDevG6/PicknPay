@@ -17,4 +17,9 @@ export default defineConfig({
             "@layouts": resolve(__dirname, "src/layouts"),
         },
     },
+    test: {
+        environment: "jsdom",
+        globals: true,
+        setupFiles: "./src/tests/setup.js",
+    },
 });
